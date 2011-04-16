@@ -1,0 +1,20 @@
+{
+    "feeds": {
+        "title":"Feeds",
+        "description":"Configure the external data feeds from a variety of photo sources",
+        "config":"feeds",
+        "sectiontype":"section",
+        "fields":{
+            "section":{"label":"ID", "description":"Programmatic id for this feed", "type":"label"},
+            "TITLE":{"label":"Title","description":"Label for this feed", "type":"text"},
+            "CONTROLLER_CLASS":{"label":"Controller class", "description":"The type of data feed", "type":"select","optionsMethod":["PhotoDataController","getPhotoDataControllers"],"optionsFirst":"-- Choose a photo provider --"},
+            "AUTHOR":{"label":"Author","description":"(Optional) Include only photos from this author/user.","type":"text","omitBlankValue":true},
+            "TAG":{"label":"Tag","description":"(Optional) Include only photos with this tag","type":"text","omitBlankValue":true}
+        },
+        "sectionindex":"string",
+        "sectionsmethod":"loadFeedData",
+        "sectionaddnew":true,
+        "sectiondelete":true,
+        "sectionreorder":true
+    }
+}
