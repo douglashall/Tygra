@@ -6,9 +6,9 @@ abstract class PhotoDataController extends DataController
     protected $tag;
     protected $author;
 
-    public static function getVideoDataControllers() {
+    public static function getPhotoDataControllers() {
         return array(
-            'FlickrVideoController'=>'Flickr'
+            'FlickrPhotoController'=>'Flickr'
         );
     }
     

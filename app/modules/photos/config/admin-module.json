@@ -8,7 +8,8 @@
             "section":{"label":"ID", "description":"Programmatic id for this feed", "type":"label"},
             "TITLE":{"label":"Title","description":"Label for this feed", "type":"text"},
             "CONTROLLER_CLASS":{"label":"Controller class", "description":"The type of data feed", "type":"select","optionsMethod":["PhotoDataController","getPhotoDataControllers"],"optionsFirst":"-- Choose a photo provider --"},
-            "AUTHOR":{"label":"Author","description":"(Optional) Include only photos from this author/user.","type":"text","omitBlankValue":true},
+            "GROUP":{"label":"Group","description":"(Optional) Include photos from this group. Keep in mind that some services (Flickr) use a group id that is not the same as the group name","type":"text","omitBlankValue":true,"showIf":["CONTROLLER_CLASS",["FlickrPhotoController"]]},
+            "AUTHOR":{"label":"Author","description":"(Optional) Include only photos from this author/user. Keep in mind that some services (Flickr) use a user id that is not the same as the user name","type":"text","omitBlankValue":true},
             "TAG":{"label":"Tag","description":"(Optional) Include only photos with this tag","type":"text","omitBlankValue":true}
         },
         "sectionindex":"string",
