@@ -9,7 +9,7 @@
      public function search($q)
      {
          // set the base url
-         $this->setBaseUrl('http://test.isites.harvard.edu/mobile/updates.json');
+         $this->setBaseUrl('http://vm1.isites.harvard.edu/mobile/updates.json');
          //$this->setBaseUrl('http://localhost:8080/icommonsapi/whatsnew/by_user/10564158.json');
          //$this->addFilter('alt', 'json'); //set the output format to json
 

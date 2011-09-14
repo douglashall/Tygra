@@ -16,8 +16,8 @@
 		  {/if}
 		{/capture}
 		{block name="itemLink"}
-		  {if $item['url']}
-		    <a href="{$item['url']}" class="{$item['class']|default:''}"{if $linkTarget || $item['linkTarget']} target="{if $item['linkTarget']}{$item['linkTarget']}{else}{$linkTarget}{/if}"{/if}>
+		  {if $item['syllabus']}
+		    <a href="{$item['syllabus']}" class="{$item['class']|default:''}"{if $linkTarget || $item['linkTarget']} target="{if $item['linkTarget']}{$item['linkTarget']}{else}{$linkTarget}{/if}"{/if}>
 		  {/if}
 		    {if $item['img']}
 		      <img src="{$item['img']}" alt="{$item['title']}"{if $item['imgWidth']}
@@ -34,7 +34,7 @@
 		    {if $item['badge']}
 		      <span class="badge">{$item['badge']}</span>
 		    {/if}
-		  {if $item['url']}
+		  {if $item['syllabus']}
 		    </a>
 		  {/if}
 		{/block}

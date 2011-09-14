@@ -12,6 +12,11 @@ class ClassmatesWebModule extends WebModule
 				$items = $controller->search('10564158');
 				$this->assign('results', $items);
 				break;
+			
+			case 'detail':
+				$id = $this->getArg('id');
+				$item = $controller->getItem($id);
+				break;
 		}
 	}
 }

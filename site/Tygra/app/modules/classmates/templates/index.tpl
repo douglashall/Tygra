@@ -5,11 +5,11 @@
     {if !isset($item['separator'])}
       <li{if $item['img']} class="icon"{/if}>
         {capture name="listItemLabel" assign="listItemLabel"}
-		  {if isset($item['firstname'])}
+		  {if isset($item['firstName'])}
 		    {if $boldLabels}
 		      <strong>
 		    {/if}
-		      {$item['firstname']} {$item['lastname']}{if $labelColon|default:false}: {/if}
+		      {$item['firstName']} {$item['lastName']}{if $labelColon|default:false}: {/if}
 		    {if $boldLabels}
 		      </strong>
 		    {/if}

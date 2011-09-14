@@ -6,7 +6,7 @@
     protected $playlist;
     
  	private function setStandardFilters() {
- 		$this->setBaseUrl('http://test.isites.harvard.edu/mobile/video.json');
+ 		$this->setBaseUrl('http://vm1.isites.harvard.edu/mobile/video.json');
     }
     
     public function search($q, $start=0, $limit=null) {
