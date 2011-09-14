@@ -1,15 +1,15 @@
 {include file="findInclude:common/templates/header.tpl"}
 
-<ul class="results" id="activityList">
+<ul class="results" id="classmatesList">
   {foreach $results as $item}
     {if !isset($item['separator'])}
       <li{if $item['img']} class="icon"{/if}>
         {capture name="listItemLabel" assign="listItemLabel"}
-		  {if isset($item['title'])}
+		  {if isset($item['firstname'])}
 		    {if $boldLabels}
 		      <strong>
 		    {/if}
-		      {$item['title']}{if $labelColon|default:false}: {/if}
+		      {$item['firstname']} {$item['lastname']}{if $labelColon|default:false}: {/if}
 		    {if $boldLabels}
 		      </strong>
 		    {/if}
@@ -26,11 +26,6 @@
 		        alt="{$item['imgAlt']}"{/if} />
 		    {/if}
 		    {$listItemLabel}
-		    {if $titleTruncate}
-		      {$item['title']|truncate:$titleTruncate}
-		    {else}
-		      {$item['title']}
-		    {/if}
 		    {if $item['subtitle']}
 		      {if $subTitleNewline|default:true}<div{else}&nbsp;<span{/if} class="smallprint">
 		        {$item['subtitle']}

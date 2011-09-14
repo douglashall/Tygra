@@ -1,16 +1,16 @@
 <?php
 
-class SyllabiWebModule extends WebModule
+class SyllabusWebModule extends WebModule
 {
-	protected $id='courses';
+	protected $id='syllabus';
 	protected function initializeForPage() {
-		//$controller = DataController::factory('ActivityDataController');
+		$controller = DataController::factory('SyllabusDataController');
 	    
 		switch ($this->page)
 		{
 			case 'index':
-				//$items = $controller->search('10564158');
-				$this->assign('results', array());
+				$items = $controller->search('10564158');
+				$this->assign('results', $items);
 				break;
 		}
 	}

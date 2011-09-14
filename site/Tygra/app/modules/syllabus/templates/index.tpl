@@ -1,6 +1,6 @@
 {include file="findInclude:common/templates/header.tpl"}
 
-<ul class="results" id="activityList">
+<ul class="results" id="syllabusList">
   {foreach $results as $item}
     {if !isset($item['separator'])}
       <li{if $item['img']} class="icon"{/if}>
@@ -26,11 +26,6 @@
 		        alt="{$item['imgAlt']}"{/if} />
 		    {/if}
 		    {$listItemLabel}
-		    {if $titleTruncate}
-		      {$item['title']|truncate:$titleTruncate}
-		    {else}
-		      {$item['title']}
-		    {/if}
 		    {if $item['subtitle']}
 		      {if $subTitleNewline|default:true}<div{else}&nbsp;<span{/if} class="smallprint">
 		        {$item['subtitle']}

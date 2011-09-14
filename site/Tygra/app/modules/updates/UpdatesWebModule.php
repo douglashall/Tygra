@@ -1,10 +1,10 @@
 <?php
 
-class ActivityWebModule extends WebModule
+class UpdatesWebModule extends WebModule
 {
-	protected $id='activity';
+	protected $id='updates';
 	protected function initializeForPage() {
-		$controller = DataController::factory('ActivityDataController');
+		$controller = DataController::factory('UpdatesDataController');
 	    
 		switch ($this->page)
 		{
