@@ -16,9 +16,7 @@
 		  {/if}
 		{/capture}
 		{block name="itemLink"}
-		  {if $item['url']}
-		    <a href="{$item['url']}" class="{$item['class']|default:''}"{if $linkTarget || $item['linkTarget']} target="{if $item['linkTarget']}{$item['linkTarget']}{else}{$linkTarget}{/if}"{/if}>
-		  {/if}
+		  <a href="detail?id={$item['id']}" class="{$item['class']|default:''}"{if $linkTarget || $item['linkTarget']} target="{if $item['linkTarget']}{$item['linkTarget']}{else}{$linkTarget}{/if}"{/if}>
 		    {if $item['img']}
 		      <img src="{$item['img']}" alt="{$item['title']}"{if $item['imgWidth']}
 		        width="{$item['imgWidth']}"{/if}{if $item['imgHeight']}
@@ -34,9 +32,7 @@
 		    {if $item['badge']}
 		      <span class="badge">{$item['badge']}</span>
 		    {/if}
-		  {if $item['url']}
 		    </a>
-		  {/if}
 		{/block}
       </li>
     {/if}

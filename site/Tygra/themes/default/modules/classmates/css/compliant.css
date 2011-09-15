@@ -1,0 +1,46 @@
+.label {
+  width: 4em;
+}
+
+.value {
+  margin-left: 3.75em;
+}
+
+li.nolabel .value {
+    margin-top: 0;
+    margin-left: 0;
+}
+
+li.nolabel .image {
+    margin-left: 0;
+}
+
+.image {
+  margin-left: 3.75em;
+}
+
+
+.peoplebuttons {
+    position: absolute;
+    right: 10px;
+	margin: 0 0 0.6em 0.5em;
+	z-index: 100;
+}
+
+.peoplebuttons #bookmarkContainer {
+    float: none;
+    margin: 0;
+}
+
+.nav {
+	clear: both;
+}
+
+.section_thumbnail {
+	float: left;
+}
+
+.section_thumbnail .image {
+	margin-left: 0;
+	padding: 12px 12px 4px 12px;
+}

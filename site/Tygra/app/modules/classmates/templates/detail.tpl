@@ -1,43 +1,52 @@
 {include file="findInclude:common/templates/header.tpl"}
 
+<div class="peoplebuttons">
+{include file="findInclude:common/templates/bookmark.tpl" name=$cookieName item=$bookmarkItem exdate=$expireDate}  
+</div>
+
 {block name="detailsStart"}
 {/block}
-{foreach $personDetails as $sectionName=>$section}
     {block name="sectionStart"}
-      <ul class="nav section_{$sectionName}">
-    {/block}        
-        {foreach $section as $key=>$item}
+      <div class="nav section_thumbnail">
+    {/block}
           {block name="detail"}
-            <li class="detail_{$key}{if !$item['label']} nolabel{/if}">
-              {if $item['url']}
-                <a href="{$item['url']}" class="{$item['class']}">
-              {/if}
-                  {if $item['label']}<div class="label">{$item['label']}</div>{/if}
-                  {if $item['title']}<div class="value">{$item['title']}</div>{/if}
-              {if $item['url']}
-                </a>
-              {/if}
-              
-              
-              {if $item['img']}
-			      <img src="{$item['img']}" class="image" alt="{$item['title']}"{if $item['imgWidth']}
-			        width="{$item['imgWidth']}"{/if}{if $item['imgHeight']}
-			        height="{$item['imgHeight']}"{/if}{if $item['imgAlt']}
-			        alt="{$item['imgAlt']}"{/if} />
-    		  {/if}
-              
-              
+            <img src="{$photoUrl}" class="image" alt="{$item['title']}"{if $item['imgWidth']}
+			        width="{$item['imgWidth']}"{/if}
+			        {if $item['imgAlt']}alt="{$item['imgAlt']}"{/if} />
+          {/block}
+    {block name="sectionEnd"}
+      </div>
+    {/block}
+    
+    {block name="sectionStart"}
+      <ul class="nav section_name">
+    {/block}
+          {block name="detail"}
+            <li class="detail_name">
+                  <div class="label">name</div>
+                  <div class="value">{$item['firstName']} {$item['lastName']}</div>
             </li>
           {/block}
-        {/foreach}    
     {block name="sectionEnd"}
       </ul>
-    {/block} 
-  {/foreach}
+    {/block}
+    
+    {block name="sectionStart"}
+      <ul class="nav section_email">
+    {/block}
+          {block name="detail"}
+            <li class="detail_email">
+              <a href="mailto:{$item['email']}" class="email">
+                  <div class="label">email</div>
+                  <div class="value">{$item['email']}</div>
+              </a>
+            </li>
+          {/block}
+    {block name="sectionEnd"}
+      </ul>
+    {/block}
 {block name="detailsEnd"}
 {/block}
-
-{/if}
 
 {include file="findInclude:common/templates/footer.tpl"}
 
