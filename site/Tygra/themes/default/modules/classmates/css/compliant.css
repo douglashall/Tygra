@@ -43,4 +43,6 @@ li.nolabel .image {
 .section_thumbnail .image {
 	margin-left: 0;
 	padding: 12px 12px 4px 12px;
+	height: 120px;
+	width: 120px;
 }
