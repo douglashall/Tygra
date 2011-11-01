@@ -137,7 +137,7 @@ function CacheHeaders($file)
 
 //
 // Handle page request
-//
+// 
 
 $url_patterns = array(
   array(
