@@ -23,7 +23,7 @@ class ClassmatesWebModule extends WebModule
 	}
 	
 	protected function getPhotoUrl($userId) {
-		$pwd = 'Kj287asdfiefk*@#82023949jrkKJNikkkaswooqwecnzcasowqeqe,zxmnkfdiwK';
+		$pwd = '';
 		$photoUrlBase = 'http://isites.harvard.edu/idphoto/';
 		$timestamp = time();
 		$randomString = $this->randomString(30);
