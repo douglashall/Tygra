@@ -11,10 +11,10 @@ class ArcGISJSMap extends JavascriptMapImageController {
 
 	private $moreLayers = array();
     
-    private $apiVersion = '2.1';
+    private $apiVersion = '2.4';
     private $themeName = 'claro'; // claro, tundra, soria, nihilo
-    
-    private $permanentZoomLevel = null;
+
+    protected $levelsOfDetail = array();    
     
     // TODO: fix zoom level problem
     public function __construct($baseURL)
@@ -34,14 +34,13 @@ class ArcGISJSMap extends JavascriptMapImageController {
             $this->setMapProjection($wkid);
         }
 
+        if (isset($data['tileInfo'], $data['tileInfo']['lods'])) {
+            $this->levelsOfDetail = $data['tileInfo']['lods'];
+        }
+
         if (is_array($baseURL)) {
             $this->addLayers($baseURL);
         }
-    }
-
-    public function setPermanentZoomLevel($zoomLevel)
-    {
-        $this->permanentZoomLevel = $zoomLevel;
     }
     
     public function setImageWidth($width) {
@@ -64,7 +63,7 @@ class ArcGISJSMap extends JavascriptMapImageController {
         $this->moreLayers = array_merge($this->moreLayers, $moreLayers);
     }
 
-    public function addPoint($placemark)
+    public function addPoint(Placemark $placemark)
     {
         parent::addPoint($placemark);
 
@@ -128,7 +127,7 @@ class ArcGISJSMap extends JavascriptMapImageController {
         $this->markers[] = $templateValues;
     }
 
-    public function addPath($placemark)
+    public function addPath(Placemark $placemark)
     {
         parent::addPath($placemark);
 
@@ -167,7 +166,7 @@ class ArcGISJSMap extends JavascriptMapImageController {
         $this->paths[] = $templateValues;
     }
     
-    public function addPolygon($placemark)
+    public function addPolygon(Placemark $placemark)
     {
         parent::addPolygon($placemark);
 
@@ -273,14 +272,28 @@ class ArcGISJSMap extends JavascriptMapImageController {
 
     function getHeaderScript() {
         $header = $this->prepareJavascriptTemplate('ArcGISJSMapHeader');
+        $header->setValues(array(
+            '___MAPELEMENT___' => $this->mapElement,
+            ));
         return $header->getScript();
     }
     
     function getFooterScript() {
         // put dojo stuff in the footer since the header script
         // gets loaded before the included script
+
+        $zoomLevel = $this->zoomLevel;
+        $targetScale = oldPixelScaleForZoomLevel($zoomLevel);
+        if ($this->levelsOfDetail) {
+            foreach ($this->levelsOfDetail as $levelData) {
+                if ($levelData['scale'] < $targetScale) {
+                    break;
+                } else {
+                    $zoomLevel = $levelData['level'];
+                }
+            }
+        }
         
-        $zoomLevel = $this->permanentZoomLevel ? $this->permanentZoomLevel : $this->zoomLevel;
         $moreLayersJS = '';
         foreach ($this->moreLayers as $anotherLayer) {
             $moreLayersJS .= <<<JS
@@ -290,6 +303,7 @@ JS;
 
         $footer = $this->prepareJavascriptTemplate('ArcGISJSMapFooter');
         $footer->setValues(array(
+            '___FULL_URL_PREFIX___' => FULL_URL_PREFIX,
             '___API_URL___' => FULL_URL_BASE.API_URL_PREFIX."/map/projectPoint", // TODO don't hard code module id
             '___WKID___' => $this->mapProjection,
             '___MAPELEMENT___' => $this->mapElement,

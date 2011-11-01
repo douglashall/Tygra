@@ -1,7 +1,10 @@
 <?php
 
+define('MILES_PER_METER', 0.000621371192);
+define('FEET_PER_METER', 3.2808399);
 define('GEOGRAPHIC_PROJECTION', 4326);
 define('EARTH_RADIUS_IN_METERS', 6378100);
+define('EARTH_METERS_PER_DEGREE', 111319); // very very rough
 define('MAP_CATEGORY_DELIMITER', ':');
 
 Kurogo::includePackage('Maps', 'Abstract');
@@ -39,7 +42,7 @@ function euclideanDistance($fromLat, $fromLon, $toLat, $toLon)
 {
     $dx = $toLon - $fromLon;
     $dy = $toLat - $fromLat;
-    return sqrt($dx*$dx + $dy*$dy);
+    return sqrt($dx*$dx + $dy*$dy) * EARTH_METERS_PER_DEGREE;
 }
 
 function filterLatLon($testString) {
@@ -47,6 +50,22 @@ function filterLatLon($testString) {
         return array('lat' => $matches[1], 'lon' => $matches[2]);
     }
     return false;
+}
+
+// the following two functions are based on the scale, i.e. the number of 
+// ground inches represented per inch on the computer screen, using the old
+// pixel size of 0.28 millimeters.
+// the number 559082264 is this ratio at a zoom level of 0 (showing full map).
+// http://wiki.openstreetmap.org/wiki/MinScaleDenominator
+// it currently works for WMS and ArcGIS maps
+function oldPixelScaleForZoomLevel($zoomLevel)
+{
+    return 559082264 / pow(2, $zoomLevel);
+}
+
+function oldPixelZoomLevelForScale($scale)
+{
+    return ceil(log(559082264 / $scale, 2));
 }
 
 function normalizedBoundingBox($center, $tolerance, $fromProj=null, $toProj=null)
@@ -83,11 +102,13 @@ function normalizedBoundingBox($center, $tolerance, $fromProj=null, $toProj=null
 }
 
 function mapIdForFeedData(Array $feedData) {
-    if (!isset($feedData['BASE_URL'])) {
-        throw new Exception("missing BASE_URL for map feed");
+    $identifier = $feedData['TITLE'];
+    if (isset($feedData['BASE_URL'])) {
+        $identifier .= $feedData['BASE_URL'];
+    } else {
+        Kurogo::log(LOG_WARNING, "Warning: map feed for $identifier has no BASE_URL for map feed", 'maps');
     }
-    $baseURL = $feedData['BASE_URL'];
-    return substr(md5($baseURL), 0, 10);
+    return substr(md5($identifier), 0, 10);
 }
 
 function shortArrayFromMapFeature(Placemark $feature) {
@@ -149,31 +170,4 @@ class MapsAdmin
 $config = ConfigFile::factory('maps', 'site');
 Kurogo::siteConfig()->addConfig($config);
 
-function debug_dump($variable=null, $message='') {
-    $backtrace = debug_backtrace();
-    $currentCall = current($backtrace); // who is calling debug_dump
-    $lastCall = next($backtrace); // what debug_dump is being called in
-    $file = end(explode('/', $currentCall['file']));
-    $line = $currentCall['line'];
-    $function = $lastCall['function'];
-    if ($variable !== null) {
-        if (is_string($variable)) {
-            $varClass = 'string';
-            $varRep = "'$variable'";
-        } elseif (is_int($variable)) {
-            $varClass = 'int';
-            $varRep = $variable;
-        } elseif (is_bool($variable)) {
-            $varClass = 'bool';
-            $varRep = $variable ? 'TRUE' : 'FALSE';
-        } else {
-            $varClass = get_class($variable);
-            $varRep = spl_object_hash($variable);
-        }
-        $trace = "$file($line):$function [$varClass $varRep] $message";
-    } else {
-        $trace = "$file($line):$function $message";
-    }
-    error_log($trace);
-}
 

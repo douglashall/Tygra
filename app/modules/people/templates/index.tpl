@@ -1,7 +1,7 @@
 {include file="findInclude:common/templates/header.tpl"}
 
 {block name="searchbox"}
-{include file="findInclude:common/templates/search.tpl" placeholder="Search" resultCount=$resultCount tip=$searchTip|default:"You can search by part or all of a person's name, email address or phone number."}
+{include file="findInclude:common/templates/search.tpl" resultCount=$resultCount tip=$searchTip}
 {/block}
 
 {if $hasBookmarks}

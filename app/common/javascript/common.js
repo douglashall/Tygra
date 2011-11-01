@@ -11,7 +11,7 @@ function showTab(strID, objTrigger) {
 		show(strID);
 		if(currentTab && (currentTab != objTab)) {
 			hide(currentTab.id);
-			currentTab.style.display = "none";
+			//currentTab.style.display = "none";
 		}
 	}
 	currentTab = objTab; // Remember which is the currently displayed tab
@@ -248,34 +248,13 @@ function hideShare() {
 }
 
 // Bookmarks
-function setBookmarkStates(name, item) {
-  var bookmark = document.getElementById("bookmark");
-  var items = getCookieArrayValue(name);
-  for (var i = 0; i < items.length; i++) {
-    if (items[i] == item) {
-      addClass(bookmark, "on");
-      break;
-    }
-  }
-  if (bookmark.addEventListener) {
-    bookmark.addEventListener("touchstart", function() {
-        addClass(bookmark, "pressed");
-    }, false);
-    bookmark.addEventListener("touchend", function() {
-        removeClass(bookmark, "pressed");
-    }, false);
-    
-  } else if (bookmark.attachEvent) {
-    bookmark.attachEvent("ontouchstart", function() {
-        addClass(bookmark, "pressed");
-    });
-    bookmark.attachEvent("ontouchend", function() {
-        removeClass(bookmark, "pressed");
-    });
-  }
-}
-
 function toggleBookmark(name, item, expireseconds, path) {
+  // facility for module to respond to bookmark state change
+  if (typeof moduleBookmarkWillToggle != 'undefined') {
+    $result = moduleBookmarkWillToggle(name, item, expireseconds, path);
+    if ($result === false) { return; }
+  }
+
   var bookmark = document.getElementById("bookmark");
   toggleClass(bookmark, "on");
   var items = getCookieArrayValue(name);
@@ -296,6 +275,11 @@ function toggleBookmark(name, item, expireseconds, path) {
     }
   }
   setCookieArrayValue(name, newItems, expireseconds, path);
+  
+  // facility for module to respond to bookmark state change
+  if (typeof moduleBookmarkToggled != 'undefined') {
+    moduleBookmarkToggled(name, item, expireseconds, path);
+  }
 }
 
 // TODO this needs to handle encoded strings and parameter separators (&amp;)

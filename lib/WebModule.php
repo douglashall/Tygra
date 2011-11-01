@@ -52,9 +52,7 @@ abstract class WebModule extends Module {
 
   private $fontsize = 'medium';
   private $fontsizes = array('small', 'medium', 'large', 'xlarge');
-  
-  protected $bookmarkLinkTitle = 'Bookmarks';
-  
+    
   private $templateEngine = null;
   
   private $htmlPager = null;
@@ -281,10 +279,24 @@ abstract class WebModule extends Module {
   //
   private function loadTemplateEngineIfNeeded() {
     if (!isset($this->templateEngine)) {
+      Kurogo::log(LOG_DEBUG, "Initializing template engine", 'module');
       $this->templateEngine = new TemplateEngine($this->id);
+      $this->templateEngine->registerPlugin('function', 'drawChart', array($this, 'drawChart'));
+      $this->templateEngine->registerPlugin('modifier','getLocalizedString', array($this,'getLocalizedString'));
     }
   }
   
+  public function drawChart($params) {
+    static $chartDrawn;
+    $result = '';
+    if (!$chartDrawn) {
+        $result .= '<style type="text/css">@import url("' . $this->getInternalCSSURL('/common/css/chart.css') . '");</style>';
+        $result .= '<script type="text/javascript" src="' . $this->getInternalJavascriptURL('/common/javascript/chart.js') . '"></script>';
+        $chartDrawn = true;
+    }
+    $result .= KurogoChart::drawChart($params);
+    return $result;
+  }
   //
   // URL helper functions
   //
@@ -320,7 +332,7 @@ abstract class WebModule extends Module {
   public function redirectToModule($id, $page, $args=array()) {
     $url = self::buildURLForModule($id, $page, $args);
     //error_log('Redirecting to: '.$url);
-    
+    Kurogo::log(LOG_DEBUG, "Redirecting to module $id at $url",'module');
     header("Location: ". URL_PREFIX . ltrim($url, '/'));
     exit;
   }
@@ -336,6 +348,7 @@ abstract class WebModule extends Module {
     }
     
     //error_log('Redirecting to: '.$url);
+    Kurogo::log(LOG_DEBUG, "Redirecting to page $page at $url",'module');
     header("Location: ". URL_PREFIX . ltrim($url, '/'));
     exit;
   }
@@ -350,7 +363,7 @@ abstract class WebModule extends Module {
   
     /* This method would be called by other modules to get a valid link from a model object */
     public function linkForItem(KurogoObject $object, $options=null) {
-       throw new Exception("linkForItem must be subclassed if it is going to be used");
+       throw new KurogoException("linkForItem must be subclassed if it is going to be used");
     }
 
     /* default implmentation. Subclasses may wish to override this */
@@ -462,7 +475,14 @@ abstract class WebModule extends Module {
         $d = dir(SITE_DIR . "/themes");
         while (false !== ($entry = $d->read())) {
             if ($entry[0]!='.' && is_dir(SITE_DIR . "/themes/$entry")) {
-                $themes[$entry] = $entry;
+                
+                $configFile = SITE_DIR . "/themes/$entry/config.ini";
+                try {
+                    $config = ConfigFile::factory($configFile, 'file');
+                    $themes[$entry] = $config->getOptionalVar('theme_name', $entry, 'general');
+                    
+                } catch (KurogoException $e) {
+                }
             }
         }
         $d->close();
@@ -480,6 +500,7 @@ abstract class WebModule extends Module {
         }
 
         $redirect= sprintf("https://%s%s%s", $secure_host, $secure_port == 443 ? '': ":$secure_port", $_SERVER['REQUEST_URI']);
+        Kurogo::log(LOG_DEBUG, "Redirecting to secure url $redirect",'module');
         header("Location: $redirect");          
         exit();
     }
@@ -511,7 +532,7 @@ abstract class WebModule extends Module {
 				if ($module = WebModule::factory($id)) {
 				   $modules[$id] = $module;
 				}
-			} catch (Exception $e) {
+			} catch (KurogoException $e) {
 			}
   		}
   	}
@@ -546,14 +567,6 @@ abstract class WebModule extends Module {
   //
   // Module list control functions
   //
-  protected function getModuleNavigationConfig() {
-    static $moduleNavConfig;
-    if (!$moduleNavConfig) {
-        $moduleNavConfig = ModuleConfigFile::factory('home', 'module');
-    }
-    
-    return $moduleNavConfig;
-  }
 
   protected function getModuleNavlist() {
     $navModules = $this->getAllModuleNavigationData(self::EXCLUDE_DISABLED_MODULES);
@@ -637,6 +650,9 @@ abstract class WebModule extends Module {
                 if (!$primary) { $classes[] = 'utility'; }
         
                 $imgSuffix = ($this->pagetype == 'tablet' && $selected) ? '-selected' : '';
+
+                //this is fixed for now
+                $modulesThatCannotBeDisabled = array('customize');
     
                 $moduleNavData = array(
                     'type'        => $type,
@@ -644,7 +660,7 @@ abstract class WebModule extends Module {
                     'title'       => $title,
                     'shortTitle'  => $shortTitle,
                     'url'         => "/$moduleID/",
-                    'disableable' => true,
+                    'disableable' => !in_array($moduleID, $modulesThatCannotBeDisabled),
                     'disabled'    => $includeDisabled && in_array($moduleID, $disabledIDs),
                     'img'         => "/modules/home/images/{$moduleID}{$imgSuffix}".$this->imageExt,
                     'class'       => implode(' ', $classes),
@@ -716,9 +732,11 @@ abstract class WebModule extends Module {
     return $path;
   }
   protected function addInternalCSS($path) {
+    Kurogo::log(LOG_DEBUG, "Adding internal css $path", 'module');
     $this->cssURLs[] = $this->getInternalCSSURL($path);
   }
   protected function addExternalCSS($url) {
+    Kurogo::log(LOG_DEBUG, "Adding external css $url", 'module');
     $this->cssURLs[] = $url;
   }
   protected function addInlineJavascript($inlineJavascript) {
@@ -738,49 +756,62 @@ abstract class WebModule extends Module {
     return $path;
   }
   protected function addInternalJavascript($path) {
+    Kurogo::log(LOG_DEBUG, "Adding internal javascript $path", 'module');
     $path = $this->getInternalJavascriptURL($path);
     if (!in_array($path, $this->javascriptURLs)) {
         $this->javascriptURLs[] = $path;
     }
   }
   protected function addExternalJavascript($url) {
+    Kurogo::log(LOG_DEBUG, "Adding external javascript $url", 'module');
     if (!in_array($url, $this->javascriptURLs)) {
         $this->javascriptURLs[] = $url;
     }
   }
   
   public function exportCSSAndJavascript() {
-    $memberArrays = array(
-      'inlineCSSBlocks',
-      'cssURLs',
-      'inlineJavascriptBlocks',
-      'inlineJavascriptFooterBlocks',
-      'onOrientationChangeBlocks',
-      'onLoadBlocks',
-      'javascriptURLs',
-    );
-    $data = array();
-    foreach ($memberArrays as $memberName) {
-      $data[$memberName] = $this->$memberName;
-    }
-
-    // Add page Javascript and CSS if any
     $minifyURLs = $this->getMinifyUrls(true);
-    
-    $context = stream_context_create(array(
-      'http' => array(
-        'user_agent' => $_SERVER['HTTP_USER_AGENT'],
-      ),
-    ));
-    
-    $javascript = @file_get_contents(FULL_URL_PREFIX.ltrim($minifyURLs['js'], '/'), false, $context);
-    if ($javascript) {
-      array_unshift($data['inlineJavascriptBlocks'], $javascript);
-    }
 
-    $css = @file_get_contents(FULL_URL_PREFIX.ltrim($minifyURLs['css'], '/'), false, $context);
-    if ($css) {
-      array_unshift($data['inlineCSSBlocks'], $css);
+    $cache = new DiskCache(CACHE_DIR.'/minify', Kurogo::getOptionalSiteVar('MINIFY_CACHE_TIMEOUT', 30), true);
+    $cacheName = "export_{$this->configModule}-{$this->page}-{$this->pagetype}-{$this->platform}-".
+        md5($minifyURLs['js'].$minifyURLs['css']);
+
+    if ($cache->isFresh($cacheName)) {
+      $data = $cache->read($cacheName);
+      
+    } else {
+      $memberArrays = array(
+        'inlineCSSBlocks',
+        'cssURLs',
+        'inlineJavascriptBlocks',
+        'inlineJavascriptFooterBlocks',
+        'onOrientationChangeBlocks',
+        'onLoadBlocks',
+        'javascriptURLs',
+      );
+      $data = array();
+      foreach ($memberArrays as $memberName) {
+        $data[$memberName] = $this->$memberName;
+      }
+  
+      // Add page Javascript and CSS if any
+      $context = stream_context_create(array(
+        'http' => array(
+          'user_agent' => $_SERVER['HTTP_USER_AGENT'],
+        ),
+      ));
+      
+      $javascript = @file_get_contents(FULL_URL_PREFIX.ltrim($minifyURLs['js'], '/'), false, $context);
+      if ($javascript) {
+        array_unshift($data['inlineJavascriptBlocks'], $javascript);
+      }
+  
+      $css = @file_get_contents(FULL_URL_PREFIX.ltrim($minifyURLs['css'], '/'), false, $context);
+      if ($css) {
+        array_unshift($data['inlineCSSBlocks'], $css);
+      }
+      
+      $cache->write($data, $cacheName);
     }
     
     return $data;
@@ -849,10 +880,6 @@ abstract class WebModule extends Module {
         $bookmarkCookie = $this->getBookmarkCookie();
 
         // compliant branch
-        $this->addOnLoad("setBookmarkStates('{$bookmarkCookie}', '".
-          strtr($cookieID, array(
-            '\\' => '\\\\', "'" => "\\'", '"' => '\\"', "\r" => '\\r', "\n" => '\\n', '</' => '<\/'
-          ))."')");
         $this->assign('cookieName', $bookmarkCookie);
         $this->assign('expireDate', $this->getBookmarkLifespan());
         $this->assign('bookmarkItem', $cookieID);
@@ -895,14 +922,11 @@ abstract class WebModule extends Module {
     
     protected function generateBookmarkLink() {
         $hasBookmarks = count($this->getBookmarks()) > 0;
-        $bookmarkLink = array();
-        if ($hasBookmarks) {
-            $bookmarkLink = array(array(
-                'title' => $this->bookmarkLinkTitle,
-                'url' => $this->buildBreadcrumbURL('bookmarks', $this->args, true),
-                ));
-            $this->assign('bookmarkLink', $bookmarkLink);
-        }
+        $bookmarkLink = array(array(
+            'title' => $this->getLocalizedString('BOOKMARK_TITLE'),
+            'url' => $this->buildBreadcrumbURL('bookmarks', $this->args, true),
+        ));
+        $this->assign('bookmarkLink', $bookmarkLink);
         $this->assign('hasBookmarks', $hasBookmarks);
         return $bookmarkLink;
     }    
@@ -1030,6 +1054,7 @@ abstract class WebModule extends Module {
   //
   private function loadPageConfig() {
     if (!isset($this->pageConfig)) {
+        Kurogo::log(LOG_DEBUG, "Loading page configuration for $this->configModule - $this->page", 'module');
       $this->setPageTitle($this->moduleName);
 
       // Load site configuration and help text
@@ -1072,6 +1097,7 @@ abstract class WebModule extends Module {
   
   // Programmatic overrides for titles generated from backend data
   protected function setPage($page) {
+    Kurogo::log(LOG_INFO, "Setting page to $page", 'module');
     $this->page = $page;
   }
   protected function getPageTitle() {
@@ -1110,7 +1136,26 @@ abstract class WebModule extends Module {
   // Config files
   //
   
+    protected function getThemeVar($key) {
+        $vars = $this->getThemeVars();
+        if (!isset($vars[$key])) {
+            throw new KurogoConfigurationException("Config variable '$key' not set");
+        }
+        
+        return $vars[$key];
+    }
+
+    protected function getOptionalThemeVar($var, $default='') {
+        $vars = $this->getThemeVars();
+        return isset($vars[$var]) ? $vars[$var] : $default;
+    }
+    
     protected function getThemeVars() {
+        static $vars = array();
+        if ($vars) {
+            return $vars;
+        }
+        
         $config = ConfigFile::factory('config', 'theme', ConfigFile::OPTION_CREATE_EMPTY);
         $sections = array(
             'common',
@@ -1118,7 +1163,6 @@ abstract class WebModule extends Module {
             $this->pagetype . '-' . $this->platform
         );
         
-        $vars = array();
         foreach ($sections as $section) {
             if ($sectionVars = $config->getOptionalSection($section)) {
                 $vars = array_merge($vars, $sectionVars);
@@ -1202,6 +1246,13 @@ abstract class WebModule extends Module {
         $this->refreshTime = $time;
         $this->assign('refreshPage', $this->refreshTime);
     }
+    
+    private function assignLocalizedStrings() {
+        $this->assign('footerKurogo', $this->getLocalizedString('FOOTER_KUROGO'));
+        $this->assign('footerBackToTop', $this->getLocalizedString('FOOTER_BACK_TO_TOP'));
+        $this->assign('homeLinkText', $this->getLocalizedString('HOME_LINK', Kurogo::getSiteString('SITE_NAME')));
+        $this->assign('moduleHomeLinkText', $this->getLocalizedString('HOME_LINK', $this->getModuleName()));
+    }
   
   private function setPageVariables() {
     $this->loadTemplateEngineIfNeeded();
@@ -1230,6 +1281,7 @@ abstract class WebModule extends Module {
     // Google Analytics. This probably needs to be moved
     if ($gaID = Kurogo::getOptionalSiteVar('GOOGLE_ANALYTICS_ID')) {
         $this->assign('GOOGLE_ANALYTICS_ID', $gaID);
+        $this->assign('GOOGLE_ANALYTICS_DOMAIN', Kurogo::getOptionalSiteVar('GOOGLE_ANALYTICS_DOMAIN'));
         $this->assign('gaImageURL', $this->googleAnalyticsGetImageUrl($gaID));
     }
 
@@ -1253,9 +1305,11 @@ abstract class WebModule extends Module {
       $this->assign('moduleNavList', $this->getModuleNavlist());
     }
             
-    // Set variables for each page
-    $this->initializeForPage();
+    Kurogo::log(LOG_DEBUG,"Calling initializeForPage for $this->configModule - $this->page", 'module');
+    $this->initializeForPage(); //subclass behavior
+    Kurogo::log(LOG_DEBUG,"Returned from initializeForPage for $this->configModule - $this->page", 'module');
 
+    // Set variables for each page
     $this->assign('pageTitle', $this->pageTitle);
 
     // Variables which may have been modified by the module subclass
@@ -1275,6 +1329,9 @@ abstract class WebModule extends Module {
     
     $moduleStrings = $this->getOptionalModuleSection('strings');
     $this->assign('moduleStrings', $moduleStrings);
+    $this->assign('homeLink', $this->buildURLForModule('home','',array()));
+    
+    $this->assignLocalizedStrings();
 
     // Module Help
     if ($this->page == 'help') {
@@ -1282,8 +1339,11 @@ abstract class WebModule extends Module {
       $template = 'common/templates/'.$this->page;
     } else {
       $this->assign('hasHelp', isset($moduleStrings['help']));
+      $this->assign('helpLink', $this->buildBreadcrumbURL('help',array()));
+      $this->assign('helpLinkText', $this->getLocalizedString('HELP_TEXT', $this->getModuleName()));
       $template = 'modules/'.$this->templateModule.'/templates/'.$this->templatePage;
     }
+    Kurogo::log(LOG_DEBUG,"Template file is $template", 'module');
     
     // Pager support
     if (isset($this->htmlPager)) {
@@ -1315,21 +1375,27 @@ abstract class WebModule extends Module {
         if ($this->isLoggedIn()) {
             $user = $session->getUser();
             $authority = $user->getAuthenticationAuthority();
-            $this->assign('session_authority_class', $authority->getAuthorityClass());
-            $this->assign('session_authority_title', $authority->getAuthorityTitle());
             $this->assign('session_userID', $user->getUserID());
             $this->assign('session_fullName', $user->getFullname());
             if (count($session->getUsers())==1) {
                 $this->assign('session_logout_url', $this->buildURLForModule('login', 'logout', array('authority'=>$user->getAuthenticationAuthorityIndex())));
-                $this->assign('session_multiple_logins', false);
+                $this->assign('footerLoginLink', $this->buildURLForModule('login', '', array()));
+                $this->assign('footerLoginText', $this->getLocalizedString('SIGNED_IN_SINGLE', $authority->getAuthorityTitle(), $user->getFullName()));
+                $this->assign('footerLoginClass', $authority->getAuthorityClass());
             } else {
-                $this->assign('session_multiple_logins', true);
+                $this->assign('footerLoginClass', 'login_multiple');
                 $this->assign('session_logout_url', $this->buildURLForModule('login', 'logout', array()));
+                $this->assign('footerLoginLink', $this->buildURLForModule('login', 'logout', array()));
+                $this->assign('footerLoginText', $this->getLocalizedString('SIGNED_IN_MULTIPLE'));
             }
 
             if ($session_max_idle = intval(Kurogo::getOptionalSiteVar('AUTHENTICATION_IDLE_TIMEOUT', 0))) {
                 $this->setRefresh($session_max_idle+2);
             }
+        } else {
+            $this->assign('footerLoginClass', 'noauth');
+            $this->assign('footerLoginLink', $this->buildURLForModule('login','', array()));
+            $this->assign('footerLoginText', $this->getLocalizedString('SIGN_IN_SITE', Kurogo::getSiteString('SITE_NAME')));
         }
     }
 
@@ -1348,7 +1414,18 @@ abstract class WebModule extends Module {
     $template = $this->setPageVariables();
     
     // Load template for page
-    $this->templateEngine->displayForDevice($template);    
+    $output = $this->templateEngine->fetchForDevice($template);
+
+	// log this request
+	$this->logView(strlen($output));
+	echo $output;
+	exit();
+  }
+  
+  protected function logView($size=null) {
+    if ($this->logView) {
+        KurogoStats::logView('web', $this->configModule, $this->page, $this->logData, $this->logDataLabel, $size);
+    }
   }
   
   //

@@ -61,19 +61,19 @@ class ArcGISParser extends DataParser implements MapDataParser
     {
         $data = json_decode($contents, true);
         if (!$data) {
-            error_log("Failed to get JSON response from ArcGIS server at {$this->baseURL}");
-            throw new DataServerException("The map server for this category is temporarily down.  Please try again later.");
+            Kurogo::log(LOG_WARNING, "Failed to get JSON response from ArcGIS server at {$this->baseURL}", 'maps');
+            throw new KurogoDataServerException("The map server for this category is temporarily down.  Please try again later.");
         }
         if (isset($data['error'])) {
             $error = $data['error'];
             $code = $error['code'];
             $message = $error['message'];
             $details = isset($error['details']) ? json_encode($error['details']) : '';
-            error_log("Error response from ArcGIS server at {$this->baseURL}:\n"
+            Kurogo::log(LOG_WARNING, "Error response from ArcGIS server at {$this->baseURL}:\n"
                       ."Code: $code\n"
                       ."Message: $message\n"
-                      ."Details: $details\n");
-            throw new DataServerException("The map server for this category is temporarily down.  Please try again later.");
+                      ."Details: $details\n", 'maps');
+            throw new KurogoDataServerException("The map server for this category is temporarily down.  Please try again later.");
         }
 
         $this->serviceDescription = $data['serviceDescription'];
@@ -251,7 +251,7 @@ class ArcGISParser extends DataParser implements MapDataParser
     }
     
     public function getSelectedLayerId() {
-        return $this->selectedLayer->getIndex();
+        return $this->selectedLayer->getId();
     }
     
     public function getSubLayerNames() {

@@ -7,7 +7,6 @@ define('MAP_GROUP_COOKIE', 'mapgroup');
 class MapWebModule extends WebModule {
 
     protected $id = 'map';
-    protected $bookmarkLinkTitle = 'Bookmarked Locations';
     protected $feedGroup = null;
     protected $feedGroups = null;
     protected $numGroups = 1;
@@ -140,11 +139,19 @@ class MapWebModule extends WebModule {
     {
         $addBreadcrumb = $options && isset($options['addBreadcrumb']) && $options['addBreadcrumb'];
         $urlArgs = shortArrayFromMapFeature($placemark);
+        if (isset($options['external']) && $options['external']) {
+            $urlArgs['external'] = true;
+        }
         $result = array(
             'title' => $placemark->getTitle(),
             'subtitle' => $placemark->getSubtitle(),
             'url' => $this->buildBreadcrumbURL('detail', $urlArgs, $addBreadcrumb),
             );
+
+        if (($distance = $placemark->getField('distance')) && $this->getOptionalModuleVar('SHOW_DISTANCES', true)) {
+            $result['subtitle'] = $this->displayTextFromMeters($distance);
+        }
+
         return $result;
     }
 
@@ -217,30 +224,15 @@ class MapWebModule extends WebModule {
         return $this->buildBreadcrumbURL('detail', $args, false);
     }
 
-    public function searchItems($searchTerms, $limit=null, $options)
+    public function searchItems($searchTerms, $limit=null, $options=null)
     {
         $addBreadcrumb = isset($options['addBreadcrumb']) && $options['addBreadcrumb'];
         $mapSearch = $this->getSearchClass($options);
         $searchResults = array_values($mapSearch->searchCampusMap($searchTerms));
-        $maxCount = count($searchResults);
-        if ($limit && $limit < $maxCount) {
-            $maxCount = $limit;
+        if ($limit) {
+            return array_slice($searchResults, 0, $limit);
         }
-        $results = array();
-        for ($i = 0; $i < $maxCount; $i++) {
-            $urlParams = shortArrayFromMapFeature($searchResults[$i]);
-            $external = $this->getArg('external', null);
-            if ($external) {
-                $urlParams['external'] = true;
-            }
-            $result = array(
-                'title' => $searchResults[$i]->getTitle(),
-                'url'   => $this->buildBreadcrumbURL('detail', $urlParams, $addBreadcrumb),
-                );
-            $results[] = $result;
-        }
-    
-        return $results;
+        return $searchResults;
     }
 
     // depends on feeds being loaded
@@ -264,7 +256,7 @@ class MapWebModule extends WebModule {
             if (isset($this->feeds[$category])) {
                 return $this->feeds[$category];
             } else {
-                error_log("Warning: unable to find feed data for category $category");
+                Kurogo::log(LOG_WARNING,"Warning: unable to find feed data for category $category",'maps');
             }
         }
         return null;
@@ -278,7 +270,7 @@ class MapWebModule extends WebModule {
         $configData = $this->getCurrentFeed();
         if (!isset($configData['STATIC_MAP_CLASS']) && !isset($configData['JS_MAP_CLASS'])) {
             if ($this->feedGroup === null) {
-                error_log("Warning: feed group not set when initializing image controller, using first group");
+                Kurogo::log(LOG_WARNING,"Warning: feed group not set when initializing image controller, using first group",'maps');
                 $this->feedGroup = key($this->feedGroups);
             }
             $configData = $this->getDataForGroup($this->feedGroup);
@@ -352,6 +344,50 @@ class MapWebModule extends WebModule {
         }
     }
 
+    protected function displayTextFromMeters($meters)
+    {
+        $result = null;
+        $system = $this->getOptionalModuleVar('DISTANCE_MEASUREMENT_UNITS', 'Metric');
+        switch ($system) {
+            case 'Imperial':
+                $miles = $meters * MILES_PER_METER;
+                if ($miles < 0.1) {
+                    $feet = $meters * FEET_PER_METER;
+                    $result = $this->getLocalizedString(
+                        'DISTANCE_IN_FEET',
+                         number_format($feet, 0));
+
+                } elseif ($miles < 15) {
+                    $result = $this->getLocalizedString(
+                        'DISTANCE_IN_MILES',
+                         number_format($miles, 1));
+                } else {
+                    $result = $this->getLocalizedString(
+                        'DISTANCE_IN_MILES',
+                         number_format($miles, 0));
+                }
+                break;
+            case 'Metric':
+            default:
+                if ($meters < 100) {
+                    $result = $this->getLocalizedString(
+                        'DISTANCE_IN_METERS',
+                         number_format($meters, 0));
+                } elseif ($meters < 15000) {
+                    $result = $this->getLocalizedString(
+                        'DISTANCE_IN_KILOMETERS',
+                         number_format($meters / 1000, 1));
+                } else {
+                    $result = $this->getLocalizedString(
+                        'DISTANCE_IN_KILOMETERS',
+                         number_format($meters / 1000, 0));
+                }
+                
+                break;
+        }
+        return $result;
+    }
+
     /////// UI functions
     
     protected function addJavascriptStaticMap() {
@@ -414,14 +450,6 @@ JS;
     {
         $placemarks = $dataController->getSelectedPlacemarks();
 
-        // override point for where annotation should be drawn
-        if (isset($this->args['lat'], $this->args['lon'])) {
-            $customPlacemark = new MapBasePoint(
-                $this->args['lat'], $this->args['lon']);
-            
-            $placemarks[] = $customPlacemark;
-        }
-
         $imgController = $this->getImageController();
         foreach ($placemarks as $placemark) {
             $imgController->addPlacemark($placemark);
@@ -436,10 +464,9 @@ JS;
         
         // override point for where map should be centered
         if (isset($this->args['center'])) {
-            $latlon = explode(",", $this->args['center']);
-            $center = array('lat' => $latlon[0], 'lon' => $latlon[1]);
-        } elseif (isset($customPlacemark)) {
-            $center = $customPlacemark->getCenterCoordinate();
+            $center = filterLatLon($this->getArg('center'));
+        } elseif (isset($this->args['lat'], $this->args['lon'])) {
+            $center = array('lat' => $this->getArg('lat'), 'lon' => $this->getArg('lon'));
         }
 
         if (isset($center)) {
@@ -498,12 +525,38 @@ JS;
                 }
 
                 $mapSearch = $this->getSearchClass($this->args);
-                $searchResults = $mapSearch->searchByProximity($center, 1000, 10, $dataController);
+
+                // defaults values for proximity search
+                $tolerance = 1000;
+                $maxItems = 0;
+
+                // check for settings in feedgroup config
+                $configData = $this->getDataForGroup($this->feedGroup);
+                if ($configData) {
+                    if (isset($configData['NEARBY_THRESHOLD'])) {
+                        $tolerance = $configData['NEARBY_THRESHOLD'];
+                    }
+                    if (isset($configData['NEARBY_ITEMS'])) {
+                        $maxItems = $configData['NEARBY_ITEMS'];
+                    }
+                }
+
+                // check for override settings in feeds
+                $configData = $this->getCurrentFeed();
+                if (isset($configData['NEARBY_THRESHOLD'])) {
+                    $tolerance = $configData['NEARBY_THRESHOLD'];
+                }
+                if (isset($configData['NEARBY_ITEMS'])) {
+                    $maxItems = $configData['NEARBY_ITEMS'];
+                }
+
+                $searchResults = $mapSearch->searchByProximity($center, $tolerance, $maxItems, $dataController);
                 $places = array();
                 if ($searchResults) {
                     foreach ($searchResults as $result) {
                         if ($result->getId() !== $currentId || $result->getTitle() !== $currentTitle) {
-                            $places[] = $this->linkForItem($result);
+                            $aPlace = $this->linkForItem($result);
+                            $places[] = $aPlace;
                         }
                     }
                     $this->assign('nearbyResults', $places);
@@ -571,13 +624,13 @@ JS;
                 $centerText = $center['lat'].','.$center['lon'];
 
                 $externalLinks[] = array(
-                    'title' => 'View in Google Maps', // TODO put this in strings file
+                    'title' => $this->getLocalizedString('VIEW_IN_GOOGLE_MAPS'),
                     'url'   => 'http://maps.google.com?ll='.$centerText,
                     'class' => 'external',
                     );
                 
                 $externalLinks[] = array(
-                    'title' => 'Get directions from Google',
+                    'title' => $this->getLocalizedString('GET_DIRECTIONS_FROM_GOOGLE'),
                     'url'   => 'http://maps.google.com?daddr='.$centerText,
                     'urlID' => 'directionsLink',
                     'class' => 'external',
@@ -616,7 +669,13 @@ JS;
                     }
                 }
 
-                if ($this->feedGroup === null && $this->numGroups > 1) {
+                if ($this->numGroups == 0) {
+                    $categories = array(array(
+                        'title' => $this->getLocalizedString('NO_MAPS_FOUND'),
+                        ));
+                    $this->assign('categories', $categories);
+
+                } else if ($this->feedGroup === null && $this->numGroups > 1) {
                     // show the list of groups
                     foreach ($this->feedGroups as $id => $groupData) {
                         $categories[] = array(
@@ -630,18 +689,17 @@ JS;
                     $apiURL = FULL_URL_BASE.API_URL_PREFIX."/{$this->configModule}";
                     $this->addInlineJavascript("\napiURL = '$apiURL';\n");
 
-                    $groupAlias = $this->getOptionalModuleVar('GROUP_ALIAS', 'Campus');
-                    $this->assign('browseHint', "Select a $groupAlias");
+                    $groupAlias = $this->getLocalizedString('MAP_GROUP_ALIAS');
+                    $this->assign('browseHint', $this->getLocalizedString('SELECT_A_MAP_GROUP', $groupAlias));
                     $this->assign('categories', $categories);
 
                     $this->addOnLoad('sortGroupsByDistance();');
                     
                 } else {
                     $groupData = $this->getDataForGroup($this->feedGroup);
-                    $browseBy = $groupData['title'];
+                    $this->assign('browseBy', $groupData['title']);
                     if ($this->numGroups > 1) {
-                        // TODO: use localization framework to get this string
-                        $groupAlias = $this->getOptionalModuleVar('GROUP_ALIAS_PLURAL', 'Campuses');
+                        $groupAlias = $this->getLocalizedString('MAP_GROUP_ALIAS_PLURAL');
                         $clearLink = array(array(
                             'title' => "All $groupAlias",
                             'url' => $this->groupURL(''),
@@ -657,9 +715,10 @@ JS;
                         $this->redirectTo('category', array('category'=>$category['id']));
                     }
                     */
-                    $this->assign('browseHint', "Browse {$browseBy} by:");
-                    $this->assign('searchTip', "You can search by any category shown in the 'Browse by' list below.");
                 }
+
+                $this->assign('placeholder', $this->getLocalizedString('MAP_SEARCH_PLACEHOLDER'));
+                $this->assign('tip', $this->getLocalizedString('MAP_SEARCH_TIP'));
 
                 if ($this->getOptionalModuleVar('BOOKMARKS_ENABLED', 1)) {
                     $this->generateBookmarkLink();
@@ -700,7 +759,11 @@ JS;
                     $args = array_merge($this->args, array('addBreadcrumb' => true));
 
                     // still need a way to show the Google logo if we use their search
-                    $places = $this->searchItems($searchTerms, null, $args);
+                    $searchResults = $this->searchItems($searchTerms, null, $args);
+                    $places = array();
+                    foreach ($searchResults as $place) {
+                        $places[] = $this->linkForItem($place);
+                    }
         
                     $this->assign('searchTerms', $searchTerms);
                     $this->assign('places',      $places);
@@ -757,7 +820,7 @@ JS;
                     if ($this->numGroups > 1) {
                         $categories = $this->assignCategories();
                         if (count($categories)==1) {
-                            $groupAlias = $this->getOptionalModuleVar('GROUP_ALIAS_PLURAL', 'Campuses');
+                            $groupAlias = $this->getLocalizedString('MAP_GROUP_ALIAS_PLURAL');
                             $clearLink = array(array(
                                 'title' => "All $groupAlias",
                                 'url' => $this->groupURL(''),

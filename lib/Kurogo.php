@@ -1,7 +1,7 @@
 <?php
 
 define('ROOT_DIR', realpath(dirname(__FILE__).'/..'));
-define('KUROGO_VERSION', '1.2');
+define('KUROGO_VERSION', '1.3');
 
 //
 // And a double quote define for ini files (php 5.1 can't escape them)
@@ -12,12 +12,24 @@ define('_QQ_', '"');
 class Kurogo
 {
     private static $_instance = NULL;
-    private function __construct() {}
     private function __clone() {}
+    protected $startTime;
     protected $libDirs = array();
     protected $config;
     protected $deviceClassifier;
     protected $session;
+    protected $logger;
+    protected $locale;    
+    protected $languages=array();
+
+    private function __construct() {
+        $this->startTime = microtime(true);
+    }
+    
+    public static function getElapsed() {
+        $Kurogo = self::sharedInstance();
+        return microtime(true) - $Kurogo->startTime;
+    }
 
     public static function getSession() {    
         $Kurogo = self::sharedInstance();
@@ -82,12 +94,12 @@ class Kurogo
     
     public function addPackage($packageName, $subpackageName=null) {
         if (!preg_match("/^[a-zA-Z0-9]+$/", $packageName)) {
-            throw new Exception("Invalid Package name $packageName");
+            throw new KurogoConfigurationException("Invalid Package name $packageName");
         }
     
         if ($subpackageName !== null) {
             if (!preg_match("/^[a-zA-Z0-9]+$/", $subpackageName)) {
-                throw new Exception("Invalid Subpackage name $packageName");
+                throw new KurogoConfigurationException("Invalid Subpackage name $packageName");
             }
             $packageName .= DIRECTORY_SEPARATOR.$subpackageName;
         }
@@ -105,6 +117,7 @@ class Kurogo
             }
     
             if (is_dir($dir)) {
+                self::log(LOG_INFO, "Adding package $packageName", "autoLoader");
                 $found = true;
                 $this->libDirs[] = $dir;
     
@@ -115,7 +128,7 @@ class Kurogo
         }
         
         if (!$found) {
-            throw new Exception("Unable to load package $packageName");
+            throw new KurogoConfigurationException("Unable to load package $packageName");
         }
     }    
     
@@ -129,7 +142,6 @@ class Kurogo
      * 
      */
     public function siteLibAutoloader($className) {
-        //error_log("Attempting to autoload $className");
         $paths = $this->libDirs;
         
         // If the className has Module in it then use the modules dir
@@ -144,12 +156,14 @@ class Kurogo
         
         $paths[] = LIB_DIR;
         
+        self::log(LOG_DEBUG, "Autoloader loading $className", "autoLoader"); 
         foreach ($paths as $path) {
             $file = "$path/$className.php";
+            self::log(LOG_DEBUG, "Autoloader looking for $file for $className", "autoLoader");
             if (file_exists($file)) {
-              //error_log("Autoloader found $file for $className");
-              include($file);
-              return;
+                self::log(LOG_INFO, "Autoloader found $file for $className", "autoLoader");
+                include($file);
+                return;
             }
         }
         return;
@@ -182,7 +196,173 @@ class Kurogo
     public static function isWindows() {
         return strtoupper(substr(PHP_OS, 0, 3)) === 'WIN';
     }
+
+    private static function checkIP($ip) {
+        if (!empty($ip) && ip2long($ip)!=-1 && ip2long($ip)!=false) {
+            $private_ips = array (
+                array('0.0.0.0','2.255.255.255'),
+                array('10.0.0.0','10.255.255.255'),
+                array('127.0.0.0','127.255.255.255'),
+                array('169.254.0.0','169.254.255.255'),
+                array('172.16.0.0','172.31.255.255'),
+                array('192.0.2.0','192.0.2.255'),
+                array('192.168.0.0','192.168.255.255'),
+                array('255.255.255.0','255.255.255.255')
+            );
+            
+            foreach ($private_ips as $r) {
+                $min = ip2long($r[0]);
+                $max = ip2long($r[1]);
+                if ((ip2long($ip) >= $min) && (ip2long($ip) <= $max)) return false;
+            }
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public static function determineIP() {
+        
+        if (isset($_SERVER['HTTP_CLIENT_IP']) && self::checkIP($_SERVER["HTTP_CLIENT_IP"])) {
+            return $_SERVER["HTTP_CLIENT_IP"];
+        }
+
+        if (isset($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+            foreach (explode(",",$_SERVER["HTTP_X_FORWARDED_FOR"]) as $ip) {
+                if (self::checkIP(trim($ip))) {
+                    return $ip;
+                }
+            }
+        }
+
+        if (isset($_SERVER['HTTP_X_FORWARDED']) && self::checkIP($_SERVER["HTTP_X_FORWARDED"])) {
+            return $_SERVER["HTTP_X_FORWARDED"];
+        } elseif (isset($_SERVER['HTTP_X_CLUSTER_CLIENT_IP']) && self::checkIP($_SERVER["HTTP_X_CLUSTER_CLIENT_IP"])) {
+            return $_SERVER["HTTP_X_CLUSTER_CLIENT_IP"];
+        } elseif (isset($_SERVER['HTTP_FORWARDED_FOR']) && self::checkIP($_SERVER["HTTP_FORWARDED_FOR"])) {
+            return $_SERVER["HTTP_FORWARDED_FOR"];
+        } elseif (isset($_SERVER['HTTP_FORWARDED']) && self::checkIP($_SERVER["HTTP_FORWARDED"])) {
+            return $_SERVER["HTTP_FORWARDED"];
+        } elseif (isset($_SERVER['REMOTE_ADDR'])) {
+            return $_SERVER["REMOTE_ADDR"];
+        }
+
+        return false;
+    }
+
+    public static function file_upload_error_message($error_code) {
+        switch ($error_code) { 
+            case UPLOAD_ERR_OK:
+                return self::getLocalizedString('UPLOAD_ERR_OK');
+            case UPLOAD_ERR_INI_SIZE: 
+                return self::getLocalizedString('UPLOAD_ERR_INI_SIZE', ini_get('upload_max_filesize'));
+            case UPLOAD_ERR_FORM_SIZE: 
+                return self::getLocalizedString('UPLOAD_ERR_FORM_SIZE');
+            case UPLOAD_ERR_PARTIAL: 
+                return self::getLocalizedString('UPLOAD_ERR_PARTIAL');
+            case UPLOAD_ERR_NO_FILE: 
+                return self::getLocalizedString('UPLOAD_ERR_NO_FILE');
+            case UPLOAD_ERR_NO_TMP_DIR: 
+                return self::getLocalizedString('UPLOAD_ERR_NO_TMP_DIR');
+            case UPLOAD_ERR_CANT_WRITE: 
+                return self::getLocalizedString('UPLOAD_ERR_CANT_WRITE');
+            case UPLOAD_ERR_EXTENSION: 
+                return self::getLocalizedString('UPLOAD_ERR_EXTENSION');
+            default: 
+                return self::getLocalizedString('UPLOAD_ERR_UNKNOWN');
+        }
+    }
     
+    public static function getAvailableLocales() {
+        static $locales=array();
+        if ($locales) {
+            return $locales;
+        }
+        
+        if (file_exists('/usr/bin/locale')) {
+            exec('/usr/bin/locale -a', $locales, $retval);
+            if ($retval!==0) {
+                throw new KurogoException("Error retrieving locale values");
+            }
+        } else {
+            throw new KurogoException("Unable to find list of locales on this platform");
+        }
+        
+        return $locales;
+    }
+    
+    public function getLocale() {
+        return $this->locale;
+    }
+
+    public function getSystemLocale() {
+        return setLocale(LC_ALL,"");
+    }
+
+    public function setLocale($locale) {
+        if ($this->isWindows()) {
+            throw new KurogoConfigurationException("Setting locale in Windows is not supported at this time");
+        }
+
+        // this is platform dependent.        
+        if (!$return = setLocale(LC_TIME, $locale)) {
+            throw new KurogoConfigurationException("Unknown locale setting $locale");
+        }
+        $this->locale = $return;
+        return $this->locale;
+    }
+        
+    private function logger() {
+        if (!$this->logger && $this->config) {
+            require_once(LIB_DIR . '/KurogoLog.php');
+            $this->logger = new KurogoLog();
+            $logFile = $this->config->getOptionalVar('KUROGO_LOG_FILE', LOG_DIR . "/kurogo.log");
+            $this->logger->setLogFile($logFile);
+            $this->logger->setDefaultLogLevel($this->config->getOptionalVar('DEFAULT_LOGGING_LEVEL', LOG_WARNING));
+            if (($loggingLevels = $this->config->getOptionalVar('LOGGING_LEVEL')) && is_array($loggingLevels)) {
+                foreach ($loggingLevels as $area=>$level) {
+                    $this->logger->setLogLevel($area, $level);
+                }
+            }
+        }
+        
+        return $this->logger;
+    }
+    
+    public function setDefaultLogLevel($level) {
+        $logger = $this->logger();
+        $logger->setDefaultLogLevel($level);
+    }
+    
+    public function setLogLevel($area, $level) {
+        $logger = $this->logger();
+        $logger->setLogLevel($area, $level);
+    }
+
+    
+    public static function log($priority, $message, $area, $backtrace=null) {
+        static $deferredLogs = array();
+        $logger = Kurogo::sharedInstance()->logger();
+        
+        if (!$logger) {
+            //this is a really early log before we have setup the config environment
+            $args = func_get_args();
+            $args[] = debug_backtrace();
+            $deferredLogs[] = $args;
+            return;
+        }
+            
+        // replay the deferred logs. 
+        if ($deferredLogs) {
+            foreach ($deferredLogs as $args) {
+                $logger->log($args[0], $args[1], $args[2], $args[3]);
+            }
+            $deferredLogs = array();
+        }
+
+        return $logger->log($priority, $message, $area, $backtrace);
+    }
+        
     public function initialize(&$path=null) {
         //
         // Constants which cannot be set by config file
@@ -193,7 +373,7 @@ class Kurogo
         define('MASTER_CONFIG_DIR', ROOT_DIR . DIRECTORY_SEPARATOR . 'config');
         define('APP_DIR',           ROOT_DIR . DIRECTORY_SEPARATOR . 'app');
         define('MODULES_DIR',       APP_DIR  . DIRECTORY_SEPARATOR . 'modules');
-        define('MIN_FILE_PREFIX',  'file:');
+        define('MIN_FILE_PREFIX',  'file-');
         define('API_URL_PREFIX',   'rest');
         
         //
@@ -201,6 +381,7 @@ class Kurogo
         //
         
         require(LIB_DIR . '/compat.php');
+        require(LIB_DIR.'/exceptions.php');
 
         // add autoloader        
         spl_autoload_register(array($this, "siteLibAutoloader"));
@@ -209,6 +390,7 @@ class Kurogo
         // Load configuration files
         //    
         $this->config = new SiteConfig($path);
+        
         ini_set('display_errors', $this->config->getVar('DISPLAY_ERRORS'));
         if (!ini_get('error_log')) {
             ini_set('error_log', LOG_DIR . DIRECTORY_SEPARATOR . 'php_error.log');
@@ -217,7 +399,6 @@ class Kurogo
         //
         // Install exception handlers
         //
-        require(LIB_DIR.'/exceptions.php');
       
         if ($this->config->getVar('PRODUCTION_ERROR_HANDLER_ENABLED')) {
             set_exception_handler("exceptionHandlerForProduction");
@@ -229,7 +410,20 @@ class Kurogo
         $timezone = $this->config->getVar('LOCAL_TIMEZONE');
         date_default_timezone_set($timezone);
         $this->timezone = new DateTimeZone($timezone);
+        self::log(LOG_DEBUG, "Setting timezone to $timezone", "kurogo");
 
+        if ($locale = $this->config->getOptionalVar('LOCALE')) {
+            $this->setLocale($locale);
+        } else {
+            $this->locale = $this->getSystemLocale();
+        }
+        
+        if ($languages = $this->config->getOptionalVar('LANGUAGES')) {
+        	$this->setLanguages($languages);
+        } else {
+        	$this->setLanguages(array('en_US'));
+        }
+        
         //
         // everything after this point only applies to http requests 
         //
@@ -247,6 +441,7 @@ class Kurogo
               $host .= ":{$_SERVER['SERVER_PORT']}";
         }
         define('SERVER_HOST', $host);
+        self::log(LOG_DEBUG, "Setting server host to $host", "kurogo");
     
         define('IS_SECURE', isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on');
         define('FULL_URL_BASE', 'http'.(IS_SECURE ? 's' : '').'://'.$_SERVER['HTTP_HOST'].URL_BASE);
@@ -255,6 +450,7 @@ class Kurogo
         // make sure host is all lower case
         if ($host != strtolower($host)) {
             $url = 'http'.(IS_SECURE ? 's' : '').'://' . strtolower($host) . $path;
+            self::log(LOG_INFO, "Redirecting to lowercase url $url", 'kurogo');
             header("Location: $url");
             exit();
           }
@@ -283,6 +479,7 @@ class Kurogo
       
         define('URL_DEVICE_DEBUG_PREFIX', $urlDeviceDebugPrefix);
         define('URL_PREFIX', $urlPrefix);
+        self::log(LOG_DEBUG, "Setting URL_PREFIX to " . URL_PREFIX, "kurogo");
         define('FULL_URL_PREFIX', 'http'.(IS_SECURE ? 's' : '').'://'.$_SERVER['HTTP_HOST'].URL_PREFIX);
         define('KUROGO_IS_API', preg_match("#^" .API_URL_PREFIX . "/#", $path));
           
@@ -294,35 +491,135 @@ class Kurogo
         $GLOBALS['deviceClassifier'] = $this->deviceClassifier;
     }
     
-    public static function getLanguages() {
-        return array(
-            'en'=>'English'
-        );
+    public static function encrypt($string, $key=SITE_KEY) {
+        if (strlen($string)==0) {
+            return $string;
+        }
+        
+        if (!function_exists('mcrypt_encrypt')) {
+            throw new KurogoException("mcrypt functions not available");
+        }
+        
+        return base64_encode(mcrypt_encrypt(MCRYPT_RIJNDAEL_256, md5($key), $string, MCRYPT_MODE_CBC, md5(md5($key))));
     }
+
+    public static function decrypt($encrypted, $key=SITE_KEY) {
+        if (strlen($encrypted)==0) {
+            return $encrypted;
+        }
+
+        if (!function_exists('mcrypt_decrypt')) {
+            throw new KurogoException("mcrypt functions not available");
+        }
+        
+        return rtrim(mcrypt_decrypt(MCRYPT_RIJNDAEL_256, md5($key), base64_decode($encrypted), MCRYPT_MODE_CBC, md5(md5($key))), "\0");    
+    }
+    
+    public function getLanguages() {
+    	return $this->languages;
+    }
+
+    public function setLanguages($languages) {
+    	$validLanguages = self::getAvailableLanguages();
+    	if (is_array($languages)) {
+    		$this->languages = array();
+    		foreach ($languages as $language) {
+    			if (!array_key_exists($language, $validLanguages)) {
+    				throw new KurogoConfigurationException("Invalid language $language");
+    			}
+    			$this->languages[] = $language;
+    		}
+    	} elseif (array_key_exists($languages, $validLanguages)) {
+			$this->languages[] = $languages;
+    	} else {
+			throw new KurogoConfigurationException("Invalid language $languages");
+		}
+		
+		if (!in_array('en_US', $this->languages)) {
+		    $this->languages[] = "en_US"; // always include english US
+		}		
+    }
+    
+    public static function getAvailableLanguages() {
+		return array(
+			'af_ZA'=>'Afrikaans',
+			'am_ET'=>'አማርኛ',
+			'be_BY'=>'Беларуская',
+			'bg_BG'=>'български език',
+			'ca_ES'=>'Català',
+			'cs_CZ'=>'čeština',
+			'da_DK'=>'Dansk',
+			'de_AT'=>'Deutsch (Österreich)',
+			'de_CH'=>'Deutsch (Schweiz)',
+			'de_DE'=>'Deutsch (Deutschland)',
+			'el_GR'=>'Ελληνικά',
+			'en_AU'=>'English (Australia)',
+			'en_CA'=>'English (Canada)',
+			'en_GB'=>'English (United Kingdom)',
+			'en_IE'=>'English (Ireland)',
+			'en_NZ'=>'English (New Zealand)',
+			'en_US'=>'English (United States)',
+			'es_ES'=>'Español',
+			'et_EE'=>'Eesti',
+			'eu_ES'=>'Euskara',
+			'fi_FI'=>'Suomi',
+			'fr_BE'=>'Français (Belgique)',
+			'fr_CA'=>'Français (Canada)',
+			'fr_CH'=>'Français (Suisse)',
+			'fr_FR'=>'Français (France)',
+			'he_IL'=>'עברית',
+			'hr_HR'=>'Hrvatski',
+			'hu_HU'=>'Magyar',
+			'hy_AM'=>'Հայերեն',
+			'is_IS'=>'Íslenska',
+			'it_CH'=>'Italiano (Svizzera)',
+			'it_IT'=>'Italiano (Italia)',
+			'ja_JP'=>'日本語',
+			'kk_KZ'=>'Қазақ тілі',
+			'ko_KR'=>'한국어',
+			'lt_LT'=>'Lietuvių',
+			'nl_BE'=>'Vlaams',
+			'nl_NL'=>'Nederlands',
+			'no_NO'=>'Norsk',
+			'pl_PL'=>'Polski',
+			'pt_BR'=>'Português (Brasil)',
+			'pt_PT'=>'Português',
+			'ro_RO'=>'Română',
+			'ru_RU'=>'Pусский',
+			'sk_SK'=>'Slovenčina',
+			'sl_SI'=>'Slovenščina',
+			'sr_YU'=>'Cрпски',
+			'sv_SE'=>'Svenska',
+			'tr_TR'=>'Türkçe',
+			'uk_UA'=>'Yкраїнська',
+			'zh_CN'=>'简体中文',
+			'zh_TW'=>'繁體中文'
+		);    
+	}
 
     public static function getLifetimeOptions() {
         return array(
-            ""    =>'Default',
-            0     =>'None',
-            10    =>'10 seconds',
-            30    =>'30 seconds',
-            60    =>'1 minute',
-            120   =>'2 minutes',
-            300   =>'5 minutes',
-            600   =>'10 minutes',
-            900   =>'15 minutes',
-            1800  =>'30 minutes',
-            3600  =>'1 hour',
-            7200  =>'2 hours',
-            10800 =>'3 hours',
-            21600 =>'6 hours',
-            43200 =>'12 hours',
-            86400 =>'1 day',
-            604800 =>'1 week',
-            1209600=>'2 weeks',
-            2419200=>'4 weeks',
-            15552000=>'180 days',
-            31536000=>'1 year'
+            ""    => self::getLocalizedString('TIMEOUT_DEFAULT'),
+            0     => self::getLocalizedString('TIMEOUT_NONE'),
+            10    => self::getLocalizedString('TIMEOUT_SECONDS', 10),
+            30    => self::getLocalizedString('TIMEOUT_SECONDS', 30),
+            60    => self::getLocalizedString('TIMEOUT_MINUTE', 1),
+            120   => self::getLocalizedString('TIMEOUT_MINUTES', 2),
+            300   => self::getLocalizedString('TIMEOUT_MINUTES', 5),
+            600   => self::getLocalizedString('TIMEOUT_MINUTES', 10),
+            900   => self::getLocalizedString('TIMEOUT_MINUTES', 15),
+            1800  => self::getLocalizedString('TIMEOUT_MINUTES', 30),
+            3600  => self::getLocalizedString('TIMEOUT_HOUR', 1),
+            7200  => self::getLocalizedString('TIMEOUT_HOURS', 2),
+            10800 => self::getLocalizedString('TIMEOUT_HOURS', 3),
+            21600 => self::getLocalizedString('TIMEOUT_HOURS', 6),
+            43200 => self::getLocalizedString('TIMEOUT_HOURS', 12),
+            86400 => self::getLocalizedString('TIMEOUT_DAY', 1),
+            604800 => self::getLocalizedString('TIMEOUT_WEEK', 1),
+            1209600=> self::getLocalizedString('TIMEOUT_WEEKS', 2),
+            2419200=> self::getLocalizedString('TIMEOUT_WEEKS', 4),
+            15552000=> self::getLocalizedString('TIMEOUT_DAYS', 180),
+            31536000=> self::getLocalizedString('TIMEOUT_YEAR', 1)
         );
     }
     
@@ -390,9 +687,69 @@ class Kurogo
         
         return $acls;
     }
+
+    private function getStringsForLanguage($lang) {
+        $stringFiles = array(
+            APP_DIR . "/common/strings/".$lang . '.ini',
+            SITE_APP_DIR . "/common/strings/".$lang . '.ini'
+        );
+        
+        $strings = array();
+        foreach ($stringFiles as $stringFile) {
+            if (is_file($stringFile)) {
+                $_strings = parse_ini_file($stringFile);
+                $strings = array_merge($strings, $_strings);
+            }
+        }
+        
+        return $strings;
+    }
+    
+    private function processString($string, $opts) {
+        if (!is_array($opts)) {
+            return $string;
+        } else {
+            return vsprintf($string, $opts);
+        }
+    }
+    
+    private function getStringForLanguage($key, $lang, $opts) {
+        if (!isset($this->strings[$lang])) {
+            $this->strings[$lang] = $this->getStringsForLanguage($lang);
+        }
+        
+        return isset($this->strings[$lang][$key]) ? $this->processString($this->strings[$lang][$key], $opts) : null;
+    }
+    
+    public function localizedString($key, $opts=null) {
+        if (!preg_match("/^[a-z0-9_]+$/i", $key)) {
+            throw new KurogoConfigurationException("Invalid string key $key");
+        }
+
+        // use any number of args past the first as options
+        $args = func_get_args();
+        array_shift($args);
+        if (count($args)==0 || is_null($args[0])) {
+            $args = null;
+        } 
+        
+        $languages = $this->getLanguages();
+        foreach ($languages as $language) {
+            $val = $this->getStringForLanguage($key, $language, $args);
+            if ($val !== null) {
+                return self::getOptionalSiteVar('LOCALIZATION_DEBUG') ?  $key : $val;
+            }
+        }
+        
+        throw new KurogoConfigurationException("Unable to find site string $key");
+    }
+    
+    public static function getLocalizedString($key, $opts=null) {
+        return Kurogo::sharedInstance()->localizedString($key, $opts);
+    }    
     
     public function checkCurrentVersion() {
-        $url = "https://modolabs.com/kurogo/checkversion.php?" . http_build_query(array(
+        $url = "http://kurogo.org/checkversion.php?" . http_build_query(array(
             'version'=>KUROGO_VERSION,
             'base'=>FULL_URL_BASE,
             'site'=>SITE_KEY,
@@ -410,7 +767,7 @@ class Kurogo
                 exec($exec, $output, $retval);
                 return $retval;
             } else {
-                throw new Exception("Cannot find a folder removal tool for this platform. Please report this and include your server operating system and version");
+                throw new KurogoException("Cannot find a folder removal tool for this platform. Please report this and include your server operating system and version");
             }
         } else {
             return 1;
@@ -418,6 +775,8 @@ class Kurogo
     }
     
     public function clearCaches($type=null) {
+
+        self::log(LOG_NOTICE, "Clearing site caches", "kurogo");
 
         if (strlen($type)>0) {
             return $this->rmdir(CACHE_DIR . "/" . $type);

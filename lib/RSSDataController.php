@@ -48,8 +48,17 @@ class RSSDataController extends DataController
     protected function clearInternalCache()
     {
         $this->items = null;
-        $this->parser->clearInternalCache();
         parent::clearInternalCache();
+    }
+    
+    public function getTitle() {
+        if (!$this->title) {
+            if ($this->parser) {
+                return $this->parser->getTitle();
+            }
+        }
+        
+        return $this->title;
     }
 
     public function items($start=0,$limit=null)

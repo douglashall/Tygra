@@ -24,6 +24,9 @@
       <script type="text/javascript">
         var _gaq = _gaq || [];
         _gaq.push(['_setAccount', '{$GOOGLE_ANALYTICS_ID}']);
+        {if $GOOGLE_ANALYTICS_DOMAIN}
+        _gaq.push(['_setDomainName', '{$GOOGLE_ANALYTICS_DOMAIN}']);
+        {/if}
         _gaq.push(['_trackPageview']);
       </script>
     {/if}
@@ -43,10 +46,18 @@
 
     <script type="text/javascript">
       function onOrientationChange() {ldelim}
-        rotateScreen();
-        {foreach $onOrientationChangeBlocks as $script}
-          {$script}
-        {/foreach}
+        {* the galaxy tab sends orientation change events constantly *}
+        if (typeof onOrientationChange.lastOrientation == 'undefined') {ldelim}
+          onOrientationChange.lastOrientation = null;
+        {rdelim}
+        var newOrientation = getOrientation();
+        if (newOrientation != onOrientationChange.lastOrientation) {ldelim}
+          rotateScreen();
+          {foreach $onOrientationChangeBlocks as $script}
+            {$script}
+          {/foreach}
+        {rdelim}
+        onOrientationChange.lastOrientation = newOrientation;
       {rdelim}
       if (window.addEventListener) {ldelim}
         window.addEventListener("orientationchange", onOrientationChange, false);
@@ -145,8 +156,8 @@
       {block name="navbar"}
         <div id="navbar"{if $hasHelp} class="helpon"{/if}>
           <div class="breadcrumbs{if $isModuleHome} homepage{/if}">
-            <a href="/home/" class="homelink">
-              <img src="/common/images/homelink.png" width="{$homelink_image_width|default:57}" height="{$homelink_image_height|default:45}" alt="Home" />
+            <a href="{$homeLink}" class="homelink" title="{$homeLinkText}">
+              <img src="/common/images/homelink.png" width="{$homelink_image_width|default:57}" height="{$homelink_image_height|default:45}" alt="{$homeLinkText}" />
             </a>
             
             {$breadcrumbHTML}
@@ -159,7 +170,7 @@
           </div>
           {if $hasHelp}
             <div class="help">
-              <a href="help.php"><img src="/common/images/help.png" width="{$help_image_width|default:46}" height="{$help_image_height|default:45}" alt="Help" /></a>
+              <a href="{$helpLink}" title="{$helpLinkText}"><img src="/common/images/help.png" width="{$help_image_width|default:46}" height="{$help_image_height|default:45}" alt="{$helpLinkText}" /></a>
             </div>
           {/if}
         </div>
