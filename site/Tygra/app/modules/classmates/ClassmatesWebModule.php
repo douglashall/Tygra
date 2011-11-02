@@ -23,8 +23,8 @@ class ClassmatesWebModule extends WebModule
 	}
 	
 	protected function getPhotoUrl($userId) {
-		$pwd = '';
-		$photoUrlBase = 'http://isites.harvard.edu/idphoto/';
+		$photoUrlBase = $this->getModuleVar('id_photo_url');
+		$pwd = $this->getModuleVar('id_photo_password');
 		$timestamp = time();
 		$randomString = $this->randomString(30);
 		$remoteAddr = $_SERVER["REMOTE_ADDR"];
