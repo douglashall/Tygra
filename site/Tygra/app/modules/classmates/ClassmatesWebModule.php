@@ -5,11 +5,12 @@ class ClassmatesWebModule extends WebModule
 	protected $id='classmates';
 	protected function initializeForPage() {
 		$controller = DataController::factory('ClassmatesDataController');
+		$userId = $_REQUEST['userId'];
 		
 		switch ($this->page)
 		{
 			case 'index':
-				$items = $controller->search('10564158');
+				$items = $controller->search($userId);
 				$this->assign('results', $items);
 				break;
 			
