@@ -33,7 +33,7 @@ class ClassmatesWebModule extends WebModule
 			$remoteAddr = gethostbyname(gethostname());
 		}
 		
-		$payload = rc4crypt::encrypt($pwd, $userId.'|'.$remoteAddr.'|'.$timestamp.'|'.$randomString);
+		$payload = RC4Crypt::encrypt($pwd, $userId.'|'.$remoteAddr.'|'.$timestamp.'|'.$randomString);
 		
 		$photoUrl = $photoUrlBase.bin2hex($payload).'.jpg';
 		
