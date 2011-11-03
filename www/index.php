@@ -99,26 +99,6 @@ html;
 }
 
 /**
-  * Outputs a 401 error message
-  */
-function _401() {
-    header("HTTP/1.1 401 Unauthorized");
-    $url = $_SERVER['REQUEST_URI'];
-    Kurogo::log(LOG_WARNING, "URL $url unauthorized", 'kurogo');
-    echo <<<html
-<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN">
-<html><head>
-<title>401 Unauthorized</title>
-</head><body>
-<h1>Unauthorized</h1>
-<p>You are not authorized to access the requested URL $url on this server.</p>
-</body></html>
-
-html;
-    exit();
-}
-
-/**
   * Will see if there is a HTTP_IF_MODIFIED_SINCE header and if the dates match it will return a 304
   * otherwise will set the Last-Modified header
   */
@@ -153,15 +133,6 @@ function CacheHeaders($file)
     }    
     return;
 }
-
-//
-// Authenticate user
-//
-$headers = apache_request_headers();
-if (!isset($headers['HU-PIN-USER-ID'])) {
-	_401();
-}
-$_REQUEST['userId'] = $headers['HU-PIN-USER-ID'];
 
 //
 // Handle page request
