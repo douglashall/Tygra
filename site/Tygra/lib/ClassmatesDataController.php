@@ -8,12 +8,11 @@
 
      public function search($q)
      {
-         // set the base url
-         $this->setBaseUrl('http://vm1.isites.harvard.edu/mobile/classmates.json');
-         //$this->setBaseUrl('http://localhost:8080/icommonsapi/whatsnew/by_user/10564158.json');
-         //$this->addFilter('alt', 'json'); //set the output format to json
-
+         $url = $this->baseURL;
+     	 $this->setBaseURL("$url$q.json");
          $data = $this->getParsedData();
+         $this->setBaseURL($url);
+
          $results = array();
          foreach ($data['classes']['class'] as $class) {
              foreach ($class['classmate'] as $item) {

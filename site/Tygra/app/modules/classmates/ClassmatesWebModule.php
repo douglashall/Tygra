@@ -4,13 +4,15 @@ class ClassmatesWebModule extends WebModule
 {
 	protected $id='classmates';
 	protected function initializeForPage() {
+		$session = $this->getSession();
+		$user = $session->getUser();
 		$controller = DataController::factory('ClassmatesDataController');
-		$userId = $_REQUEST['userId'];
+		$controller->setBaseURL($this->getModuleVar('data_url'));
 		
 		switch ($this->page)
 		{
 			case 'index':
-				$items = $controller->search($userId);
+				$items = $controller->search($user->getUserID());
 				$this->assign('results', $items);
 				break;
 			
