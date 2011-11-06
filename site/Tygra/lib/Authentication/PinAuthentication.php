@@ -10,18 +10,6 @@ class PinAuthentication extends AuthenticationAuthority
 {
     protected $authorityClass = 'pin';
     protected $userClass='HarvardUser';
-    protected $peopleDataUrl;
-    
-	public function init($args)
-    {
-        parent::init($args);
-        $args = is_array($args) ? $args : array();
-        if (!isset($args['PEOPLE_DATA_URL']) || strlen($args['PEOPLE_DATA_URL'])==0) {
-            throw new KurogoConfigurationException("People data url not set");
-        }
-
-        $this->peopleDataUrl = $args['PEOPLE_DATA_URL'];
-    }
     
 	protected function validUserLogins() { 
         return array('LINK');
@@ -60,7 +48,6 @@ class PinAuthentication extends AuthenticationAuthority
         }
         
         $controller = DataController::factory('PeopleDataController');
-		$controller->setBaseURL($this->peopleDataUrl);
 		$person = $controller->findPerson($login);
 		
         $user = new $this->userClass($this);
