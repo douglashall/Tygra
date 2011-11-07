@@ -5,6 +5,37 @@
      protected $cacheFolder = "Syllabus"; // set the cache folder
      protected $cacheSuffix = "json";   // set the suffix for cache files
      protected $DEFAULT_PARSER_CLASS='JSONDataParser'; // the default parser
+//	 protected $path;
+//	
+// 	protected function url() {
+//        $url = $this->baseURL;
+//        if ($this->path) {
+//        	$url .= $this->path;
+//        	$this->path = NULL;
+//        }
+//        if (count($this->filters)>0) {
+//            $glue = strpos($this->baseURL, '?') !== false ? '&' : '?';
+//            $url .= $glue . http_build_query($this->filters);
+//        }
+//        
+//        return $url;
+//    }
+//    
+//     public function search($q)
+//     {
+//         $this->path = "$q.json";
+//         $data = $this->getParsedData();
+//
+//         $results = array();
+//         foreach ($data['Courses'] as $item) {
+//             $course = new CourseObject();
+//             $course->setId($item['courseId']);
+//             $course->setTitle($item['title']);
+//             $course->setSyllabus($item['syllabusUrl']);
+//             $results[] = $course->toArray();
+//         }
+//
+//         return $results;
      //user: F7455492-E3B1-11E0-B26E-E0A8BADA4195
      //pwd: lcnnWEMnqrDLSVL5CifU
 //https://isites.harvard.edu/services/search/select/?userid=70602482&q=Syllabus&omitHeader=true&fq=sitekey:k63478&start=0&rows=250&fl=id,title,description,siteid&wt=json&fq=category:topic
