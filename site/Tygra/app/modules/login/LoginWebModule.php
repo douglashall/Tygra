@@ -122,7 +122,8 @@ class LoginWebModule extends WebModule {
                 if ($this->isLoggedIn()) {
                     $this->redirectTo('index', array('logout'=>$authorityIndex));
                 } else {
-                    $this->redirectToModule('home','',array('logout'=>$authorityIndex));
+                    header("Location: https://login.pin1.harvard.edu/pin/logout");
+                    exit();
                 }
             } else {
                 //there was an error logging out
