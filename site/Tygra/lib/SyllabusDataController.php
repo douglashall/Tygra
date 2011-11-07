@@ -5,7 +5,8 @@
      protected $cacheFolder = "Syllabus"; // set the cache folder
      protected $cacheSuffix = "json";   // set the suffix for cache files
      protected $DEFAULT_PARSER_CLASS='JSONDataParser'; // the default parser
-
+	 protected $path;
+	
  	protected function url() {
         $url = $this->baseURL;
         if ($this->path) {
