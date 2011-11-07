@@ -64,7 +64,7 @@ abstract class MapImageController
 
     public function init()
     {
-        $this->bufferBox = array('xmin' => 90, 'ymin' => 180, 'xmax' => -90, 'ymax' => -180);
+        $this->bufferBox = array('xmin' => 180, 'ymin' => 90, 'xmax' => -180, 'ymax' => -90);
     }
 
     // query functions
@@ -266,7 +266,7 @@ abstract class MapImageController
 
     public function prepareJavascriptTemplate($filename, $repeating=false) {
         // TODO better way to search for package-specific templates
-        $path = __DIR__.'/javascript/'.$filename.'.js';
+        $path = dirname(__FILE__).'/javascript/'.$filename.'.js';
         $path = realpath_exists($path);
         if ($path) {
             return new JavascriptTemplate($path, $repeating);

@@ -1,0 +1,46 @@
+<?php
+
+class PeopleDataController extends AuthenticatedDataController
+{
+    protected $cacheFolder = "People"; // set the cache folder
+    protected $cacheSuffix = "json";   // set the suffix for cache files
+    protected $DEFAULT_PARSER_CLASS='JSONDataParser'; // the default parser
+    protected $path;
+
+    protected function init($args) {
+    	
+        parent::init($args);
+        
+        $baseURL = $this->baseURL;
+        $this->setBaseURL($baseURL."people/by_id/");
+        
+    }
+    
+	protected function url() {
+        $url = $this->baseURL;
+        if ($this->path) {
+        	$url .= $this->path;
+        	$this->path = NULL;
+        }
+        if (count($this->filters)>0) {
+            $glue = strpos($this->baseURL, '?') !== false ? '&' : '?';
+            $url .= $glue . http_build_query($this->filters);
+        }
+        
+        return $url;
+    }
+    
+    public function findPerson($q)
+    {
+    	$this->path = "$q.json";
+        $data = $this->getParsedData();
+
+        $result = $data['people'][0];
+         
+        return $result;
+    }
+
+    // not used yet
+    public function getItem($id){}
+
+}

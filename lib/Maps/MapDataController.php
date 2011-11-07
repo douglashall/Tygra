@@ -18,6 +18,7 @@ class MapDataController extends DataController implements MapFolder
     // not config variables    
     protected $items = null;
     protected $selectedPlacemarks = array();
+    protected $allPlacemarks = array();
     protected $drillDownPath = array();
 
     protected $projectorReady = false;
@@ -37,7 +38,7 @@ class MapDataController extends DataController implements MapFolder
         return $this->searchable;
     }
 
-    protected function featureMatchesTokens(MapFeature $feature, Array $tokens)
+    protected function featureMatchesTokens(Placemark $feature, Array $tokens)
     {
         $matched = true;
         $title = $feature->getTitle();
@@ -111,8 +112,7 @@ class MapDataController extends DataController implements MapFolder
                     && $featureCenter['lon'] <= $bbox['max']['lon']
                     && $featureCenter['lon'] >= $bbox['min']['lon']
                 ) {
-                    // assume distances are small enough to use Euclidean distance
-                    $distance = euclideanDistance(
+                    $distance = greatCircleDistance(
                         $bbox['center']['lat'], $bbox['center']['lon'],
                         $featureCenter['lat'], $featureCenter['lon']);
                     if ($distance > $tolerance) continue;
@@ -268,8 +268,11 @@ class MapDataController extends DataController implements MapFolder
 
     public function getAllPlacemarks()
     {
-        $this->getListItems(); // make sure we're populated
-        return $this->parser->getAllPlacemarks();
+        if (!$this->allPlacemarks) {
+            $this->getListItems(); // make sure we're populated
+            $this->allPlacemarks = $this->parser->getAllPlacemarks();
+        }
+        return $this->allPlacemarks;
     }
 
     public function getListItems()
@@ -289,6 +292,7 @@ class MapDataController extends DataController implements MapFolder
 
     // End MapFolder interface
 
+    /*
     protected function getFeature($name, $categoryPath=array()) {
         $items = $this->getListItems($categoryPath);
         if (isset($items[$name])) {
@@ -296,11 +300,13 @@ class MapDataController extends DataController implements MapFolder
         }
         return null;
     }
+    */
 
     // implemented for compatibility with DataController
     public function getItem($name)
     {
-        return $this->getFeature($name);
+        throw new Exception("This function has moved. See getSelectedPlacemark");
+        //return $this->getFeature($name);
     }
 
     // override what the feed says
@@ -378,11 +384,11 @@ class MapDataController extends DataController implements MapFolder
     {
         if (strpos($url, '.kmz') !== false) {
             if (!class_exists('ZipArchive')) {
-                throw new Exception("class ZipArchive (php-zip) not available");
+                throw new KurogoException("class ZipArchive (php-zip) not available");
             }
             $tmpDir = Kurogo::tempDirectory();
             if (!is_writable($tmpDir)) {
-                throw new Exception("Temporary directory $tmpDir not available");
+                throw new KurogoConfigurationException("Temporary directory $tmpDir not available");
             }
             $tmpFile = $tmpDir.'/tmp.kmz';
 

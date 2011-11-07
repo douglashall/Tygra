@@ -4,9 +4,10 @@ class SyllabusWebModule extends WebModule
 {
 	protected $id='syllabus';
 	protected function initializeForPage() {
-		$controller = DataController::factory('SyllabusDataController');
 		$session = $this->getSession();
 		$user = $session->getUser();
+		$controller = DataController::factory('SyllabusDataController');
+//		$controller->setBaseURL($this->getModuleVar('data_url'));
 	    
 		switch ($this->page)
 		{

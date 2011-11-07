@@ -37,7 +37,6 @@ class NewsAPIModule extends APIModule {
                 foreach ($feeds as $index => $feedData) {
                     $response[] = array('id' => strval($index),
                     					'title' => strip_tags($feedData['TITLE']),
-                    					'time' => time(),
                     					);
                 }
                 $this->setResponse($response);
@@ -115,7 +114,7 @@ class NewsAPIModule extends APIModule {
             $controller = DataController::factory($feedData['CONTROLLER_CLASS'], $feedData);
             return $controller;
         } else {
-            throw new Exception("Error getting news feed for index $index");
+            throw new KurogoConfigurationException("Error getting news feed for index $index");
         }
     }
 

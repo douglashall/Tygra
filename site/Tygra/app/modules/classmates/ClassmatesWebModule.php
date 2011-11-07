@@ -4,12 +4,15 @@ class ClassmatesWebModule extends WebModule
 {
 	protected $id='classmates';
 	protected function initializeForPage() {
+		$session = $this->getSession();
+		$user = $session->getUser();
 		$controller = DataController::factory('ClassmatesDataController');
+		$controller->setBaseURL($this->getModuleVar('data_url'));
 		
 		switch ($this->page)
 		{
 			case 'index':
-				$items = $controller->search('10564158');
+				$items = $controller->search($user->getUserID());
 				$this->assign('results', $items);
 				break;
 			
@@ -23,8 +26,8 @@ class ClassmatesWebModule extends WebModule
 	}
 	
 	protected function getPhotoUrl($userId) {
-		$pwd = '';
-		$photoUrlBase = 'http://isites.harvard.edu/idphoto/';
+		$photoUrlBase = $this->getModuleVar('id_photo_url');
+		$pwd = $this->getModuleVar('id_photo_password');
 		$timestamp = time();
 		$randomString = $this->randomString(30);
 		$remoteAddr = $_SERVER["REMOTE_ADDR"];
@@ -32,7 +35,7 @@ class ClassmatesWebModule extends WebModule
 			$remoteAddr = gethostbyname(gethostname());
 		}
 		
-		$payload = rc4crypt::encrypt($pwd, $userId.'|'.$remoteAddr.'|'.$timestamp.'|'.$randomString);
+		$payload = RC4Crypt::encrypt($pwd, $userId.'|'.$remoteAddr.'|'.$timestamp.'|'.$randomString);
 		
 		$photoUrl = $photoUrlBase.bin2hex($payload).'.jpg';
 		

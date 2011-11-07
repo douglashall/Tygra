@@ -12,21 +12,27 @@ class PeopleAPIModule extends APIModule
     
     protected function getContactGroup($group) {
         if (!$this->contactGroups) {
-            $this->contactGroups = $this->getModuleSections('api-contacts-groups');
+            $this->contactGroups = $this->getAPIConfigData('contacts-groups');
         }
         
         if (isset($this->contactGroups[$group])) {
-            if (!isset($this->contactGroups[$group]['contacts'])) {
-                $this->contactGroups[$group]['contacts'] = $this->getModuleSections('api-contacts-' . $group);
-            }
+            return $this->contactGroups[$group];
 
-            if (!isset($this->contactGroups[$group]['description'])) {
-                $this->contactGroups[$group]['description'] = '';
-            }
-            
-            return $this->contactGroups[$group];            
         } else {
-            throw new Exception("Unable to find contact group information for $group");
+            throw new KurogoConfigurationException("Unable to find contact group information for $group");
+        }
+    }
+
+    protected function getContactsForGroup($group) {
+        if (!$this->contactGroups) {
+            $this->contactGroups = $this->getAPIConfigData('contacts-groups');
+        }
+        
+        if (isset($this->contactGroups[$group])) {
+            return $this->getAPIConfigData('contacts-' . $group);
+
+        } else {
+            throw new KurogoConfigurationException("Unable to find contact group information for $group");
         }
     }
     
@@ -69,7 +75,7 @@ class PeopleAPIModule extends APIModule
                         $result[$section] = array();
                     }
                     $valueArray = array(
-                        'label' => $fieldOptions['label'],
+                        'title' => $fieldOptions['label'],
                         'type' => $fieldOptions['type'],
                         'value' => $value,
                         );
@@ -95,7 +101,7 @@ class PeopleAPIModule extends APIModule
             //$controller->setAttributes($this->detailAttributes);
             return $controller;
         } else {
-            throw new Exception("Error getting people feed for index $index");
+            throw new KurogoConfigurationException("Error getting people feed for index $index");
         }
     }
 
@@ -145,7 +151,35 @@ class PeopleAPIModule extends APIModule
                 }
                 break;
             case 'contacts':
-                $results = $this->getAPIConfigData('contacts');
+                $convertTags = array(
+                    'class' => 'type',
+                    'label' => 'title',
+                    'value' => 'subtitle',
+                    );
+
+                $group = $this->getArg('group');
+                if ($group) {
+                    $results = $this->getContactsForGroup($group);
+                } else {
+                    $results = $this->getAPIConfigData('contacts');
+                }
+
+                foreach ($results as &$aResult) {
+                    if (isset($aResult['group'])) {
+                        $groupData = $this->getContactGroup($aResult['group']);
+                        if (isset($groupData['description'])) {
+                            $aResult['subtitle'] = $groupData['description'];
+                        }
+                    }
+
+                    foreach ($convertTags as $from => $to) {
+                        if (isset($aResult[$from])) {
+                            $aResult[$to] = $aResult[$from];
+                            unset($aResult[$from]);
+                        }
+                    }
+                }
+
                 $response = array(
                     'total'        => count($results),
                     'results'      => $results,
