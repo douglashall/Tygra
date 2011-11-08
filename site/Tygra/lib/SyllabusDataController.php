@@ -35,44 +35,44 @@
 			}
 			
 			if (strlen($sitekeys) > 0) {
-     		$this->path = sprintf("userid=%s&q=Syllabus&omitHeader=true&fq=category:topic&start=0&rows=100&wt=json&fq=sitekey:%s&fl=topicid,title,sitekey,linkurl,description,fileurl",$user->getUserID(),$sitekeys);
-	
-	        $data = $this->getParsedData();
-			foreach ($data['response']['docs'] as $item) {
-				$result = new SyllabusObject();
-				if (isset($item['title']))
-					$result->setTitle($item['title']);
-				if (isset($item['sitekey']))
-					$result->setKeyword($item['sitekey']);
-				if (isset($item['fileurl']))
-					$result->setFileUrl($item['fileurl']);
-				if (isset($item['linkurl']))
-					$result->setLinkUrl($item['linkurl']);
-				if (isset($item['description']))
-				    $result->setDescription($item['description']);
-				if (isset($item['topicid']))
-				    $result->setTopicId($item['topicid']);
-				foreach ($user->getCourses() as $course) {
-					$course->addSyllabusObject($result);
-				}
-	         }
-     	}
+	     		$this->path = sprintf("userid=%s&q=Syllabus&omitHeader=true&fq=category:topic&start=0&rows=100&wt=json&fq=sitekey:%s&fl=topicid,title,sitekey,linkurl,description,fileurl",$user->getUserID(),$sitekeys);
+		
+		        $data = $this->getParsedData();
+				foreach ($data['response']['docs'] as $item) {
+					$result = new SyllabusObject();
+					if (isset($item['title']))
+						$result->setTitle($item['title']);
+					if (isset($item['sitekey']))
+						$result->setKeyword($item['sitekey']);
+					if (isset($item['fileurl']))
+						$result->setFileUrl($item['fileurl']);
+					if (isset($item['linkurl']))
+						$result->setLinkUrl($item['linkurl']);
+					if (isset($item['description']))
+					    $result->setDescription($item['description']);
+					if (isset($item['topicid']))
+					    $result->setTopicId($item['topicid']);
+					foreach ($user->getCourses() as $course) {
+						$course->addSyllabusObject($result);
+					}
+		         }
+     		}
      	
- 		foreach ($user->getCourses() as $course) {
- 			$view = new SyllabusView();
- 			$view->setSiteTitle($course->getTitle());
- 			$href = sprintf("%s/%s",$this->getIsitesUrl(),$course->getKeyword());
- 			$view->setSiteHref($href);
- 			if($course->getSyllabus()) {
- 				$items = array();
-				foreach ($course->getSyllabus() as $item) {
-					$items[] = $item->toArray();
-				}
- 				
- 				$view->setSyllabus($items);
- 			}
-			$results[] = $view->toArray();
- 		}
+	 		foreach ($user->getCourses() as $course) {
+	 			$view = new SyllabusView();
+	 			$view->setSiteTitle($course->getTitle());
+	 			$href = sprintf("%s/%s",$this->getIsitesUrl(),$course->getKeyword());
+	 			$view->setSiteHref($href);
+	 			if($course->getSyllabus()) {
+	 				$items = array();
+					foreach ($course->getSyllabus() as $item) {
+						$items[] = $item->toArray();
+					}
+	 				
+	 				$view->setSyllabus($items);
+	 			}
+				$results[] = $view->toArray();
+	 		}
      	}
      		
 		return $results;
