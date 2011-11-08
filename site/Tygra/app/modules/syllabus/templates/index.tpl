@@ -1,7 +1,7 @@
 {include file="findInclude:common/templates/header.tpl"}
 <ul class="results" id="syllabusList">
   {foreach $results as $site}
-  <b>From site: '{$site['siteTitle']}'</b>
+  <b>From site: <a href="{$site['siteHref']}">'{$site['siteTitle']}'</a></b>
 	  {foreach $site.syllabus as $item}
 	    {if !isset($item['separator'])}
 	      <li{if $item['img']} class="icon"{/if}>

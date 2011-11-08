@@ -2,7 +2,17 @@
 
 abstract class AuthenticatedDataController extends DataController
 {
- 
+	protected $path;
+	protected $isitesUrl;
+	
+    protected function init($args) {
+        parent::init($args);
+        
+        if (isset($args['ISITES_URL'])) {
+    		$this->isitesUrl = $args['ISITES_URL'];
+        }
+    }
+	
   	protected function url() {
         $url = $this->baseURL;
         if ($this->path) {
@@ -16,6 +26,10 @@ abstract class AuthenticatedDataController extends DataController
         
         return $url;
     }
+    
+    public function getIsitesUrl() {
+    	return $this->isitesUrl;
+	}
     
     protected function initStreamContext($args) {
     	$streamContextOpts = array();

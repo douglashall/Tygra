@@ -5,7 +5,6 @@
      protected $cacheFolder = "Syllabus"; // set the cache folder
      protected $cacheSuffix = "json";   // set the suffix for cache files
      protected $DEFAULT_PARSER_CLASS='JSONDataParser'; // the default parser
-	 protected $path;
 
     protected function init($args) {
     	
@@ -62,6 +61,8 @@
  		foreach ($user->getCourses() as $course) {
  			$view = new SyllabusView();
  			$view->setSiteTitle($course->getTitle());
+ 			$href = sprintf("%s/%s",$this->getIsitesUrl(),$course->getKeyword());
+ 			$view->setSiteHref($href);
  			if($course->getSyllabus()) {
  				$items = array();
 				foreach ($course->getSyllabus() as $item) {
