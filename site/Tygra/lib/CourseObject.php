@@ -5,17 +5,17 @@
  */
 class CourseObject implements KurogoObject
 {
-    protected $id;
-    protected $title;
+    protected $keyword; //site keyword
+    protected $title; // site title
     protected $syllabus;
     protected $enrollees;
     
-    public function setId($id) {
-        $this->id = $id;
+    public function setKeyword($keyword) {
+        $this->keyword = $keyword;
     }
 
-    public function getId() {
-        return $this->id;
+    public function getKeyword() {
+        return $this->keyword;
     }
     
     public function setTitle($title) {
@@ -44,5 +44,13 @@ class CourseObject implements KurogoObject
     
     public function toArray() {
     	return get_object_vars($this);
+    }
+    
+    public function addSyllabusObject(SyllabusObject $o) {
+    	if ($o->getKeyword() == $this->keyword) {
+    		if (!$this->syllabus)
+    			$this->syllabus = array();
+    		$this->syllabus[] = $o;	
+    	}
     }
 }
