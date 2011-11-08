@@ -12,7 +12,7 @@ class PeopleDataController extends AuthenticatedDataController
         parent::init($args);
         
         $baseURL = $this->baseURL;
-        $this->setBaseURL($baseURL."people/by_id/");
+        $this->setBaseURL($baseURL."people/course_person/");
         
     }
     
@@ -34,10 +34,8 @@ class PeopleDataController extends AuthenticatedDataController
     {
     	$this->path = "$q.json";
         $data = $this->getParsedData();
-
-        $result = $data['people'][0];
-         
-        return $result;
+        if (isset($data['person']))
+			return $data['person'];
     }
 
     // not used yet
