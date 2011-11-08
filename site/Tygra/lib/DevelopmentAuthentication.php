@@ -16,13 +16,6 @@
 class DevelopmentAuthentication extends AuthenticationAuthority
 {
     protected $userClass='Person';
-    protected $groupClass='PasswdUserGroup';
-    private $userFile;
-    private $groupFile;
-    private $users = array();
-    private $userEmails = array();
-    private $groups = array();
-    private $groupGIDs = array();
     
     protected function validUserLogins()
     {
@@ -44,7 +37,7 @@ class DevelopmentAuthentication extends AuthenticationAuthority
             return new AnonymousUser();       
         }
 
-        $user = $user = $this->getUser($login);;
+        $user = $this->getUser($login);;
         return AUTH_OK;
     }
     
@@ -65,11 +58,17 @@ class DevelopmentAuthentication extends AuthenticationAuthority
             $json = @json_decode($data, true);
 //			var_export($json);
 
+
             if (isset($json['person']['id'])) {
 		        $user = new $this->userClass($this);
 		        $user->setUserID($json['person']['id']);
 		        $user->setEmail('developer@harvard.edu');
+		        $user->setFirstName($json['person']['firstName']);
+		        $user->setLastName($json['person']['lastName']);
+		        
 		        $user->setFullName($json['person']['firstName']." ".$json['person']['lastName']."(".$json['person']['id'].")");
+		        if (!isset($json['person']['courses']))
+		        	return $user;
 		        $courses = array();
          		foreach ($json['person']['courses'] as $course) {
 					$result = new CourseObject();
@@ -77,7 +76,6 @@ class DevelopmentAuthentication extends AuthenticationAuthority
          				$result->setTitle($course['title']);
 					if (isset($course['keyword']))
          				$result->setKeyword($course['keyword']);
-//					$courses[] = $result->toArray();
 					$courses[] = $result;
          		}
 		        $user->setCourses($courses);
@@ -96,5 +94,6 @@ class DevelopmentAuthentication extends AuthenticationAuthority
     public function init($args)
     {
         parent::init($args);
+//    	print("Init dev authentication module");
     }
 }

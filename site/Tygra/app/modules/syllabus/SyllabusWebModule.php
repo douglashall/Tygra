@@ -13,7 +13,7 @@ class SyllabusWebModule extends WebModule
 		{
 			case 'index':
 				$items = $controller->search($user);
-				var_export($items);
+//				var_export($items);
 				$this->assign('results', $items);
 				break;
 		}

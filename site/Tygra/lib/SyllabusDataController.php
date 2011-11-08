@@ -41,6 +41,7 @@
 //https://isites.harvard.edu/services/search/select/?userid=70602482&q=Syllabus&omitHeader=true&fq=sitekey:k63478&start=0&rows=250&fl=id,title,description,siteid&wt=json&fq=category:topic
      public function search($user)
      {
+		$results = array();
      	$syllabusSet = false;
      	if ($user->getCourses()) {
      		foreach ($user->getCourses() as $course) {
@@ -58,6 +59,8 @@
 					$sitekeys = $sitekeys.'%20OR%20';
 				$sitekeys = $sitekeys.$course->getKeyword();
 			}
+			
+			if (strlen($sitekeys) > 0) {
 	     	
 			// set application key for icommonsapi service
 	         $this->addHeader('Authorization', 'Basic ' . $SERVER_USER_CREDENTIALS);
@@ -97,7 +100,6 @@
 	         }
      	}
      	
-		$results = array();
  		foreach ($user->getCourses() as $course) {
  			$view = new SyllabusView();
  			$view->setSiteTitle($course->getTitle());
@@ -111,6 +113,7 @@
  			}
 			$results[] = $view->toArray();
  		}
+     	}
      		
 		return $results;
      }
