@@ -34,6 +34,7 @@ class PeopleDataController extends AuthenticatedDataController
     {
     	$this->path = "$q.json";
         $data = $this->getParsedData();
+
         if (isset($data['person']))
 			return $data['person'];
     }

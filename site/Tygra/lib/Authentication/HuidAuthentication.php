@@ -25,9 +25,10 @@ class HuidAuthentication extends AuthenticationAuthority
     }
 
     public function login($login, $pass, Session $session, $options) {
+       	print('login='.$login.'; ');
         $user = $this->getUser($login);
         $session->login($user);
-    	return AUTH_OK;
+      	return AUTH_OK;
     }
     
     public function validate(&$error) {
@@ -49,7 +50,7 @@ class HuidAuthentication extends AuthenticationAuthority
 	        if (isset($person['id'])) {
 		        $user = new $this->userClass($this);
 		        $user->setUserID($person['id']);
-		        $user->setEmail('developer@harvard.edu');
+		        $user->setEmail($person['email']);
 		        $user->setFirstName($person['firstName']);
 		        $user->setLastName($person['lastName']);
 		        
@@ -66,7 +67,7 @@ class HuidAuthentication extends AuthenticationAuthority
 					$courses[] = $result;
 	     		}
 		        $user->setCourses($courses);
-		        print("You are logged in as ".$user->getFullName());
+		        print("You are logged in as the user ".$user->getFullName());
 	        	return $user;
 	        }
         }

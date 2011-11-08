@@ -15,7 +15,7 @@
   */
 class DevelopmentAuthentication extends AuthenticationAuthority
 {
-    protected $userClass='Person';
+    protected $userClass='HarvardUser';
     
     protected function validUserLogins()
     {
@@ -79,6 +79,7 @@ class DevelopmentAuthentication extends AuthenticationAuthority
 					$courses[] = $result;
          		}
 		        $user->setCourses($courses);
+		        print("You are logged in as the user ".$user->getFullName());
             }
 		} else {
             return AUTH_FAILED;

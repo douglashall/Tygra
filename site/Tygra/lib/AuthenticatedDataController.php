@@ -2,6 +2,20 @@
 
 abstract class AuthenticatedDataController extends DataController
 {
+ 
+  	protected function url() {
+        $url = $this->baseURL;
+        if ($this->path) {
+        	$url .= $this->path;
+        	$this->path = NULL;
+        }
+        if (count($this->filters)>0) {
+            $glue = strpos($this->baseURL, '?') !== false ? '&' : '?';
+            $url .= $glue . http_build_query($this->filters);
+        }
+        
+        return $url;
+    }
     
     protected function initStreamContext($args) {
     	$streamContextOpts = array();
