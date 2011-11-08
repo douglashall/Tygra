@@ -18,7 +18,6 @@ class LoginWebModule extends WebModule {
 
 
   protected function initializeForPage() {
-  
     if (!Kurogo::getSiteVar('AUTHENTICATION_ENABLED')) {
         throw new KurogoConfigurationException($this->getLocalizedString("ERROR_AUTHENTICATION_DISABLED"));
     }
@@ -122,8 +121,12 @@ class LoginWebModule extends WebModule {
                 if ($this->isLoggedIn()) {
                     $this->redirectTo('index', array('logout'=>$authorityIndex));
                 } else {
-                    header("Location: https://login.pin1.harvard.edu/pin/logout");
-                    exit();
+                	if ($authorityData['USER_LOGIN'] == 'FORM') {
+        				$this->redirectTo('login', array('url'=>$url));
+		        	} else {
+		        		header("Location: " . $authority->getLogoutUrl());
+                    	exit();
+		        	}
                 }
             } else {
                 //there was an error logging out
@@ -132,89 +135,8 @@ class LoginWebModule extends WebModule {
             }
         
             break;
-
+            
         case 'login':
-            //get arguments
-            $login          = $this->argVal($_POST, 'loginUser', '');
-            $password       = $this->argVal($_POST, 'loginPassword', '');
-            $options = array(
-                'url'=>$url
-            );
-            
-            $session  = $this->getSession();
-            $session->setRemainLoggedIn($remainLoggedIn);
-
-            $authorityIndex = $this->getArg('authority', '');
-            if (!$authorityData = AuthenticationAuthority::getAuthenticationAuthorityData($authorityIndex)) {
-                //invalid authority
-                $this->redirectTo('index', $options);
-            }
-
-            if ($this->isLoggedIn($authorityIndex)) {
-                //we're already logged in
-                $this->redirectTo('index', $options);
-            }                    
-
-            $this->assign('authority', $authorityIndex);
-            $this->assign('remainLoggedIn', $remainLoggedIn);
-            $this->assign('authorityTitle', $authorityData['TITLE']);
-
-            //if they haven't submitted the form and it's a direct login show the form
-            if ($authorityData['USER_LOGIN']=='FORM' && empty($login)) {
-
-                if (!$loginMessage = $this->getOptionalModuleVar('LOGIN_DIRECT_MESSAGE')) {
-                    $loginMessage = $this->getLocalizedString('LOGIN_DIRECT_MESSAGE', Kurogo::getSiteString('SITE_NAME'));
-                }
-                $this->assign('LOGIN_DIRECT_MESSAGE', $loginMessage);
-                $this->assign('url', $url);
-                break;
-            } elseif ($authority = AuthenticationAuthority::getAuthenticationAuthority($authorityIndex)) {
-                //indirect logins handling the login process themselves. Send a return url so the indirect authority can come back here
-                if ($authorityData['USER_LOGIN']=='LINK') {
-                    $options['return_url'] = FULL_URL_BASE . $this->configModule . '/login?' . http_build_query(array_merge($options, array(
-                            'authority'=>$authorityIndex
-                    )));
-                }
-                $options['startOver'] = $this->getArg('startOver', 0);
-
-                $result = $authority->login($login, $password, $session, $options);
-            } else {
-                $this->redirectTo('index', $options);
-            }
-
-            switch ($result)
-            {
-                case AUTH_OK:
-                    $user = $this->getUser($authority);
-                    $this->setLogData($user, $user->getFullName());
-                    $this->logView();
-                    if ($url) {
-                        header("Location: $url");
-                        exit();
-                    } else {
-                        $this->redirectToModule('home','',array('login'=>$authorityIndex));
-                    }
-                    break;
-
-                case AUTH_OAUTH_VERIFY:
-                    // authorities that require a manual oauth verification key 
-                    $this->assign('verifierKey',$authority->getVerifierKey());
-                    $this->setTemplatePage('oauth_verify.tpl');
-                    break 2;
-                    
-                default:
-                    //there was a problem.
-                    if ($authorityData['USER_LOGIN']=='FORM') {
-                        $this->assign('message', $this->getLocalizedString('ERROR_LOGIN_DIRECT'));
-                        break 2;
-                    } else {
-                        $this->redirectTo('index', array_merge(
-                            array('messagekey'=>'ERROR_LOGIN_INDIRECT'),
-                            $options));
-                    }
-            }
-            
-        case 'index':
     		if ($this->isLoggedIn($authority)) {
     			if ($url) {
                     header("Location: $url");
@@ -231,13 +153,8 @@ class LoginWebModule extends WebModule {
             );
             
             $session  = $this->getSession();
-            
-            $headers = apache_request_headers();
-			if (!isset($headers['HU-PIN-USER-ID'])) {
-				$this->_401();
-			}
 			
-    		$result = $authority->login($headers['HU-PIN-USER-ID'], '', $session, $options);
+    		$result = $authority->login($login, $password, $session, $options);
 
             switch ($result)
             {
@@ -258,6 +175,15 @@ class LoginWebModule extends WebModule {
             }
             
             break;
+            
+        case 'index':
+        	if ($authorityData['USER_LOGIN'] == 'FORM') {
+        		$this->assign('authority', $authority);
+        	} else {
+        		$this->redirectTo('login', array('url'=>$url));
+        	}
+        	break;
+        	
     }
   }
 

@@ -5,12 +5,9 @@
 {if !$message}
 <p class="nonfocal">{$LOGIN_DIRECT_MESSAGE}</p>
 {/if}
-<input type="hidden" name="authority" value="{$authority}" />
 <div class="focal">
     {if $message}<p>{$message}</p>{/if}
     <p><label for="loginUser">{$moduleStrings.LOGIN_LABEL|default:'login'}:</label> <input type="text" name="loginUser" id="loginUser" class="loginFormInput" /></p>
-    <p><label for="loginPassword">{$moduleStrings.PASSWORD_LABEL|default:'password'}:</label> <input type="password" name="loginPassword" id="loginPassword" class="loginFormInput" /> </p>
-    {if $allowRemainLoggedIn}<p class="checkitem"><input type="checkbox" id="remember" name="remainLoggedIn"{if $remainLoggedIn} checked{/if} /> <label for="remember">{"REMEMBER_ME"|getLocalizedString}</label></p>{/if}
 
     <div class="formbuttons">
       {include file="findInclude:common/templates/formButtonSubmit.tpl" buttonTitle="SIGN_IN"|getLocalizedString}
