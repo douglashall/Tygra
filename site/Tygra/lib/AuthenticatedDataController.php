@@ -17,7 +17,6 @@ abstract class AuthenticatedDataController extends DataController
         $url = $this->baseURL;
         if ($this->path) {
         	$url .= $this->path;
-        	$this->path = NULL;
         }
         if (count($this->filters)>0) {
             $glue = strpos($this->baseURL, '?') !== false ? '&' : '?';
