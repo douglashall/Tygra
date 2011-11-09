@@ -20,13 +20,12 @@ class PeopleDataController extends AuthenticatedDataController
         $url = $this->baseURL;
         if ($this->path) {
         	$url .= $this->path;
-        	$this->path = NULL;
         }
         if (count($this->filters)>0) {
             $glue = strpos($this->baseURL, '?') !== false ? '&' : '?';
             $url .= $glue . http_build_query($this->filters);
         }
-        
+        Kurogo::log(LOG_WARNING, "*** $url ***", 'session');
         return $url;
     }
     

@@ -39,7 +39,7 @@ class HomeWebModule extends WebModule {
   }
      
   protected function initializeForPage() {
-    switch ($this->page) {
+  	switch ($this->page) {
       case 'help':
         break;
               
