@@ -67,7 +67,6 @@ class HuidAuthentication extends AuthenticationAuthority
 					$courses[] = $result;
 	     		}
 		        $user->setCourses($courses);
-		        print("You are logged in as the user ".$user->getFullName());
 	        	return $user;
 	        }
         }

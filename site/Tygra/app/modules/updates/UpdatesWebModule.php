@@ -7,7 +7,6 @@ class UpdatesWebModule extends WebModule
 		$session = $this->getSession();
 		$user = $session->getUser();
 		$controller = DataController::factory('UpdatesDataController');
-		$controller->setBaseURL($this->getModuleVar('data_url'));
 	    
 		switch ($this->page)
 		{

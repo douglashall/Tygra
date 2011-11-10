@@ -52,4 +52,6 @@
 {/if}  
 {/block}
 
+<div style="clear:both;padding:12px 0 0 0;">You are logged in as {$user->getFirstName()} {$user->getLastName()} ({$user->getUserID()})</div>
+
 {include file="findInclude:common/templates/footer.tpl"}
