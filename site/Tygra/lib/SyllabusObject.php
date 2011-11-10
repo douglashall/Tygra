@@ -11,7 +11,7 @@ class SyllabusObject implements KurogoObject
     protected $title;
     protected $keyword;
     protected $linkUrl;
-    protected $fileUrl;
+    protected $category;
     protected $description;
     
     public function setKeyword($keyword) {
@@ -46,12 +46,12 @@ class SyllabusObject implements KurogoObject
         $this->linkUrl = $linkUrl;
     }
     
-    public function getFileUrl() {
-        return $this->fileUrl;
+    public function getCategory() {
+        return $this->category;
     }
 
-    public function setFileUrl($fileUrl) {
-        $this->fileUrl = $fileUrl;
+    public function setCategory($category) {
+        $this->category = $category;
     }
 
     public function getDescription() {
