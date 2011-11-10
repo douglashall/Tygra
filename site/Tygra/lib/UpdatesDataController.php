@@ -34,7 +34,7 @@
 		 $this->path = "$q.json";
          $data = $this->getParsedData();
          
-         $results = $data['whatsnews']['sections'][0]['items'];
+         $results = $data['whatsnews']['sections'];
 
          return $results;
      }

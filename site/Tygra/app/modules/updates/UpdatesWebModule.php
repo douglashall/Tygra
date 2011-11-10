@@ -11,8 +11,8 @@ class UpdatesWebModule extends WebModule
 		switch ($this->page)
 		{
 			case 'index':
-				$items = $controller->search($user->getUserID());
-				$this->assign('results', $items);
+				$sections = $controller->search($user->getUserID());
+				$this->assign('sections', $sections);
 				break;
 		}
 	}
