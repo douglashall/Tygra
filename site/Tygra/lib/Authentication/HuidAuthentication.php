@@ -53,23 +53,24 @@ class HuidAuthentication extends AuthenticationAuthority
 		        $user->setEmail($person['email']);
 		        $user->setFirstName($person['firstName']);
 		        $user->setLastName($person['lastName']);
-		        $user->setFullName($person['firstName']." ".$person['lastName']);
-		        print('You are logged in as '.$user->getFullName().'('.$user->getUserID().')');
-		        if (isset($person['courses'])) {
-			        $courses = array();
-		     		foreach ($person['courses'] as $course) {
-						$result = new CourseObject();
-						if (isset($course['title']))
-		     				$result->setTitle($course['title']);
-						if (isset($course['keyword']))
-		     				$result->setKeyword($course['keyword']);
-						$courses[] = $result;
-		     		}
-			        $user->setCourses($courses);
-		        }
+		        
+		        $user->setFullName($person['firstName']." ".$person['lastName']."(".$person['id'].")");
+		        if (!isset($person['courses']))
+		        	return $user;
+		        $courses = array();
+	     		foreach ($person['courses'] as $course) {
+					$result = new CourseObject();
+					if (isset($course['title']))
+	     				$result->setTitle($course['title']);
+					if (isset($course['keyword']))
+	     				$result->setKeyword($course['keyword']);
+					$courses[] = $result;
+	     		}
+		        $user->setCourses($courses);
 	        	return $user;
 	        }
         }
 		return new AnonymousUser();       
+        
     }
 }

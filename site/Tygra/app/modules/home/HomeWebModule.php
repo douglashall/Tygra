@@ -39,11 +39,14 @@ class HomeWebModule extends WebModule {
   }
      
   protected function initializeForPage() {
+  	$session = $this->getSession();
+	$user = $session->getUser();
   	switch ($this->page) {
       case 'help':
         break;
               
       case 'index':
+      	$this->assign('user', $user);
         if ($this->pagetype == 'tablet') {
           
           $this->assign('modulePanes', $this->getTabletModulePanes($this->getModuleSection('tablet_panes')));

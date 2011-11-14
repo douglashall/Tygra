@@ -1,11 +1,20 @@
 <?php
 
- class UpdatesDataController extends DataController
+ class UpdatesDataController extends AuthenticatedDataController
  {
      protected $cacheFolder = "Updates"; // set the cache folder
      protected $cacheSuffix = "json";   // set the suffix for cache files
      protected $DEFAULT_PARSER_CLASS='JSONDataParser'; // the default parser
 	 protected $path;
+    
+    protected function init($args) {
+    	
+        parent::init($args);
+        
+        $baseURL = $this->baseURL;
+        $this->setBaseURL($baseURL."whatsnew/by_user/");
+        
+    }
     
 	protected function url() {
         $url = $this->baseURL;
@@ -25,7 +34,7 @@
 		 $this->path = "$q.json";
          $data = $this->getParsedData();
          
-         $results = $data['whatsnews']['sections'][0]['items'];
+         $results = $data['whatsnews']['sections'];
 
          return $results;
      }
