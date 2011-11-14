@@ -7,20 +7,41 @@ class ClassmatesWebModule extends WebModule
 		$session = $this->getSession();
 		$user = $session->getUser();
 		$controller = DataController::factory('ClassmatesDataController');
-		$controller->setBaseURL($this->getModuleVar('data_url'));
 		
 		switch ($this->page)
 		{
+			// courses
 			case 'index':
-				$items = $controller->search($user->getUserID());
-				$this->assign('results', $items);
+				$items = array();
+	 			foreach ($user->getCourses() as $course) {
+					$items[] = $course->toArray();
+					$this->assign('results', $items);
+	 			}
 				break;
-			
+			case 'people':
+				$keyword = $this->getArg('keyword');
+				$students = $user->getUserData('enrollee_'.$keyword);
+				if (!$students) {
+					$students = $controller->search($keyword, $user->getUserID());
+					$user->setUserData('enrollee_'.$course->getKeyword(), $items);
+				}
+				$results = array("keyword" => $keyword, "people" => $students);
+				$this->assign('results', $results);
+				break;
 			case 'detail':
 				$id = $this->getArg('id');
-				$item = $controller->getItem($id);
-				$this->assign('item', $item);
-				$this->assign('photoUrl', $this->getPhotoUrl($item['id']));
+				$keyword = $this->getArg('keyword');
+				$students = $user->getUserData('enrollee_'.$keyword);
+				if ($students) {
+					foreach ($students as $student) {
+						if ($id == $student['id']) {
+							$this->assign('item', $student);
+							// TODO: add a valid photoUrl to the module config
+//							$this->assign('photoUrl', $this->getPhotoUrl($student['huid']));
+							break;
+						}
+					}
+	 			}
 				break;
 		}
 	}

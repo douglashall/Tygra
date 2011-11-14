@@ -5,7 +5,8 @@
  */
 class PersonObject implements KurogoObject
 {
-    protected $id;
+    protected $id; // this is the number to pass to the ui layer in place of huid
+    protected $huid;
     protected $firstName;
     protected $lastName;
     protected $email;
@@ -17,6 +18,14 @@ class PersonObject implements KurogoObject
 
     public function getId() {
         return $this->id;
+    }
+
+    public function setHuid($huid) {
+        $this->huid = $huid;
+    }
+
+    public function getHuid() {
+        return $this->huid;
     }
     
     public function setFirstName($firstName) {

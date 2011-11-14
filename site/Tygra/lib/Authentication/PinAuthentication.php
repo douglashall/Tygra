@@ -48,19 +48,32 @@ class PinAuthentication extends AuthenticationAuthority
     }
 
     public function getUser($login) {
-        if (empty($login)) {
-            return new AnonymousUser();       
+        if (!empty($login)) {
+	        $controller = DataController::factory('PeopleDataController');
+			$person = $controller->findPerson($login);
+	        if (isset($person['id'])) {
+		        $user = new $this->userClass($this);
+		        $user->setUserID($person['id']);
+		        $user->setEmail($person['email']);
+		        $user->setFirstName($person['firstName']);
+		        $user->setLastName($person['lastName']);
+		        $user->setFullName($person['firstName']." ".$person['lastName']);
+		        if (isset($person['courses'])) {
+			        $courses = array();
+		     		foreach ($person['courses'] as $course) {
+						$result = new CourseObject();
+						if (isset($course['title']))
+		     				$result->setTitle($course['title']);
+						if (isset($course['keyword']))
+		     				$result->setKeyword($course['keyword']);
+						$courses[] = $result;
+		     		}
+			        $user->setCourses($courses);
+		        }
+	        	return $user;
+	        }
         }
-        
-        $controller = DataController::factory('PeopleDataController');
-		$person = $controller->findPerson($login);
-		
-        $user = new $this->userClass($this);
-        $user->setUserID($login);
-        $user->setEmail($person['email']);
-        $user->setFirstName($person['firstName']);
-        $user->setLastName($person['lastName']);
-        return $user;
+		return new AnonymousUser();       
     }
     
     public function getLogoutUrl() {

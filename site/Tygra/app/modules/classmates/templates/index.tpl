@@ -1,22 +1,20 @@
-{include file="findInclude:common/templates/header.tpl"}
-
-<ul class="results" id="classmatesList">
+<ul class="results" id="activityList">
   {foreach $results as $item}
     {if !isset($item['separator'])}
       <li{if $item['img']} class="icon"{/if}>
         {capture name="listItemLabel" assign="listItemLabel"}
-		  {if isset($item['firstName'])}
+		  {if isset($item['title'])}
 		    {if $boldLabels}
 		      <strong>
 		    {/if}
-		      {$item['firstName']} {$item['lastName']}{if $labelColon|default:false}: {/if}
+		      {$item['title']}{if $labelColon|default:false}: {/if}
 		    {if $boldLabels}
 		      </strong>
 		    {/if}
 		  {/if}
 		{/capture}
 		{block name="itemLink"}
-		  <a href="detail?id={$item['id']}" class="{$item['class']|default:''}"{if $linkTarget || $item['linkTarget']} target="{if $item['linkTarget']}{$item['linkTarget']}{else}{$linkTarget}{/if}"{/if}>
+		    <a href="people?keyword={$item['keyword']}" class="{$item['class']|default:''}"{if $linkTarget || $item['linkTarget']} target="{if $item['linkTarget']}{$item['linkTarget']}{else}{$linkTarget}{/if}"{/if}>
 		    {if $item['img']}
 		      <img src="{$item['img']}" alt="{$item['title']}"{if $item['imgWidth']}
 		        width="{$item['imgWidth']}"{/if}{if $item['imgHeight']}
@@ -24,6 +22,11 @@
 		        alt="{$item['imgAlt']}"{/if} />
 		    {/if}
 		    {$listItemLabel}
+		    {if $titleTruncate}
+		      {$item['title']|truncate:$titleTruncate}
+		    {else}
+		      {$item['title']}
+		    {/if}
 		    {if $item['subtitle']}
 		      {if $subTitleNewline|default:true}<div{else}&nbsp;<span{/if} class="smallprint">
 		        {$item['subtitle']}

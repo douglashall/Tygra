@@ -14,5 +14,4 @@ class HarvardUser extends User
     public function setCourses($courses) {
     	$this->courses = $courses;
     }
-
 }

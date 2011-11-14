@@ -7,8 +7,7 @@ class CourseObject implements KurogoObject
 {
     protected $keyword; //site keyword
     protected $title; // site title
-    protected $syllabus;
-    protected $enrollees;
+    protected $syllabus = array();
     
     public function setKeyword($keyword) {
         $this->keyword = $keyword;
@@ -34,16 +33,8 @@ class CourseObject implements KurogoObject
         $this->syllabus = $syllabus;
     }
     
-    public function getEnrollees() {
-        return $this->enrollees;
-    }
-
-    public function setEnrollees($enrollees) {
-        $this->enrollees = $enrollees;
-    }
-    
     public function toArray() {
-    	return get_object_vars($this);
+    	return array("keyword" => $this->keyword, "title" => $this->title);
     }
     
     public function addSyllabusObject(SyllabusObject $o) {

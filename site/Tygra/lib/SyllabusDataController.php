@@ -18,61 +18,47 @@
      public function search($user)
      {
 		$results = array();
-     	$syllabusSet = false;
-     	if ($user->getCourses()) {
-     		foreach ($user->getCourses() as $course) {
-     			if($course->getSyllabus()) {
-     				$syllabusSet = true;
-     			}
-     		}
-     	}
-     	if ($syllabusSet ==  false) {
-			$sitekeys = '';
-			foreach ($user->getCourses() as $course) {
-				if (strlen($sitekeys) > 0)
-					$sitekeys = $sitekeys.'%20OR%20';
-				$sitekeys = $sitekeys.$course->getKeyword();
-			}
+		$sitekeys = '';
+		foreach ($user->getCourses() as $course) {
+			if (strlen($sitekeys) > 0)
+				$sitekeys = $sitekeys.'%20OR%20';
+			$sitekeys = $sitekeys.$course->getKeyword();
+		}
 			
-			$category = '(file%20OR%20topic)';
-			$title = 'syllabus%20-title:hidden';
+		$category = '(file%20OR%20topic)';
 			
-			if (strlen($sitekeys) > 0) {
-//	     		$this->path = sprintf("userid=%s&q=Syllabus&omitHeader=true&fq=category:topic&start=0&rows=100&wt=json&fq=sitekey:%s&fl=topicid,title,sitekey,linkurl,description,fileurl",$user->getUserID(),$sitekeys);
-	     		$this->path = sprintf("userid=%s&q=title:syllabus+-hidden&omitHeader=true&fq=category:%s&start=0&rows=100&wt=json&fq=sitekey:%s&fl=topicid,title,sitekey,linkurl,description,category",$user->getUserID(),$category,$sitekeys);
-		
-		        $data = $this->getParsedData();
-				foreach ($data['response']['docs'] as $item) {
-					$result = new SyllabusObject();
-					if (isset($item['title']))
-						$result->setTitle($item['title']);
-					if (isset($item['sitekey']))
-						$result->setKeyword($item['sitekey']);
-					if (isset($item['category']))
-						$result->setCategory($item['category']);
-					if (isset($item['linkurl']))
-						$result->setLinkUrl($item['linkurl']);
-					if (isset($item['description']))
-					    $result->setDescription($item['description']);
-					if (isset($item['topicid']))
-					    $result->setTopicId($item['topicid']);
-					foreach ($user->getCourses() as $course) {
-						$course->addSyllabusObject($result);
-					}
-		         }
-     		}
+		if (strlen($sitekeys) > 0) {
+     		$this->path = sprintf("userid=%s&q=title:syllabus+-hidden&omitHeader=true&fq=category:%s&start=0&rows=100&wt=json&fq=sitekey:%s&fl=topicid,title,sitekey,linkurl,description,category",$user->getUserID(),$category,$sitekeys);
+	
+	        $data = $this->getParsedData();
+			foreach ($data['response']['docs'] as $item) {
+				$result = new SyllabusObject();
+				if (isset($item['title']))
+					$result->setTitle($item['title']);
+				if (isset($item['sitekey']))
+					$result->setKeyword($item['sitekey']);
+				if (isset($item['category']))
+					$result->setCategory($item['category']);
+				if (isset($item['linkurl']))
+					$result->setLinkUrl($item['linkurl']);
+				if (isset($item['description']))
+				    $result->setDescription($item['description']);
+				if (isset($item['topicid']))
+				    $result->setTopicId($item['topicid']);
+				foreach ($user->getCourses() as $course) {
+					$course->addSyllabusObject($result);
+				}
+	         }
+ 		}
      	
-	 		foreach ($user->getCourses() as $course) {
-	 			$view = new SyllabusView();
-	 			$view->setSiteTitle($course->getTitle());
-	 			$href = sprintf("%s/%s",$this->getIsitesUrl(),$course->getKeyword());
-	 			$view->setSiteHref($href);
- 				$view->setSyllabus($course->getSyllabusAsArray());
-				$results[] = $view->toArray();
-	 		}
-     	}
-     	var_export($results);
-     		
+ 		foreach ($user->getCourses() as $course) {
+ 			$view = new SyllabusView();
+ 			$view->setSiteTitle($course->getTitle());
+ 			$href = sprintf("%s/%s",$this->getIsitesUrl(),$course->getKeyword());
+ 			$view->setSiteHref($href);
+			$view->setSyllabus($course->getSyllabusAsArray());
+			$results[] = $view->toArray();
+ 		}
 		return $results;
      }
 
