@@ -23,7 +23,7 @@ class ClassmatesWebModule extends WebModule
 				$students = $user->getUserData('enrollee_'.$keyword);
 				if (!$students) {
 					$students = $controller->search($keyword, $user->getUserID());
-					$user->setUserData('enrollee_'.$course->getKeyword(), $items);
+					$user->setUserData('enrollee_'.$keyword, $students);
 				}
 				$results = array("keyword" => $keyword, "people" => $students);
 				$this->assign('results', $results);
@@ -32,6 +32,7 @@ class ClassmatesWebModule extends WebModule
 				$id = $this->getArg('id');
 				$keyword = $this->getArg('keyword');
 				$students = $user->getUserData('enrollee_'.$keyword);
+				print('details');
 				if ($students) {
 					foreach ($students as $student) {
 						if ($id == $student['id']) {
