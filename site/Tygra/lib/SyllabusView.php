@@ -5,9 +5,18 @@
  */
 class SyllabusView implements KurogoObject
 {
+    protected $keyword; //site keyword
     protected $siteHref;
     protected $siteTitle;
     protected $syllabus;
+    
+    public function setKeyword($keyword) {
+        $this->keyword = $keyword;
+    }
+
+    public function getKeyword() {
+        return $this->keyword;
+    }
     
     public function setSyllabus($syllabus) {
         $this->syllabus = $syllabus;

@@ -37,23 +37,23 @@
 
      // not used yet
      public function getItem($id){
-     	 $this->setBaseUrl('http://vm1.isites.harvard.edu/mobile/classmates.json');
-         $data = $this->getParsedData();
-         $person = new PersonObject();
-         foreach ($data['classes']['class'] as $class) {
-             foreach ($class['classmate'] as $item) {
-	             if ($item['id'] == $id) {
-	                 $person->setHuid($item['id']);
-	                 $person->setFirstName($item['firstName']);
-	                 $person->setLastName($item['lastName']);
-	                 $person->setEmail($item['email']);
-	                 $person->setThumbnail($item['thumbnail']);
-	                 break;
-	             }
-             }
-         }
-         
-         return $person->toArray();
+//     	 $this->setBaseUrl('http://vm1.isites.harvard.edu/mobile/classmates.json');
+//         $data = $this->getParsedData();
+//         $person = new PersonObject();
+//         foreach ($data['classes']['class'] as $class) {
+//             foreach ($class['classmate'] as $item) {
+//	             if ($item['id'] == $id) {
+//	                 $person->setHuid($item['id']);
+//	                 $person->setFirstName($item['firstName']);
+//	                 $person->setLastName($item['lastName']);
+//	                 $person->setEmail($item['email']);
+//	                 $person->setThumbnail($item['thumbnail']);
+//	                 break;
+//	             }
+//             }
+//         }
+//         
+//         return $person->toArray();
      }
 
  }

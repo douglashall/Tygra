@@ -11,7 +11,11 @@ class SyllabusWebModule extends WebModule
 		switch ($this->page)
 		{
 			case 'index':
-				$items = $controller->search($user);
+				$items = $user->getUserData('syllabus');
+				if (!$items) {
+					$items = $controller->search($user);
+					$user->setUserData('syllabus', $items);
+				}
 				$this->assign('results', $items);
 				break;
 		}

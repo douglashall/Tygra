@@ -32,7 +32,6 @@ class ClassmatesWebModule extends WebModule
 				$id = $this->getArg('id');
 				$keyword = $this->getArg('keyword');
 				$students = $user->getUserData('enrollee_'.$keyword);
-				print('details');
 				if ($students) {
 					foreach ($students as $student) {
 						if ($id == $student['id']) {
