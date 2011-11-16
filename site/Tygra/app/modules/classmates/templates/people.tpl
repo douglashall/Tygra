@@ -37,7 +37,7 @@
       </li>
     {/if}
   {/foreach}
-  {if count($results) == 0}
+  {if count($results['people']) == 0}
     {block name="noResults"}
       <li>{$noResultsText|default:"No results found"}</li>
     {/block}

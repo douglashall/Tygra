@@ -1,3 +1,5 @@
+{include file="findInclude:common/templates/header.tpl"}
+
 <ul class="results" id="activityList">
   {foreach $results as $item}
     {if !isset($item['separator'])}
