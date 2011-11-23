@@ -25,7 +25,7 @@ class HuidAuthentication extends AuthenticationAuthority
     }
 
     public function login($login, $pass, Session $session, $options) {
-       	print('login='.$login.'; ');
+       	//print('login='.$login.'; ');
         $user = $this->getUser($login);
         $session->login($user);
       	return AUTH_OK;
