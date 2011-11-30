@@ -1,0 +1,131 @@
+./app/common/templates/header-tablet-android.tpl:    content="width=device-width, user-scalable=no, target-densityDpi=device-dpi" />
+./app/common/templates/header-tablet.tpl:    content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0" />
+./app/common/templates/header.tpl:      content="width=device-width, {if $scalable|default:true}user-scalable=yes{else}user-scalable=no, initial-scale=1.0, maximum-scale=1.0{/if}" />
+./app/modules/login/LoginAPIModule.php:                      $authority = $user->getAuthenticationAuthority();
+./app/modules/login/LoginAPIModule.php:                $response = $user->getUserData($key);
+./app/modules/login/LoginAPIModule.php:                        'authority'=>$user->getAuthenticationAuthorityIndex(),
+./app/modules/login/LoginAPIModule.php:                        'userID'=>$user->getUserID(),
+./app/modules/login/LoginAPIModule.php:                        'name'=>$user->getFullName(),
+./app/modules/login/LoginAPIModule.php:                        'sessiondata'=>$user->getSessionData()
+./app/modules/login/LoginWebModule.php:                $authority = $user->getAuthenticationAuthority();
+./app/modules/login/LoginWebModule.php:                    $user->getFullName()
+./app/modules/login/LoginWebModule.php:                $this->setLogData($user, $user->getFullName());
+./app/modules/login/LoginWebModule.php:                    $this->setLogData($user, $user->getFullName());
+./app/modules/login/LoginWebModule.php:                    $this->redirectTo('logoutConfirm', array('authority'=>$user->getAuthenticationAuthorityIndex()));
+./app/modules/login/LoginWebModule.php:                    $authority = $user->getAuthenticationAuthority();
+./app/modules/login/LoginWebModule.php:                        'title'=>count($sessionUsers)>1 ? $this->getLocalizedString("SIGN_OUT_AUTHORITY", array($authority->getAuthorityTitle(), $user->getFullName())) : $this->getLocalizedString('SIGN_OUT'),
+./app/modules/login/LoginWebModule.php:                    $authority = $user->getAuthenticationAuthority();
+./app/modules/login/LoginWebModule.php:                        $user->getFullName()
+./doc/mw/devicedetection.rst:                        // "prefix" attempts to match the specified string at the beginning of the user-agent.
+./doc/mw/devicedetection.rst:                        // "suffix" attempts to match the specified string at the end of the user-agent.
+./doc/mw/devicedetection.rst:                        // "partial" attempts to perform a literal string match somewhere in the user-agent string.
+./doc/mw/devicedetection.rst:                        // "regex" allows you full preg_match syntax for matching any part of the user-agent string.
+./doc/REST/modulepeople.rst:Returns a list of people matching a user-entered query string.  All fields are 
+./doc/REST/overview.rst:* *tag* - the user-facing id (via the URL) of the module.  Usually the same as 
+./lib/AccessControlList.php:                    if ($user->getAuthenticationAuthorityIndex()==$this->ruleAuthority) {
+./lib/AccessControlList.php:                            if ($user->getUserID()) {
+./lib/AccessControlList.php:                        } else if ($user->getUserID()==$this->ruleValue ||
+./lib/AccessControlList.php:                            (Validator::isValidEmail($this->ruleValue) && $user->getEmail()==$this->ruleValue)) { 
+./lib/AccessControlList.php:                    if ($user->getUserID()) {
+./lib/AccessControlList.php:                } else if ($user->getUserID()==$this->ruleValue ||
+./lib/AccessControlList.php:                    (Validator::isValidEmail($this->ruleValue) && $user->getEmail()==$this->ruleValue)) { 
+./lib/Authentication/AuthenticationAuthority.php:                $user->setCredentials($password);
+./lib/Authentication/CASAuthentication.php:        if ($user->getUserID() != phpCAS::getUser())
+./lib/Authentication/CASAuthentication.php:        $memberOf = $user->getMemberOf();
+./lib/Authentication/DatabaseAuthentication.php:            $user->setUserID($row[$this->getField('user_userid')]);
+./lib/Authentication/DatabaseAuthentication.php:            $user->setEmail($row[$this->getField('user_email')]);
+./lib/Authentication/DatabaseAuthentication.php:                $user->setFullName($row[$this->getField('user_fullname')]);
+./lib/Authentication/DatabaseAuthentication.php:                $user->setFirstName($row[$this->getField('user_firstname')]) ;
+./lib/Authentication/DatabaseAuthentication.php:                $user->setLastName($row[$this->getField('user_lastname')]) ;
+./lib/Authentication/DatabaseAuthentication.php:            $parameters = array($this->$property, $user->getAuthenticationAuthorityIndex(), $user->getUserID());
+./lib/Authentication/DatabaseAuthentication.php:        } elseif ($user->getAuthenticationAuthorityIndex()==$this->getAuthenticationAuthorityIndex()) {
+./lib/Authentication/DatabaseAuthentication.php:            $parameters = array($this->$property, $user->getUserID());
+./lib/Authentication/FacebookAuthentication.php:                $user->setUserID($json['id']);
+./lib/Authentication/FacebookAuthentication.php:                $user->setFirstName($json['first_name']);
+./lib/Authentication/FacebookAuthentication.php:                $user->setLastName($json['last_name']);
+./lib/Authentication/FacebookAuthentication.php:                    $user->setEmail($json['email']);
+./lib/Authentication/GoogleAuthentication.php:        if ($user->setVars($array)) {
+./lib/Authentication/GoogleAuthentication.php:            $this->cacheUserArray($user->getUserID(), $array);
+./lib/Authentication/LDAPAuthentication.php:        $auth = @ldap_bind($ldap, $user->getDN(), $password);
+./lib/Authentication/LDAPAuthentication.php:                $user->setDN($entry['dn']);
+./lib/Authentication/LDAPAuthentication.php:                $singleValueAttributes = $user->singleValueAttributes();
+./lib/Authentication/LDAPAuthentication.php:                    $user->setAttribute($attrib, $value);
+./lib/Authentication/LDAPAuthentication.php:                $user->setDN($entry['dn']);
+./lib/Authentication/LDAPAuthentication.php:                $singleValueAttributes = $user->singleValueAttributes();
+./lib/Authentication/LDAPAuthentication.php:                    $user->setAttribute($attrib, $value);
+./lib/Authentication/LDAPAuthentication.php:        if ($user->getAuthenticationAuthorityIndex()==$this->getAuthenticationAuthorityIndex()) {
+./lib/Authentication/LDAPAuthentication.php:            if (in_array($user->getAttribute($this->AuthenticationAuthority->getField('memberuid')), $this->members)) {
+./lib/Authentication/PasswdAuthentication.php:            $user->setUserID($userData['userID']);
+./lib/Authentication/PasswdAuthentication.php:            $user->setEmail($userData['email']);
+./lib/Authentication/PasswdAuthentication.php:            $user->setFullName($userData['fullname']);
+./lib/Authentication/TwitterAuthentication.php:                $user->setVars($json);
+./lib/Authorization/OAuthProvider.php:	        $user->setUserData($this->tokenSessionVar(), array(
+./lib/Authorization/OAuthProvider.php:	    if ($tokenData = $user->getUserData($this->tokenSessionVar())) {
+./lib/DeviceClassifier.php:        'user-agent' => $user_agent,
+./lib/deviceData.json:            "groupName": "annoying bots that are neither search engines nor user-invoked command line tools",
+./lib/deviceData.json:            "description": "annoying bots that are neither search engines nor user-invoked command line tools",
+./lib/KurogoStats.php:		    'user'      => $user ? $user->getUserID() : '',
+./lib/KurogoStats.php:		    'authority' => $user ? $user->getAuthenticationAuthorityIndex() : '',
+./lib/Session.php:            return strlen($user->getUserID())>0 ? true : false;
+./lib/Session.php:            if ($auth = $user->getAuthenticationAuthorityIndex()) {
+./lib/Session.php:                Kurogo::log(LOG_DEBUG, "Setting user to $auth:".$user->getUserID(), 'session');
+./lib/Session.php:                'userID'=>$user->getUserID(),
+./lib/Session.php:                'auth_userID'=>$user->getUserID(),
+./lib/Session.php:                'auth'=>$user->getAuthenticationAuthorityIndex(),
+./lib/Session.php:                } elseif ($user->getAuthenticationAuthority() instanceOf $authority) {
+./lib/Session.php:        Kurogo::log(LOG_NOTICE, sprintf("Logging in user %s:%s", $user->getAuthenticationAuthorityIndex(), $user->getUserID()), 'session');
+./lib/Session.php:        Kurogo::log(LOG_NOTICE, sprintf("Logging out user %s:%s", $user->getAuthenticationAuthorityIndex(), $user->getUserID()), 'session');
+./lib/Session.php:                'auth'  => $user->getAuthenticationAuthorityIndex(),
+./lib/Session.php:                'userID'=> $user->getUserID(),
+./lib/Session.php:                'data'  => $user->getSessionData(),
+./lib/Session.php:                'hash'  => $user->getUserHash()
+./lib/Session.php:                                $user->setSessionData($userData['data']);
+./lib/smarty/README:to user-created data objects, and to user-created template objects. 
+./lib/smarty/sysplugins/smarty_internal_configfileparser.php:    public $minor; /* The user-supplied minor token value.  This
+./lib/smarty/sysplugins/smarty_internal_templateparser.php:    public $minor; /* The user-supplied minor token value.  This
+./lib/WebModule.php:            $authority = $user->getAuthenticationAuthority();
+./lib/WebModule.php:            $this->assign('session_userID', $user->getUserID());
+./lib/WebModule.php:            $this->assign('session_fullName', $user->getFullname());
+./lib/WebModule.php:                $this->assign('session_logout_url', $this->buildURLForModule('login', 'logout', array('authority'=>$user->getAuthenticationAuthorityIndex())));
+./lib/WebModule.php:                $this->assign('footerLoginText', $this->getLocalizedString('SIGNED_IN_SINGLE', $authority->getAuthorityTitle(), $user->getFullName()));
+./site/Tygra/app/modules/classmates/ClassmatesWebModule.php:	 			foreach ($user->getCourses() as $course) {
+./site/Tygra/app/modules/classmates/ClassmatesWebModule.php:				$students = $user->getUserData('enrollee_'.$keyword);
+./site/Tygra/app/modules/classmates/ClassmatesWebModule.php:					$students = $controller->search($keyword, $user->getUserID());
+./site/Tygra/app/modules/classmates/ClassmatesWebModule.php:					$user->setUserData('enrollee_'.$keyword, $students);
+./site/Tygra/app/modules/classmates/ClassmatesWebModule.php:				$students = $user->getUserData('enrollee_'.$keyword);
+./site/Tygra/app/modules/home/templates/index.tpl:<div style="clear:both;padding:12px 0 0 0;">You are logged in as {$user->getFirstName()} {$user->getLastName()} ({$user->getUserID()})</div>
+./site/Tygra/app/modules/login/LoginAPIModule.php:                      $authority = $user->getAuthenticationAuthority();
+./site/Tygra/app/modules/login/LoginAPIModule.php:                $response = $user->getUserData($key);
+./site/Tygra/app/modules/login/LoginAPIModule.php:                        'authority'=>$user->getAuthenticationAuthorityIndex(),
+./site/Tygra/app/modules/login/LoginAPIModule.php:                        'userID'=>$user->getUserID(),
+./site/Tygra/app/modules/login/LoginAPIModule.php:                        'name'=>$user->getFullName(),
+./site/Tygra/app/modules/login/LoginAPIModule.php:                        'sessiondata'=>$user->getSessionData()
+./site/Tygra/app/modules/login/LoginWebModule.php:                $authority = $user->getAuthenticationAuthority();
+./site/Tygra/app/modules/login/LoginWebModule.php:                    $user->getFullName()
+./site/Tygra/app/modules/login/LoginWebModule.php:                $this->setLogData($user, $user->getFullName());
+./site/Tygra/app/modules/login/LoginWebModule.php:                    $this->setLogData($user, $user->getFullName());
+./site/Tygra/app/modules/syllabus/SyllabusWebModule.php:				$items = $user->getUserData('syllabus');
+./site/Tygra/app/modules/syllabus/SyllabusWebModule.php:					$user->setUserData('syllabus', $items);
+./site/Tygra/app/modules/updates/UpdatesWebModule.php:				$sections = $controller->search($user->getUserID());
+./site/Tygra/app/modules/video/VideoWebModule.php:	 $huid = $user->getHuid();
+./site/Tygra/cache/smarty/templates/compliant_computer^a688df1dba3c052a10023a88cdae7dc25b3e5853.file.header.tpl.php:      content="width=device-width, <?php if ((($tmp = @$_smarty_tpl->getVariable('scalable')->value)===null||$tmp==='' ? true : $tmp)){?>user-scalable=yes<?php }else{ ?>user-scalable=no, initial-scale=1.0, maximum-scale=1.0<?php }?>" />
+./site/Tygra/cache/smarty/templates/compliant_iphone^a688df1dba3c052a10023a88cdae7dc25b3e5853.file.header.tpl.php:      content="width=device-width, <?php if ((($tmp = @$_smarty_tpl->getVariable('scalable')->value)===null||$tmp==='' ? true : $tmp)){?>user-scalable=yes<?php }else{ ?>user-scalable=no, initial-scale=1.0, maximum-scale=1.0<?php }?>" />
+./site/Tygra/lib/Authentication/HuidAuthentication.php:		        $user->setUserID($person['id']);
+./site/Tygra/lib/Authentication/HuidAuthentication.php:		        $user->setEmail($person['email']);
+./site/Tygra/lib/Authentication/HuidAuthentication.php:		        $user->setFirstName($person['firstName']);
+./site/Tygra/lib/Authentication/HuidAuthentication.php:		        $user->setLastName($person['lastName']);
+./site/Tygra/lib/Authentication/HuidAuthentication.php:		        $user->setFullName($person['firstName']." ".$person['lastName']."(".$person['id'].")");
+./site/Tygra/lib/Authentication/HuidAuthentication.php:		        $user->setCourses($courses);
+./site/Tygra/lib/Authentication/PinAuthentication.php:		        $user->setUserID($person['id']);
+./site/Tygra/lib/Authentication/PinAuthentication.php:		        $user->setEmail($person['email']);
+./site/Tygra/lib/Authentication/PinAuthentication.php:		        $user->setFirstName($person['firstName']);
+./site/Tygra/lib/Authentication/PinAuthentication.php:		        $user->setLastName($person['lastName']);
+./site/Tygra/lib/Authentication/PinAuthentication.php:		        $user->setFullName($person['firstName']." ".$person['lastName']);
+./site/Tygra/lib/Authentication/PinAuthentication.php:			        $user->setCourses($courses);
+./site/Tygra/lib/IsitesVideoController.php:		$results = $user->getVideoList(); // not decalred yet !!!!!
+./site/Tygra/lib/SyllabusDataController.php:		foreach ($user->getCourses() as $course) {
+./site/Tygra/lib/SyllabusDataController.php:     		$this->path = sprintf("userid=%s&q=title:syllabus+-hidden&omitHeader=true&fq=category:%s&start=0&rows=100&wt=json&fq=sitekey:%s&fl=topicid,title,sitekey,linkurl,description,category",$user->getUserID(),$category,$sitekeys);
+./site/Tygra/lib/SyllabusDataController.php:			foreach ($user->getCourses() as $course) {
+./www/min/lib/Minify/Controller/Base.php:     * Is a user-given file within an allowable directory, existing,
+./www/min/lib/Minify/Controller/Base.php:     * user-given paths
+./www/min/lib/Minify/Controller/Base.php:     * Mix in default controller options with user-given options
