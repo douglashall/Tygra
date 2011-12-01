@@ -7,9 +7,14 @@
     
     public function search($huid) {
     
-        $this->setBaseUrl('http://localhost:8080/icommonsapi/video/by_user/'.$huid.'.json');
+    	$baseURL = $this->baseURL;
+    	//print_r("baseURL=".$baseURL);
+    	
+        $this->setBaseUrl($baseURL.'video/by_user/'.$huid.'.json');
         $data = $this->getParsedData();
-        $results = $data['video']['response']['docs'];
+        $results = $data['video']['docs'];
+        
+        //print_r($results);
         
         return $results;
     }
