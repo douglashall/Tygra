@@ -17,26 +17,32 @@ class VideoWebModule extends WebModule
         case 'index':
              //search for videos
              
-             $items = $controller->search($huid);
+             //$items = $controller->search($user, $keyword);
              
              $siteList = array();
 
-             //prepare the list
+             
+             $courses = $user->getCourses();
+             
+             //print_r($courses);
+             
+             //get list of courses from user
+             /*
              foreach ($items as $video) {
-             	
              	// need to store keyword in this array ? 
              	$keyword = $video['sitekey'];
              	$siteList[$keyword]++;
-				
              }
+              $courseList = array_keys($siteList);
+             */
             
-             $courseList = array_keys($siteList);
              $results = array();
-             foreach ($courseList as $course){
+             foreach ($courses as $course){
+             	
              	$results[] = array(
-             		'keyword'=>$course,
+             		'keyword'=>$course->getTitle(),
              		'url'=>$this->buildBreadcrumbURL('list-course-videos', 
-             			array('keyword'=>$course))
+             			array('keyword'=>$course->getKeyword(), 'title'=>$course->getTitle()))
              	);
              }
 			 //print_r($results);
@@ -47,13 +53,16 @@ class VideoWebModule extends WebModule
         case 'list-course-videos':
         	
 			$keyword = $this->getArg('keyword');
+			$title = $this->getArg('title');
 			//$this->assign('pageTitle', $keyword);
-			$this->setPageTitles($keyword);
+			$this->setPageTitles($title);
+			
         	 //search for videos
-             $items = $controller->searchByIdAndSite($huid, $keyword);
-             //print_r($items);
+             $items = $controller->search($user, $keyword);
+             
+             print_r('>>>>> count='.count($items));
              $videos = array();
-
+			if(count($items)>0){
              //prepare the list
              foreach ($items as $video) {
                  $videos[] = array(
@@ -63,6 +72,7 @@ class VideoWebModule extends WebModule
             		 'videoid'=>$video['id']))
                  );
              }
+			}
 
              $this->assign('videos', $videos);
         	

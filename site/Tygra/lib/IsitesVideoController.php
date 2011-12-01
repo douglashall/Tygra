@@ -5,20 +5,35 @@
     protected $cacheFolder = "Videos"; // set the cache folder
     protected $DEFAULT_PARSER_CLASS='JSONDataParser'; // the default parser
     
-    public function search($huid) {
+    public function search($user, $keyword) {
     
+    	$huid = $user->getUserID();
     	$baseURL = $this->baseURL;
-    	//print_r("baseURL=".$baseURL);
     	
-        $this->setBaseUrl($baseURL.'video/by_user/'.$huid.'.json');
-        $data = $this->getParsedData();
-        $results = $data['video']['docs'];
+    	
+    	// check to see if we already retrieved the video list
+    	$course = $user->findCoursebyKeyword($keyword);
+    	//print_r($course->toArray());
+    	$videos = $course->getVideos();
+    
+    	// if not make the call
+    	if(!isset($videos)){
+    		//print_r("Getting videos from search");
+        	$this->setBaseUrl($baseURL.'video/by_userandkeyword/'.$huid.'/'.$keyword.'.json');
+        	//print_r($this->baseURL);
+        	$data = $this->getParsedData();
+        	$results = $data['video']['docs'];
+        	$course->setVideos($results);
+        	return $results;
+    	}
+    	print_r("Videos already in course");
         
         //print_r($results);
+        return $vidoes;
         
-        return $results;
     }
     
+    /*
     public function searchByIdAndSite($huid, $keyword){
     	$videos = array();
     	$results = $this->search($huid);
@@ -29,7 +44,8 @@
         }
      	return isset($videos) ? $videos : false;   
     }
-
+	*/
+    
 	public function getItemByHuidAndVideoId($huid, $id){
 		$results = $this->search($huid);
 		

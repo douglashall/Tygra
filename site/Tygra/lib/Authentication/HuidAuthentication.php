@@ -64,6 +64,7 @@ class HuidAuthentication extends AuthenticationAuthority
 	     				$result->setTitle($course['title']);
 					if (isset($course['keyword']))
 	     				$result->setKeyword($course['keyword']);
+	     			
 					$courses[] = $result;
 	     		}
 		        $user->setCourses($courses);
