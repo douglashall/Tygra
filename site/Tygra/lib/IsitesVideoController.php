@@ -10,7 +10,6 @@
     	$huid = $user->getUserID();
     	$baseURL = $this->baseURL;
     	
-    	
     	// check to see if we already retrieved the video list
     	$course = $user->findCoursebyKeyword($keyword);
     	//print_r($course->toArray());
@@ -33,6 +32,17 @@
         
     }
     
+    
+     public function findVideosByHuidAndKeyword($huid, $keyword) {
+    
+    	$baseURL = $this->baseURL;
+        $this->setBaseUrl($baseURL.'video/by_userandkeyword/'.$huid.'/'.$keyword.'.json');
+        $data = $this->getParsedData();
+        $results = $data['video']['docs'];
+        //$course->setVideos($results);
+        return $results;
+    }
+    
     /*
     public function searchByIdAndSite($huid, $keyword){
     	$videos = array();
@@ -46,8 +56,8 @@
     }
 	*/
     
-	public function getItemByHuidAndVideoId($huid, $id){
-		$results = $this->search($huid);
+	public function getItemByHuidAndVideoId($huid, $keyword, $id){
+		$results = $this->search($huid, $keyword);
 		
         foreach ($results as $video) {
         	if(strcmp($video['id'], $id)==0){

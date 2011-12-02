@@ -11,42 +11,25 @@ class VideoWebModule extends WebModule
      // get the current logged in user
      $session = $this->getSession();
 	 $user = $session->getUser();
+	 
+	 
+	 
 	 $huid = $user->getUserID();
 	 
        switch ($this->page) {
         case 'index':
-             //search for videos
-             
-             //$items = $controller->search($user, $keyword);
              
              $siteList = array();
-
-             
              $courses = $user->getCourses();
-             
-             //print_r($courses);
-             
-             //get list of courses from user
-             /*
-             foreach ($items as $video) {
-             	// need to store keyword in this array ? 
-             	$keyword = $video['sitekey'];
-             	$siteList[$keyword]++;
-             }
-              $courseList = array_keys($siteList);
-             */
             
              $results = array();
              foreach ($courses as $course){
-             	
              	$results[] = array(
              		'keyword'=>$course->getTitle(),
              		'url'=>$this->buildBreadcrumbURL('list-course-videos', 
              			array('keyword'=>$course->getKeyword(), 'title'=>$course->getTitle()))
              	);
              }
-			 //print_r($results);
-             // send the results to the template
              $this->assign('results', $results);
              
              break;
@@ -54,43 +37,40 @@ class VideoWebModule extends WebModule
         	
 			$keyword = $this->getArg('keyword');
 			$title = $this->getArg('title');
-			//$this->assign('pageTitle', $keyword);
 			$this->setPageTitles($title);
+			$course = $user->findCourseByKeyword($keyword);
+			$videoObjectList = $course->getVideos();
+			$videoArrayList = array();
 			
-        	 //search for videos
-             $items = $controller->search($user, $keyword);
-             
-             print_r('>>>>> count='.count($items));
-             $videos = array();
-			if(count($items)>0){
-             //prepare the list
-             foreach ($items as $video) {
-                 $videos[] = array(
-                     'title'=>$video['title'][0],
-                     'img'=>$video['imageurl'],
-                 	 'url'=>$this->buildBreadcrumbURL('detail', array(
-            		 'videoid'=>$video['id']))
-                 );
-             }
+			foreach($videoObjectList as $videoObject) {
+				$vidArray = $videoObject->toArray();
+				$entryId = $videoObject->getEntryId();
+				$urlArray = array('url'=>$this->buildBreadcrumbURL('detail', array('videoid'=>$entryId, 'keyword'=>$keyword)));
+				$merged = $vidArray + $urlArray;
+				$videoArrayList[] = $merged;
 			}
-
-             $this->assign('videos', $videos);
+			
+             $this->assign('videos', $videoArrayList);
         	
         	break;
         case 'detail':
   			$videoid = $this->getArg('videoid');
-   			if ($video = $controller->getItemByHuidAndVideoId($huid, $videoid)) {
-      			$this->assign('videoid', $videoid);
-      			$this->assign('videoTitle', $video['title'][0]);
-      			$this->assign('videoThumbnail', $video['imageurl']);
-      			$this->assign('videoDescription', $video['content'][0]);
-      			$this->assign('keyword',$video['sitekey']);
-      			$this->assign('topicId',$video['topicid']);
-      			preg_match_all('/([\d]+)/', $videoid, $matches);
-      			$this->assign('entryId',$matches[0][1]);
-  			} else {
-      			$this->redirectTo('index');
-   			}
+  			$keyword = $this->getArg('keyword');
+  			print_r($videoid);
+  			
+  			$course = $user->findCourseByKeyword($keyword);
+			foreach($course->getVideos() as $video){
+				if($video->getEntryId()==$videoid){
+					$this->assign('videoid', $videoid);
+					$this->assign('keyword',$keyword);
+      				$this->assign('videoTitle', $video->getTitle());
+      				$this->assign('videoThumbnail', $video->getImgUrl());
+      				$this->assign('videoDescription', $video->getDescription());
+      				$this->assign('modifiedOn', $video->getModifiedOn());
+      				$this->assign('topicId',$video->getTopicId());
+				}
+			}
+
    			break;     
      }
   }

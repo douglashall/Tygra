@@ -6,6 +6,7 @@
     </li>
   {/if}
   {foreach $results as $item}
+  
     {if !isset($item['separator'])}
       <li class="video{if !$item['img']} noimage{/if}">  
   
@@ -13,6 +14,7 @@
        
       </li>
     {/if}
+    
   {/foreach}
   {if count($results) == 0}
     {block name="noResults"}

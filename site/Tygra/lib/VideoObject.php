@@ -5,7 +5,7 @@
  */
 class VideoObject implements KurogoObject
 {
-    protected $id; 
+    protected $entryid; 
     protected $entity; 
     protected $linkurl;
     protected $siteid;
@@ -13,14 +13,15 @@ class VideoObject implements KurogoObject
     protected $shared;
     protected $modifiedon;
     protected $title;
+    protected $description;
     protected $imgurl;
     
-    public function setId($id) {
-        $this->id = $id;
+    public function setEntryId($entryid) {
+        $this->entryid = $entryid;
     }
 
-    public function getId() {
-        return $this->id;
+    public function getEntryId() {
+        return $this->entryid;
     }
     
     public function setEntity($entity) {
@@ -79,6 +80,14 @@ class VideoObject implements KurogoObject
         return $this->title;
     }
     
+    public function setDescription($description) {
+        $this->description = $description;
+    }
+    
+    public function getDescription() {
+        return $this->description;
+    }
+    
     public function setImgUrl($imgurl) {
         $this->imgurl = $imgurl;
     }
@@ -88,6 +97,6 @@ class VideoObject implements KurogoObject
     }
     
     public function toArray() {
-    	return array("id" => $this->id, "title" => $this->title, "imgurl" => $this->imgurl);
+    	return get_object_vars($this);
     }
 }
