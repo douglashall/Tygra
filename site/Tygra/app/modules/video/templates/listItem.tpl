@@ -16,7 +16,6 @@
     {/if}
 	    <div class="ellipsis" id="ellipsis_{$ellipsisId}">
 	          <div class="title">{$item['title']}</div>
-	          {$item['subtitle']}
 	    </div>
     {if $item['badge']}
       <span class="badge">{$item['badge']}</span>

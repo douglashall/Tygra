@@ -35,14 +35,13 @@ class CourseObject implements KurogoObject
     }
     
     public function findVideoByEntryId($entryid){
-    	$videoObject = new VideoObject();
-    	print_r($this->$videos);
-    	//foreach( $videoList as $video){
-    		//if($video->getEntryId()==$entryid){
-    			//$videoObject = $video;
-    		//}
-    	//}
-    	return $videoObject;
+    	
+    	foreach($videos as $video){
+    		if($video->getEntryId() == $entryid){
+    			return $video;
+    		}
+    	}
+    	return NULL;
     }
     
     public function setSiteId($siteId) {

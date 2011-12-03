@@ -48,11 +48,11 @@ class VideoObject implements KurogoObject
         return $this->siteid;
     }
     
-    public function setTopicid($topicid) {
+    public function setTopicId($topicid) {
         $this->topicid = $topicid;
     }
     
-    public function getTopicid() {
+    public function getTopicId() {
         return $this->topicid;
     }
     

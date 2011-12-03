@@ -16,7 +16,7 @@
     	$videos = $course->getVideos();
     
     	// if not make the call
-    	if(!isset($videos)){
+    	if(empty($videos)){
     		//print_r("Getting videos from search");
         	$this->setBaseUrl($baseURL.'video/by_userandkeyword/'.$huid.'/'.$keyword.'.json');
         	//print_r($this->baseURL);
@@ -32,7 +32,6 @@
         
     }
     
-    
      public function findVideosByHuidAndKeyword($huid, $keyword) {
     
     	$baseURL = $this->baseURL;
@@ -43,18 +42,15 @@
         return $results;
     }
     
-    /*
-    public function searchByIdAndSite($huid, $keyword){
-    	$videos = array();
-    	$results = $this->search($huid);
-    	foreach($results as $video){
-    	    if(strcmp($video['sitekey'], $keyword)==0){
-        		 $videos[] = $video;
-        	}
-        }
-     	return isset($videos) ? $videos : false;   
+    public function findVideoByUserAndEntryId($huid, $entryid) {
+    
+    	$baseURL = $this->baseURL;
+        $this->setBaseUrl($baseURL.'video/by_userandentryid/'.$huid.'/'.$entryid.'.json');
+        $data = $this->getParsedData();
+        $results = $data['video']['docs'];
+        //$course->setVideos($results);
+        return $results;
     }
-	*/
     
 	public function getItemByHuidAndVideoId($huid, $keyword, $id){
 		$results = $this->search($huid, $keyword);

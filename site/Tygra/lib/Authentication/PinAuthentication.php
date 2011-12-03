@@ -111,7 +111,6 @@ class PinAuthentication extends AuthenticationAuthority
         			
 		        	// create video object to store course info
 		        }
-		        
 	        	return $user;
 	        }
         }

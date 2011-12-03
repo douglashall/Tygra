@@ -69,7 +69,7 @@ class HuidAuthentication extends AuthenticationAuthority
 	     		}
 		        $user->setCourses($courses);
 		        
-	        		        
+	        	/*	        
 		        foreach($user->getCourses() as $course){
 		        	$videos = array();
 		        	// get the course keyword
@@ -79,16 +79,11 @@ class HuidAuthentication extends AuthenticationAuthority
 		        	$huid    = $user->getUserId();
 		        	
 		        	// get the videos associated with the user and course
-		        	//$this->setBaseUrl($baseURL.'video/by_userandkeyword/'.$huid.'/'.$keyword.'.json');
-        			//$data = $this->getParsedData();
-        			//$results = $data['video']['docs'];
         			$videoController = DataController::factory('IsitesVideoController');
         			$results = $videoController->findVideosByHuidAndKeyword($huid, $keyword);
         			
 		        	// add videos to the course object
 		        	foreach($results as $video){
-		        		
-		        		//print_r($video);
 		        		
 		        		$videoObject = new VideoObject();
 		        		// set each field
@@ -106,15 +101,11 @@ class HuidAuthentication extends AuthenticationAuthority
       					array_push($videos, $videoObject);
 		        	}
         			$course->setVideos($videos);
-        			
-		        	// create video object to store course info
 		        }
-		        
-		        
+		        */
 	        	return $user;
 	        }
         }
 		return new AnonymousUser();       
-        
     }
 }

@@ -4,7 +4,7 @@
 
 
 <p class="nonfocal">
-<a href="http://isites.harvard.edu/icb/ajax/playListFromCollection.do?keyword={$keyword}&topicId=icb.topic{$topicId}&entry={$entryId}">
+<a href="http://isites.harvard.edu/icb/ajax/playListFromCollection.do?keyword={$keyword}&topicId=icb.topic{$topicid}&entry={$entryid}">
 <img class="videoThumbnail" src="{$videoThumbnail}">
 </a>
 </p>
