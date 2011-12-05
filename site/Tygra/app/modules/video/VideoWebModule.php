@@ -3,6 +3,8 @@
 class VideoWebModule extends WebModule
 {
   protected $id='video';
+  protected $encoding = 'UTF-8';
+  
   protected function initializeForPage() {
   	
   	 //instantiate controller
@@ -127,4 +129,56 @@ class VideoWebModule extends WebModule
    			break;     
      	}
   	}
+  	
+    protected function htmlEncodeString($string) {
+        return mb_convert_encoding($string, 'HTML-ENTITIES', $this->encoding);
+    }
+  	
+    public function linkforItem(KurogoObject $video, $options=null) {    
+    	
+		$entryid = $video->getEntryId();
+		$topicid = $video->getTopicId();
+    	$videoData = $video->toArray();
+    	$linkdata = array(
+            'title'=>$this->htmlEncodeString($video->getTitle()),
+            'url'  =>$this->buildBreadcrumbURL('detail', array('videoid'=>$entryid, 'topicid'=>$topicid,
+                                            'uid'    => $video->getEntryId(),
+                                            'filter' => $this->getArg('filter')
+                    ))
+        );
+    	
+    	$merged = $videoData + $linkdata;
+        
+        return $merged;
+    }
+  	
+    public function searchItems($searchTerms, $limit=null, $options=null) {
+    	$session = $this->getSession();
+	 	$user = $session->getUser();
+    	//print_r($searchTerms);
+    	//print_r(var_dump($user));
+    	$controller = DataController::factory('IsitesVideoController');
+        $results = $controller->search($user, $searchTerms);
+        			$videos = array();
+    		       foreach($results as $video){
+		        		
+		        		$videoObject = new VideoObject();
+		        		// set each field
+		        		preg_match_all('/([\d]+)/', $video['id'], $matches);
+      					$videoObject->setEntryId($matches[0][1]);
+      					$videoObject->setEntity($video['entity']);
+      					$videoObject->setLinkUrl($video['linkurl']);
+      					$videoObject->setSiteId($video['siteid']);
+      					$videoObject->setTopicid($video['topicid']);
+      					$videoObject->setShared($video['shared']);
+      					$videoObject->setModifiedOn($video['modifiedon']);
+      					$videoObject->setTitle($video['title'][0]);
+      					$videoObject->setDescription($video['description'][0]);
+      					$videoObject->setImgUrl($video['imageurl']);
+      					array_push($videos, $videoObject);
+		        	}
+        
+        return $videos;
+    }
+  	
 }
