@@ -7,60 +7,60 @@
     
     public function search($user, $query) {
     
-    	$huid = $user->getUserID();
     	$baseURL = $this->baseURL;
-    	
+    	$huid = $user->getUserID();
     	$courses = $user->getCourses();
-    	
     	$courseList = "(sitekey:";
+    	
+    	/*
+    	 * For each course, get the keyword and add it to the search query
+    	 */
     	foreach($courses as $course){
     		$courseList .= $course->getKeyword() .'%20OR%20sitekey:';
     	}
+    	
+    	/* Trim off the end of the string. 
+    	   len of '%20OR%20sitekey:' = 16
+    	  */
     	$lenOriginal = strlen($courseList);
-    	$lenTrim = strlen("%20OR%20sitekey:");
-     	$newCourseList = substr($courseList, 0, $lenOriginal-$lenTrim);
+     	$newCourseList = substr($courseList, 0, $lenOriginal-16);  
+     	
+     	// close the search query
     	$newCourseList .= "))";
     	
-    	$sPattern = '/\s*/m';
-		$sReplace = '+';
-    	preg_replace($sPattern, $sReplace, $query);
+    	/* replace any spaces in the original query with the + character  but in the url we need to specify this with the code %2b
+    	 * So a query like 'Hello world' would look like 'Hello%2bworld'
+    	 */
+    	$query = preg_replace('/\s+/i', '%2B', $query);
+    	//print_r($query);
     	
-    	$searchTerms = "((title:".$query."%20OR%20description:".$query."%20OR%20topictitle:".$query.")%20AND%20".$newCourseList."&omitHeader=true&fq=category:video&fq=userid:".$huid."&start=0&rows=100&wt=json";
+    	/*
+    	 * Build the search query string
+    	 */
+    	$searchTerms = "((title:".$query."%20OR%20description:".$query."%20OR%20topictitle:".$query."%20OR%20sitetitle:".$query.")%20AND%20".$newCourseList;
+    	$formattedQuery = "userid=".$huid."&q=".$searchTerms."&omitHeader=true&fq=category:video&fq=userid:".$huid."&start=0&rows=100&wt=json";
     	
-    	$formattedQuery = "userid=".$huid."&q=".$searchTerms;
-    	
-    	//print_r("fq=".$formattedQuery." END");
-    	    	
-    	$this->setBaseUrl($baseURL.'video/by_query/'.base64_encode($formattedQuery).'.json');
+    	/*
+    	 * There are issues when you try to send the query in plain text to the search url. 
+    	 * Base64 encode the query to send it to the search service
+    	 */
+    	//print_r($formattedQuery);
+    	$b64EncodedQuery = base64_encode($formattedQuery);
+    	$this->setBaseUrl($baseURL.'video/by_query/'.$b64EncodedQuery.'.json');
     	$data = $this->getParsedData();
     	$results = $data['video']['docs'];
    
         return $results;
-    	/*
-    	// if not make the call
-    	if(empty($videos)){
-    		//print_r("Getting videos from search");
-        	$this->setBaseUrl($baseURL.'video/by_userandkeyword/'.$huid.'/'.$keyword.'.json');
-        	//print_r($this->baseURL);
-        	$data = $this->getParsedData();
-        	$results = $data['video']['docs'];
-        	$course->setVideos($results);
-        	return $results;
-    	}
-    	*/
-        
-        //print_r($results);
-        //return $vidoes;
-        
+    	
     }
     
      public function findVideosByHuidAndKeyword($huid, $keyword) {
     
     	$baseURL = $this->baseURL;
         $this->setBaseUrl($baseURL.'video/by_userandkeyword/'.$huid.'/'.$keyword.'.json');
+        print_r($this->baseURL);
         $data = $this->getParsedData();
         $results = $data['video']['docs'];
-        //$course->setVideos($results);
         return $results;
     }
     
@@ -70,7 +70,6 @@
         $this->setBaseUrl($baseURL.'video/by_userandentryid/'.$huid.'/'.$entryid.'.json');
         $data = $this->getParsedData();
         $results = $data['video']['docs'];
-        //$course->setVideos($results);
         return $results;
     }
     

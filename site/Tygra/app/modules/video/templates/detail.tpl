@@ -8,6 +8,7 @@
 <img class="videoThumbnail" src="{$videoThumbnail}">
 </a>
 </p>
-<p class="focal">{$videoDescription}</p>
+<p class="focal">
+{$videoDescription}</p>
 
 {include file="findInclude:common/templates/footer.tpl"}

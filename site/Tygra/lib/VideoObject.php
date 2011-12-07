@@ -1,7 +1,7 @@
 <?php
 
 /* 
- * Class to abstract course data
+ * iSites Video Object Class
  */
 class VideoObject implements KurogoObject
 {
@@ -15,6 +15,40 @@ class VideoObject implements KurogoObject
     protected $title;
     protected $description;
     protected $imgurl;
+    
+	function __construct($video) {
+		if(isset($video['id'])){
+    		preg_match_all('/([\d]+)/', $video['id'], $matches);
+   			$this->entryid = $matches[0][1];
+		}
+		if(isset($video['entity'])){
+      		$this->entity  = $video['entity'];
+		}
+		if(isset($video['linkurl'])){
+      		$this->linkurl = $video['linkurl'];
+		}
+		if(isset($video['siteid'])){
+      		$this->siteid  = $video['siteid'];
+		}
+		if(isset($video['topicid'])){
+      		$this->topicid = $video['topicid'];
+		}
+		if(isset($video['shared'])){
+      		$this->shared  = $video['shared'];
+		}
+		if(isset($video['modifiedon'])){
+      		$this->modifiedon = $video['modifiedon'];
+		}
+		if(isset($video['title'][0])){
+      		$this->title   = $video['title'][0];
+		}
+		if(isset($video['description'][0])){
+      	$this->description = $video['description'][0];
+		}
+		if(isset($video['imageurl'])){
+      		$this->imgurl  = $video['imageurl'];
+		}
+   	}
     
     public function setEntryId($entryid) {
         $this->entryid = $entryid;

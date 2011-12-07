@@ -23,10 +23,31 @@ class VideoWebModule extends WebModule
             
              $results = array();
              foreach ($courses as $course){
+
+             	print_r($course.'<br />');
+             	$keyword = $course->getKeyword();
+             	$results = $controller->findVideosByHuidAndKeyword($huid, $keyword);
+             	
+             	// find videos by course and huid	
+             	print_r($huid.'<br />');
+             	print_r($keyword.'<br />');		
+				print_r(var_dump($results).'<br />');
+        		$videos = array();		
+		    	// add videos to the course object only when the user clicks on a course
+		    	
+        		if(isset($results)){
+		    		foreach($results as $video){
+		        		$videoObject = new VideoObject($video);
+      					$videos[] = $videoObject;
+		    		}
+        		}
+             	
+		    	$numVideos = count($videos);
+		    	$course->setVideos($videos);
              	$results[] = array(
              		'keyword'=>$course->getTitle(),
              		'url'=>$this->buildBreadcrumbURL('list-course-videos', 
-             			array('keyword'=>$course->getKeyword(), 'title'=>$course->getTitle()))
+             			array('keyword'=>$course->getKeyword(), 'title'=>$course->getTitle().' count: '.$numVideos))
              	);
              }
              $this->assign('results', $results);
@@ -37,47 +58,27 @@ class VideoWebModule extends WebModule
 			$keyword = $this->getArg('keyword');
 			$title = $this->getArg('title');
 			$this->setPageTitles($title);
-			$course = $user->findCourseByKeyword($keyword);
+			//$course = $user->findCourseByKeyword($keyword);
 			
-			// find videos by course and huid
-			
+			// find videos by course and huid			
 			$results = $controller->findVideosByHuidAndKeyword($huid, $keyword);
         	$videos = array();		
 		    // add videos to the course object only when the user clicks on a course
 		    foreach($results as $video){
-		        		
-		        $videoObject = new VideoObject();
-		        preg_match_all('/([\d]+)/', $video['id'], $matches);
-      			$videoObject->setEntryId($matches[0][1]);
-      			$videoObject->setEntity($video['entity']);
-      			$videoObject->setLinkUrl($video['linkurl']);
-      			$videoObject->setSiteId($video['siteid']);
-      			$videoObject->setTopicid($video['topicid']);
-      			$videoObject->setShared($video['shared']);
-      			$videoObject->setModifiedOn($video['modifiedon']);
-      			$videoObject->setTitle($video['title'][0]);
-      			$videoObject->setDescription($video['description'][0]);
-      			$videoObject->setImgUrl($video['imageurl']);
+		        $videoObject = new VideoObject($video);
       			$videos[] = $videoObject;
 		    }
-		    //print_r("Videos>>>>>>>>".var_dump($videos));
-		    
-		    // this line doesn't seem to work
-        	//$course->setVideos($videos);
 			
 			$videoObjectList = $videos;
 			$videoArrayList = array();
-			//print_r(">>>>>".var_dump($videoObjectList));
 			if(!empty( $videos)){
 				foreach( $videos as $videoObj) {
 					$vidArray = $videoObj->toArray();
 					$entryid = $videoObj->getEntryId();
 					$topicid = $videoObj->getTopicId();
-					//print_r("topicId=".$topicid);
 					$urlArray = array('url'=>$this->buildBreadcrumbURL('detail', 
 						array('videoid'=>$entryid, 'keyword'=>$keyword, 'topicid'=>$topicid)));
 					$merged = $vidArray + $urlArray;
-					
 					$videoArrayList[] = $merged;
 				}
 			}
@@ -91,41 +92,18 @@ class VideoWebModule extends WebModule
   			$keyword = $this->getArg('keyword');
   			$topicid = $this->getArg('topicid');
   			$huid = $user->getUserId();
-  			
-  			// icb.topic464910.icb.video39461
   			$entryid = "icb.topic".$topicid.".icb.video".$videoid;
-  			//print_r($entryid);
   			$results = $controller->findVideoByUserAndEntryId($huid, $entryid);
-  			
-  			//$course = $user->findCourseByKeyword($keyword);
-  			
-  			//print_r(var_dump($results));
-  			
   			foreach($results as $video){
   					$this->assign('videoid', $video['entity']);
 					$this->assign('keyword',$keyword);
       				$this->assign('videoTitle', $video['title'][0]);
       				$this->assign('videoThumbnail', $video['imageurl']);
       				$this->assign('videoDescription', $video['description'][0]);
-      				$this->assign('modifiedOn', $video['modifiedon']);
+      				$this->assign('modifiedOn', $video['modifiedon'] );
       				$this->assign('topicid',$video['topicid']);
       				$this->assign('entryid',$videoid);
   			}
-  			
-  			/*
-			foreach($course->getVideos() as $video){
-				print_r($video);
-				if($video->getEntryId()==$videoid){
-					
-					$this->assign('videoid', $videoid);
-					$this->assign('keyword',$keyword);
-      				$this->assign('videoTitle', $video->getTitle());
-      				$this->assign('videoThumbnail', $video->getImgUrl());
-      				$this->assign('videoDescription', $video->getDescription());
-      				$this->assign('modifiedOn', $video->getModifiedOn());
-      				$this->assign('topicId',$video->getTopicId());
-				}
-			}*/
    			break;     
      	}
   	}
@@ -146,39 +124,20 @@ class VideoWebModule extends WebModule
                                             'filter' => $this->getArg('filter')
                     ))
         );
-    	
     	$merged = $videoData + $linkdata;
-        
         return $merged;
     }
   	
     public function searchItems($searchTerms, $limit=null, $options=null) {
     	$session = $this->getSession();
 	 	$user = $session->getUser();
-    	//print_r($searchTerms);
-    	//print_r(var_dump($user));
     	$controller = DataController::factory('IsitesVideoController');
         $results = $controller->search($user, $searchTerms);
-        			$videos = array();
-    		       foreach($results as $video){
-		        		
-		        		$videoObject = new VideoObject();
-		        		// set each field
-		        		preg_match_all('/([\d]+)/', $video['id'], $matches);
-      					$videoObject->setEntryId($matches[0][1]);
-      					$videoObject->setEntity($video['entity']);
-      					$videoObject->setLinkUrl($video['linkurl']);
-      					$videoObject->setSiteId($video['siteid']);
-      					$videoObject->setTopicid($video['topicid']);
-      					$videoObject->setShared($video['shared']);
-      					$videoObject->setModifiedOn($video['modifiedon']);
-      					$videoObject->setTitle($video['title'][0]);
-      					$videoObject->setDescription($video['description'][0]);
-      					$videoObject->setImgUrl($video['imageurl']);
-      					array_push($videos, $videoObject);
-		        	}
-        
+       	$videos = array();
+   	    foreach($results as $video){
+			$videoObject = new VideoObject($video);
+      		$videos[] = $videoObject;
+     	}
         return $videos;
     }
-  	
 }
