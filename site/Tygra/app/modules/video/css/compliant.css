@@ -40,6 +40,10 @@ li.noimage {
     background-size: 110px;
 }
 
+.moddate {
+	font-size: 12px;
+	}
+
 .video {
 	margin: -9px 0;
 	padding: 10px;
@@ -84,6 +88,15 @@ li.noimage {
     font-size: 20px;
     line-height: auto;
 }
+
+.courseTitle {
+	font-size: 15px;
+	}
+
+.vidCount {
+	font-size: 15px;
+	font-style:italic;
+	}
 
 .videoThumbnail {
 	width: 120px;

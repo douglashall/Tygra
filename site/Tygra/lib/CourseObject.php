@@ -28,15 +28,16 @@ class CourseObject implements KurogoObject
     
     public function setVideos($videos) {
         $this->videos = $videos;
+       
     }
     
     public function getVideos() {
+    	 //print_r("CourseObject[ ".var_dump($this->videos)." ]<br />");
         return $this->videos;
     }
     
     public function findVideoByEntryId($entryid){
-    	
-    	foreach($videos as $video){
+    	foreach($this->$videos as $video){
     		if($video->getEntryId() == $entryid){
     			return $video;
     		}

@@ -5,6 +5,8 @@ class VideoWebModule extends WebModule
   protected $id='video';
   protected $encoding = 'UTF-8';
   
+ 
+  
   protected function initializeForPage() {
   	
   	 //instantiate controller
@@ -15,41 +17,25 @@ class VideoWebModule extends WebModule
 	 $user = $session->getUser();
 	 $huid = $user->getUserID();
 	 
+	 //print_r('called initializeForPage('.$this->page.') for user '.$user->getFullName());
+	 
      switch ($this->page) {
         case 'index':
              
              $siteList = array();
+             
              $courses = $user->getCourses();
-            
-             $results = array();
+             
              foreach ($courses as $course){
-
-             	print_r($course.'<br />');
-             	$keyword = $course->getKeyword();
-             	$results = $controller->findVideosByHuidAndKeyword($huid, $keyword);
-             	
-             	// find videos by course and huid	
-             	print_r($huid.'<br />');
-             	print_r($keyword.'<br />');		
-				print_r(var_dump($results).'<br />');
-        		$videos = array();		
-		    	// add videos to the course object only when the user clicks on a course
-		    	
-        		if(isset($results)){
-		    		foreach($results as $video){
-		        		$videoObject = new VideoObject($video);
-      					$videos[] = $videoObject;
-		    		}
-        		}
-             	
-		    	$numVideos = count($videos);
-		    	$course->setVideos($videos);
+		    	$numVideos = count($course->getVideos());
              	$results[] = array(
              		'keyword'=>$course->getTitle(),
+             		'numVideos'=>$numVideos,
              		'url'=>$this->buildBreadcrumbURL('list-course-videos', 
-             			array('keyword'=>$course->getKeyword(), 'title'=>$course->getTitle().' count: '.$numVideos))
+             			array('keyword'=>$course->getKeyword(), 'title'=>$course->getTitle(), ))
              	);
              }
+             $this->assign('noResultsText',"No courses found");
              $this->assign('results', $results);
              
              break;
@@ -58,32 +44,38 @@ class VideoWebModule extends WebModule
 			$keyword = $this->getArg('keyword');
 			$title = $this->getArg('title');
 			$this->setPageTitles($title);
-			//$course = $user->findCourseByKeyword($keyword);
+			$course = $user->findCourseByKeyword($keyword);
 			
-			// find videos by course and huid			
-			$results = $controller->findVideosByHuidAndKeyword($huid, $keyword);
-        	$videos = array();		
-		    // add videos to the course object only when the user clicks on a course
-		    foreach($results as $video){
-		        $videoObject = new VideoObject($video);
-      			$videos[] = $videoObject;
-		    }
+			//print_r('USER='.var_dump($user));
 			
-			$videoObjectList = $videos;
+			$courseVideos = $course->getVideos();
+			
 			$videoArrayList = array();
-			if(!empty( $videos)){
-				foreach( $videos as $videoObj) {
-					$vidArray = $videoObj->toArray();
-					$entryid = $videoObj->getEntryId();
-					$topicid = $videoObj->getTopicId();
-					$urlArray = array('url'=>$this->buildBreadcrumbURL('detail', 
-						array('videoid'=>$entryid, 'keyword'=>$keyword, 'topicid'=>$topicid)));
+			if(!empty( $courseVideos)){
+				foreach( $courseVideos as $key => $value) {
+					
+					$vidArray = $value->toArray();
+					$entryid = $value->getEntryId();
+					$topicid = $value->getTopicId();
+					$modDate = $value->getModifiedOn();
+  					$datetime = date("F j, Y g:i a", strtotime($modDate)); 
+					$urlArray = array('modDate'=>$datetime,
+									  'url'=>$this->buildBreadcrumbURL(
+									  		             'detail', array(
+													     'videoid'=>$entryid, 
+												  	     'keyword'=>$keyword, 
+												  	     'topicid'=>$topicid
+												        )
+											      )
+									        );
 					$merged = $vidArray + $urlArray;
 					$videoArrayList[] = $merged;
+					
 				}
 			}
 			
             $this->assign('videos', $videoArrayList);
+            $this->assign('noResultsText',"No videos found");
         	
         	break;
         case 'detail':
@@ -92,18 +84,25 @@ class VideoWebModule extends WebModule
   			$keyword = $this->getArg('keyword');
   			$topicid = $this->getArg('topicid');
   			$huid = $user->getUserId();
-  			$entryid = "icb.topic".$topicid.".icb.video".$videoid;
-  			$results = $controller->findVideoByUserAndEntryId($huid, $entryid);
-  			foreach($results as $video){
-  					$this->assign('videoid', $video['entity']);
-					$this->assign('keyword',$keyword);
-      				$this->assign('videoTitle', $video['title'][0]);
-      				$this->assign('videoThumbnail', $video['imageurl']);
-      				$this->assign('videoDescription', $video['description'][0]);
-      				$this->assign('modifiedOn', $video['modifiedon'] );
-      				$this->assign('topicid',$video['topicid']);
-      				$this->assign('entryid',$videoid);
-  			}
+  			$course = $user->findCourseByKeyword($keyword);
+  			$videos = $course->getVideos();
+  			$video = $videos[$videoid];
+  			$thumbnail = $video->getImgUrl();
+  			$title = $video->getTitle();
+  			$desc = $video->getDescription();
+  			$modDate = $video->getModifiedOn();
+  			$datetime = date("F j, Y g:i a", strtotime($modDate)); 
+  			//print_r(var_dump($modDate).'<br />');
+  			//print_r(var_dump($datetime));
+  			
+			$this->assign('keyword',$keyword);
+      		$this->assign('videoTitle', $title);
+      		$this->assign('videoThumbnail', $thumbnail);
+      		$this->assign('videoDescription', $desc);
+      		$this->assign('modifiedOn', $datetime );
+      		$this->assign('topicid',$topicid);
+      		$this->assign('entryid',$videoid);
+  			
    			break;     
      	}
   	}
@@ -140,4 +139,6 @@ class VideoWebModule extends WebModule
      	}
         return $videos;
     }
+    
+
 }

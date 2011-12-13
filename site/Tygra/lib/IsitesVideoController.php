@@ -44,7 +44,6 @@
     	 * There are issues when you try to send the query in plain text to the search url. 
     	 * Base64 encode the query to send it to the search service
     	 */
-    	//print_r($formattedQuery);
     	$b64EncodedQuery = base64_encode($formattedQuery);
     	$this->setBaseUrl($baseURL.'video/by_query/'.$b64EncodedQuery.'.json');
     	$data = $this->getParsedData();
@@ -56,10 +55,11 @@
     
      public function findVideosByHuidAndKeyword($huid, $keyword) {
     
+    	$originalBaseURL = $this->baseURL;
     	$baseURL = $this->baseURL;
         $this->setBaseUrl($baseURL.'video/by_userandkeyword/'.$huid.'/'.$keyword.'.json');
-        print_r($this->baseURL);
         $data = $this->getParsedData();
+        $this->baseURL = $originalBaseURL;
         $results = $data['video']['docs'];
         return $results;
     }
@@ -75,7 +75,6 @@
     
 	public function getItemByHuidAndVideoId($huid, $keyword, $id){
 		$results = $this->search($huid, $keyword);
-		
         foreach ($results as $video) {
         	if(strcmp($video['id'], $id)==0){
         		 $result = $video;
