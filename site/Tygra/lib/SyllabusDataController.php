@@ -61,6 +61,7 @@
 	        
 	 		foreach ($coursesSyllabusCollection as $courseSyllabus) {
 	 			$view = new SyllabusView();
+	 			$view->setKeyword($courseSyllabus->getKeyword());
 	 			$view->setSiteTitle($courseSyllabus->getTitle());
 	 			$href = sprintf("%s/%s",$this->getIsitesUrl(),$courseSyllabus->getKeyword());
 	 			$view->setSiteHref($href);
