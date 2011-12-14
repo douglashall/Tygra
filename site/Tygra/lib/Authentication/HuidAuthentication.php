@@ -25,7 +25,7 @@ class HuidAuthentication extends AuthenticationAuthority
     }
 
     public function login($login, $pass, Session $session, $options) {
-       	print('login='.$login.'; ');
+       	//print('login='.$login.'; ');
         $user = $this->getUser($login);
         $session->login($user);
       	return AUTH_OK;
@@ -64,13 +64,48 @@ class HuidAuthentication extends AuthenticationAuthority
 	     				$result->setTitle($course['title']);
 					if (isset($course['keyword']))
 	     				$result->setKeyword($course['keyword']);
+	     			
 					$courses[] = $result;
 	     		}
 		        $user->setCourses($courses);
+		        
+		        $offset = 1;
+	        	        
+		        foreach($user->getCourses() as $course){
+		        	$videos = array();
+		        	// get the course keyword
+		        	$keyword = $course->getKeyword();
+		        	
+		        	// get the huid of the user
+		        	$huid    = $user->getUserId();
+		        	
+		        	// get the videos associated with the user and course
+        			$videoController = DataController::factory('IsitesVideoController');
+        			$results = $videoController->findVideosByHuidAndKeyword($huid, $keyword);
+        			
+		        	// add videos to the course object
+		        	foreach($results as $video){
+		        		$videoObject = new VideoObject($video);
+		        		//print_r($videoObject->getEntryId().'<br />');
+		        		$videos[$videoObject->getEntryId()] = $videoObject;
+		        		//print_r(var_dump($videos).'<br /><br />');
+      					//array_push($videos, $videoObject);
+		        	}
+		        	//print_r(var_dump($videos));
+		        	//print_r(var_dump(array_keys($videos)));
+		        	
+		        	
+		    //foreach ($videos as $key => $value){
+ 			//	print_r( $key.'=>'.$value.'<br />');
+			//}
+		        	
+        			$course->setVideos($videos);
+		        }
+		        
+		        
 	        	return $user;
 	        }
         }
 		return new AnonymousUser();       
-        
     }
 }

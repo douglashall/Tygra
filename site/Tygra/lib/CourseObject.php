@@ -7,6 +7,8 @@ class CourseObject implements KurogoObject
 {
     protected $keyword; //site keyword
     protected $title; // site title
+    protected $videos = array();
+    protected $siteId;
     
     public function setKeyword($keyword) {
         $this->keyword = $keyword;
@@ -24,7 +26,34 @@ class CourseObject implements KurogoObject
         return $this->title;
     }
     
+    public function setVideos($videos) {
+        $this->videos = $videos;
+       
+    }
+    
+    public function getVideos() {
+    	 //print_r("CourseObject[ ".var_dump($this->videos)." ]<br />");
+        return $this->videos;
+    }
+    
+    public function findVideoByEntryId($entryid){
+    	foreach($this->$videos as $video){
+    		if($video->getEntryId() == $entryid){
+    			return $video;
+    		}
+    	}
+    	return NULL;
+    }
+    
+    public function setSiteId($siteId) {
+        $this->siteId = $siteId;
+    }
+    
+    public function getSiteId() {
+        return $this->siteId;
+    }
+    
     public function toArray() {
-    	return array("keyword" => $this->keyword, "title" => $this->title);
+    	return array("keyword" => $this->keyword, "title" => $this->title, "videos" => $this->videos);
     }
 }

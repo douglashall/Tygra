@@ -1,101 +1,90 @@
 <?php
 
- class IsitesVideoController extends VideoDataController
+ class IsitesVideoController extends DataController
  {
-    protected $DEFAULT_PARSER_CLASS='IsitesVideoDataParser';
-    protected $playlist;
+    protected $cacheFolder = "Videos"; // set the cache folder
+    protected $DEFAULT_PARSER_CLASS='JSONDataParser'; // the default parser
     
- 	private function setStandardFilters() {
- 		$this->setBaseUrl('http://vm1.isites.harvard.edu/mobile/video.json');
-    }
+    public function search($user, $query) {
     
-    public function search($q, $start=0, $limit=null) {
-    
-        $this->setStandardFilters();
+    	$baseURL = $this->baseURL;
+    	$huid = $user->getUserID();
+    	$courses = $user->getCourses();
+    	$courseList = "(sitekey:";
     	
-        $this->addFilter('q', $q); //set the query
-        $this->addFilter('max-results', $limit);
-        $this->addFilter('start-index', $start+1);
-        $this->addFilter('orderby', 'relevance');
-    
-        $items = parent::items(0, $limit);
-        return $items;
+    	/*
+    	 * For each course, get the keyword and add it to the search query
+    	 */
+    	foreach($courses as $course){
+    		$courseList .= $course->getKeyword() .'%20OR%20sitekey:';
+    	}
+    	
+    	/* Trim off the end of the string. 
+    	   len of '%20OR%20sitekey:' = 16
+    	  */
+    	$lenOriginal = strlen($courseList);
+     	$newCourseList = substr($courseList, 0, $lenOriginal-16);  
+     	
+     	// close the search query
+    	$newCourseList .= "))";
+    	
+    	/* replace any spaces in the original query with the + character  but in the url we need to specify this with the code %2b
+    	 * So a query like 'Hello world' would look like 'Hello%2bworld'
+    	 */
+    	$query = preg_replace('/\s+/i', '%2B', $query);
+    	//print_r($query);
+    	
+    	/*
+    	 * Build the search query string
+    	 */
+    	$searchTerms = "((title:".$query."%20OR%20description:".$query."%20OR%20topictitle:".$query."%20OR%20sitetitle:".$query.")%20AND%20".$newCourseList;
+    	$formattedQuery = "userid=".$huid."&q=".$searchTerms."&omitHeader=true&fq=category:video&fq=userid:".$huid."&start=0&rows=100&wt=json";
+    	
+    	/*
+    	 * There are issues when you try to send the query in plain text to the search url. 
+    	 * Base64 encode the query to send it to the search service
+    	 */
+    	$b64EncodedQuery = base64_encode($formattedQuery);
+    	$this->setBaseUrl($baseURL.'video/by_query/'.$b64EncodedQuery.'.json');
+    	$data = $this->getParsedData();
+    	$results = $data['video']['docs'];
+   
+        return $results;
+    	
     }
     
-    protected function init($args) {
-        parent::init($args);
-
-        if (isset($args['PLAYLIST']) && strlen($args['PLAYLIST'])) {
-            $this->playlist = $args['PLAYLIST'];
+     public function findVideosByHuidAndKeyword($huid, $keyword) {
+    
+    	$originalBaseURL = $this->baseURL;
+    	$baseURL = $this->baseURL;
+        $this->setBaseUrl($baseURL.'video/by_userandkeyword/'.$huid.'/'.$keyword.'.json');
+        $data = $this->getParsedData();
+        $this->baseURL = $originalBaseURL;
+        $results = $data['video']['docs'];
+        return $results;
+    }
+    
+    public function findVideoByUserAndEntryId($huid, $entryid) {
+    
+    	$baseURL = $this->baseURL;
+        $this->setBaseUrl($baseURL.'video/by_userandentryid/'.$huid.'/'.$entryid.'.json');
+        $data = $this->getParsedData();
+        $results = $data['video']['docs'];
+        return $results;
+    }
+    
+	public function getItemByHuidAndVideoId($huid, $keyword, $id){
+		$results = $this->search($huid, $keyword);
+        foreach ($results as $video) {
+        	if(strcmp($video['id'], $id)==0){
+        		 $result = $video;
+        	}
         }
-
-        $this->setStandardFilters();
-    }
-    
-    public function items($start=0, $limit=null) {
-    
-        $this->addFilter('max-results', $limit);
-        $this->addFilter('start-index', $start+1);
-                
-        $items = parent::items(0, $limit);
-        return $items;
-    }
-
-    protected function isValidID($id) {
-        return preg_match("/^[A-Za-z0-9_-]+$/", $id);
-    }
-    
-	 // retrieves video based on its id
-	public function getItem($id)
-	{
-	    if (!$this->isValidID($id)) {
-	        return false;
-	    }
-        $this->setBaseUrl("http://gdata.youtube.com/feeds/mobile/videos/$id");
-        $this->addFilter('alt', 'jsonc'); //set the output format to json
-        $this->addFilter('format', 6); //only return mobile videos
-        $this->addFilter('v', 2); // version 2
-
-        return $this->getParsedData();
+     	return isset($result) ? $result : false;   
 	}
+	
+	public function getItem($id){
+	}
+
 }
  
-class IsitesVideoDataParser extends DataParser
-{
-    protected function parseEntry($entry) {
-        $video = new IsitesVideoObject();
-        $video->setURL($entry['URL']);
-        $video->setTitle($entry['title']);
-        $video->setImage($entry['thumbnail']);
-        $video->setStillFrameImage($entry['thumbnail']);
-        return $video;
-    }
-    
-    public function parseData($data) {
-        if ($data = json_decode($data, true)) {
-            $videos = array();
-
-            foreach ($data['Courses'][0]['videos'] as $entry) {
-                $videos[] = $this->parseEntry($entry);
-            }
-                
-            return $videos;
-        } 
-
-        return array();
-        
-    }
-}
-
-class IsitesVideoObject extends VideoObject
-{
-    protected $type = 'isites';
-    
-    public function canPlay(DeviceClassifier $deviceClassifier) {
-        if (in_array($deviceClassifier->getPlatform(), array('blackberry','bbplus'))) {
-            return $this->getStreamingURL();
-        }
-
-        return true;
-    }
-}
