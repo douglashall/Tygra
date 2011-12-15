@@ -27,7 +27,10 @@ class VideoWebModule extends WebModule
              $courses = $user->getCourses();
              
              foreach ($courses as $course){
-		    	$numVideos = count($course->getVideos());
+		    	//$numVideos = $course->getNumVideos();
+		    	$numVideos = $controller->findVideoCountByHuidAndKeyword($huid, $course->getKeyword());	
+	     		$course->setNumVideos($numVideos);
+		    	//print_r('count: '.$numVideos.'<br />');
              	$results[] = array(
              		'keyword'=>$course->getTitle(),
              		'numVideos'=>$numVideos,
@@ -45,24 +48,34 @@ class VideoWebModule extends WebModule
 			$title = $this->getArg('title');
 			$this->setPageTitles($title);
 			$course = $user->findCourseByKeyword($keyword);
+			//icb.topic632609.icb.video17492
 			
-			//print_r('USER='.var_dump($user));
+			$vs = $controller->findVideosByHuidAndKeyword($huid, $keyword);
 			
-			$courseVideos = $course->getVideos();
+			//print_r(var_dump($vs));
+			
+			$varray = array();
+			foreach($vs as $v){
+				$vid = new VideoObject($v);
+				array_push($varray, $vid);
+			}
 			
 			$videoArrayList = array();
-			if(!empty( $courseVideos)){
-				foreach( $courseVideos as $key => $value) {
+			//if(!empty( $varrays)){
+				foreach( $varray as $value) {
 					
 					$vidArray = $value->toArray();
 					$entryid = $value->getEntryId();
 					$topicid = $value->getTopicId();
+					$entityid = $value->getEntity();
+					//print_r($entityid);
 					$modDate = $value->getModifiedOn();
   					$datetime = date("F j, Y g:i a", strtotime($modDate)); 
 					$urlArray = array('modDate'=>$datetime,
 									  'url'=>$this->buildBreadcrumbURL(
 									  		             'detail', array(
 													     'videoid'=>$entryid, 
+														 'entity'=>$entityid,
 												  	     'keyword'=>$keyword, 
 												  	     'topicid'=>$topicid
 												        )
@@ -72,7 +85,7 @@ class VideoWebModule extends WebModule
 					$videoArrayList[] = $merged;
 					
 				}
-			}
+			//}
 			
             $this->assign('videos', $videoArrayList);
             $this->assign('noResultsText',"No videos found");
@@ -83,10 +96,21 @@ class VideoWebModule extends WebModule
   			$videoid = $this->getArg('videoid');
   			$keyword = $this->getArg('keyword');
   			$topicid = $this->getArg('topicid');
+  			$entityid = $this->getArg('entity');
+  			//print_r('detail: '.$entityid);
   			$huid = $user->getUserId();
-  			$course = $user->findCourseByKeyword($keyword);
-  			$videos = $course->getVideos();
-  			$video = $videos[$videoid];
+  			//$course = $user->findCourseByKeyword($keyword);
+  			//$videos = $course->getVideos();
+  			//$video = $videos[$videoid];
+  			//print_r($videoid.'<br />'.$huid.'<br /> entity:'.$entityid.'<br />');
+  			
+  			//icb.topic632609.icb.video17492
+  			$videoStr = $entityid.'.icb.video'.$videoid;
+  			//print_r('str: '.$videoStr.'<br />');
+  			$vid = $controller->findVideoByUserAndEntryId($huid, $videoStr);
+  			//print_r(var_dump($vid));
+  			$video = new VideoObject($vid);
+  			//print_r('one: '.$vid['id']);
   			$thumbnail = $video->getImgUrl();
   			$title = $video->getTitle();
   			$desc = $video->getDescription();
