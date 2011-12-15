@@ -69,7 +69,7 @@ class HuidAuthentication extends AuthenticationAuthority
 	     		}
 		        $user->setCourses($courses);
 		        
-		        $offset = 1;
+/*		        $offset = 1;
 	        	        
 		        foreach($user->getCourses() as $course){
 		        	$videos = array();
@@ -101,7 +101,7 @@ class HuidAuthentication extends AuthenticationAuthority
 		        	
         			$course->setVideos($videos);
 		        }
-		        
+*/		        
 		        
 	        	return $user;
 	        }

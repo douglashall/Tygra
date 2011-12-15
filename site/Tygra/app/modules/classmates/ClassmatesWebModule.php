@@ -12,12 +12,17 @@ class ClassmatesWebModule extends WebModule
 		{
 			// courses
 			case 'index':
-				$items = array();
+				$courses = array();
 	 			foreach ($user->getCourses() as $course) {
-					$items[] = $course->toArray();
-					$this->assign('results', $items);
+					$courses[] = array(
+					'title'=>$course->getTitle(),
+					'url'=>$this->buildBreadcrumbURL('people', array(
+            		'keyword'=>$course->getKeyword()))
+					);
 	 			}
+				$this->assign('courses', $courses);
 				break;
+			//students
 			case 'people':
 				$keyword = $this->getArg('keyword');
 				$students = $user->getUserData('enrollee_'.$keyword);
@@ -25,8 +30,25 @@ class ClassmatesWebModule extends WebModule
 					$students = $controller->search($keyword, $user->getUserID());
 					$user->setUserData('enrollee_'.$keyword, $students);
 				}
-				$results = array("keyword" => $keyword, "people" => $students);
-				$this->assign('results', $results);
+				
+				$pageTitle = $keyword;
+	 			foreach ($user->getCourses() as $course) {
+	 				if ($keyword == $course->getKeyword()) {
+	 					$pageTitle = $course->getTitle();
+	 					break;
+	 				}
+	 			}
+	 			foreach ($students as $student) {
+	 				$results[] = array(
+					'title'=>$student['firstName'].' '.$student['lastName'],
+					'url'=>$this->buildBreadcrumbURL('detail', array(
+            		'keyword'=>$keyword,
+            		'id'=>$student['id']))
+	 				);
+	 			}
+				
+				$this->setPageTitles($pageTitle);
+				$this->assign('students', $results);
 				break;
 			case 'detail':
 				$id = $this->getArg('id');
@@ -36,6 +58,7 @@ class ClassmatesWebModule extends WebModule
 					foreach ($students as $student) {
 						if ($id == $student['id']) {
 							$this->assign('item', $student);
+							$this->setPageTitle($student['firstName'].' '.$student['lastName']);
 							// TODO: add a valid photoUrl to the module config
 //							$this->assign('photoUrl', $this->getPhotoUrl($student['huid']));
 							break;
