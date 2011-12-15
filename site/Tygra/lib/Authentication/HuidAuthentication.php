@@ -69,6 +69,44 @@ class HuidAuthentication extends AuthenticationAuthority
 					$courses[] = $result;
 	     		}
 		        $user->setCourses($courses);
+<<<<<<< HEAD
+=======
+		        
+/*		        $offset = 1;
+	        	        
+		        foreach($user->getCourses() as $course){
+		        	$videos = array();
+		        	// get the course keyword
+		        	$keyword = $course->getKeyword();
+		        	
+		        	// get the huid of the user
+		        	$huid    = $user->getUserId();
+		        	
+		        	// get the videos associated with the user and course
+        			$videoController = DataController::factory('IsitesVideoController');
+        			$results = $videoController->findVideosByHuidAndKeyword($huid, $keyword);
+        			
+		        	// add videos to the course object
+		        	foreach($results as $video){
+		        		$videoObject = new VideoObject($video);
+		        		//print_r($videoObject->getEntryId().'<br />');
+		        		$videos[$videoObject->getEntryId()] = $videoObject;
+		        		//print_r(var_dump($videos).'<br /><br />');
+      					//array_push($videos, $videoObject);
+		        	}
+		        	//print_r(var_dump($videos));
+		        	//print_r(var_dump(array_keys($videos)));
+		        	
+		        	
+		    //foreach ($videos as $key => $value){
+ 			//	print_r( $key.'=>'.$value.'<br />');
+			//}
+		        	
+        			$course->setVideos($videos);
+		        }
+*/		        
+		        
+>>>>>>> 8e8db417c3ff782115d3d42f43a9bc4c575f886b
 	        	return $user;
 	        }
         }

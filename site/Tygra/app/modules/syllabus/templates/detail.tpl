@@ -2,42 +2,33 @@
 
 <ul class="results" id="syllabusList">
   {foreach $results as $item}
-	{if $item['syllabus'] && count($item['syllabus']) > 0}
-	    {if !isset($item['separator'])}
+      {if !isset($item['separator'])}
 	      <li{if $item['img']} class="icon"{/if}>
 	        {capture name="listItemLabel" assign="listItemLabel"}
-			  {if isset($item['siteTitle'])}
+			  {if isset($item['title'])}
 			    {if $boldLabels}
 			      <strong>
 			    {/if}
-			      {$item['siteTitle']}{if $labelColon|default:false}: {/if}
+			      {$item['title'][0]}{if $labelColon|default:false}: {/if}
 			    {if $boldLabels}
 			      </strong>
 			    {/if}
 			  {/if}
 			{/capture}
 			{block name="itemLink"}
-			  {if count($item['syllabus']) == 1}
-			    <a href="{$item['syllabus'][0]['linkUrl']}" class="{$item['class']|default:''}"{if $linkTarget || $item['linkTarget']} target="{if $item['linkTarget']}{$item['linkTarget']}{else}{$linkTarget}{/if}"{/if}>
-			  {else}
-			    <a href="detail?keyword={$item['keyword']}" class="{$item['class']|default:''}"{if $linkTarget || $item['linkTarget']} target="{if $item['linkTarget']}{$item['linkTarget']}{else}{$linkTarget}{/if}"{/if}>
-			  {/if}
+			    <a href="{$item['linkUrl']}" class="{$item['class']|default:''}"{if $linkTarget || $item['linkTarget']} target="{if $item['linkTarget']}{$item['linkTarget']}{else}{$linkTarget}{/if}"{/if}>
 			    {if $item['img']}
-			      <img src="{$item['img']}" alt="{$item['title']}"{if $item['imgWidth']}
+			      <img src="{$item['img']}" alt="{$item['title'][0]}"{if $item['imgWidth']}
 			        width="{$item['imgWidth']}"{/if}{if $item['imgHeight']}
 			        height="{$item['imgHeight']}"{/if}{if $item['imgAlt']}
 			        alt="{$item['imgAlt']}"{/if} />
 			    {/if}
 			    {$listItemLabel}
-			    {if count($item['syllabus']) == 1}
-				    {if $item['syllabus'][0]['description']}
+				    {if $item['description']}
 				      {if $subTitleNewline|default:true}<div{else}&nbsp;<span{/if} class="smallprint">
-				        {$item['syllabus'][0]['description']}
+				        {$item['description'][0]}
 				      {if $subTitleNewline|default:true}</div>{else}</span>{/if}
 				    {/if}
-				{else}
-				    ({count($item['syllabus'])})
-				{/if}
 			    {if $item['badge']}
 			      <span class="badge">{$item['badge']}</span>
 			    {/if}
@@ -45,7 +36,6 @@
 			{/block}
 	      </li>
       {/if}
-    {/if}
   {/foreach}
   {if count($results) == 0}
     {block name="noResults"}
@@ -55,3 +45,4 @@
 </ul>
 
 {include file="findInclude:common/templates/footer.tpl"}
+

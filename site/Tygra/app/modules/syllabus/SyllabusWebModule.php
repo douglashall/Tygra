@@ -18,6 +18,23 @@ class SyllabusWebModule extends WebModule
 				}
 				$this->assign('results', $items);
 				break;
+			case 'detail':
+				$keyword = $this->getArg('keyword');
+				$items = $user->getUserData('syllabus');
+				if (!$items) {
+					$items = $controller->search($user);
+					$user->setUserData('syllabus', $items);
+				}
+				if ($items) {
+					foreach ($items as $item) {
+						if ($keyword == $item['keyword']) {
+							$this->assign('results', $item['syllabus']);
+							$this->setPageTitle($item['siteTitle']);
+							break;
+						}
+					}
+	 			}
+				break;
 		}
 	}
 }
