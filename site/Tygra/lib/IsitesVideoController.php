@@ -64,13 +64,26 @@
         return $results;
     }
     
+    public function findVideoCountByHuidAndKeyword($huid, $keyword) {
+    
+    	$originalBaseURL = $this->baseURL;
+    	$baseURL = $this->baseURL;
+        $this->setBaseUrl($baseURL.'video/count_byuserandkeyword/'.$huid.'/'.$keyword.'.json');
+        $data = $this->getParsedData();
+        $this->baseURL = $originalBaseURL;
+        $results = $data['video'];
+        return $results;
+    }
+    
     public function findVideoByUserAndEntryId($huid, $entryid) {
     
     	$baseURL = $this->baseURL;
         $this->setBaseUrl($baseURL.'video/by_userandentryid/'.$huid.'/'.$entryid.'.json');
         $data = $this->getParsedData();
-        $results = $data['video']['docs'];
+        //print_r('data: '.var_dump($data));
+        $results = $data['video']['docs'][0];
         return $results;
+        //return $data;
     }
     
 	public function getItemByHuidAndVideoId($huid, $keyword, $id){
