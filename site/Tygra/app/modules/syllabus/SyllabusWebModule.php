@@ -31,7 +31,7 @@ class SyllabusWebModule extends WebModule
 								$description = $item['syllabus'][0]['description'][0];
 						} else
 							$url = $this->buildBreadcrumbURL('detail', array(
-								keyword=>$item['keyword'])
+								'keyword'=>$item['keyword'])
 								);
 								
 						$syllabus[] = array(
