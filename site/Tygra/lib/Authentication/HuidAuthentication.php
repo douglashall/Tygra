@@ -70,7 +70,10 @@ class HuidAuthentication extends AuthenticationAuthority
 					$courses[] = $result;
 	     		}
 		        $user->setCourses($courses);
+<<<<<<< HEAD
 
+=======
+>>>>>>> 9f3ac6cc814dd1ddd5d699245495182f0743a772
 		        
 /*		        $offset = 1;
 	        	        
@@ -106,7 +109,10 @@ class HuidAuthentication extends AuthenticationAuthority
 		        }
 */		        
 		        
+<<<<<<< HEAD
 
+=======
+>>>>>>> 9f3ac6cc814dd1ddd5d699245495182f0743a772
 	        	return $user;
 	        }
         }

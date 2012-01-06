@@ -9,14 +9,14 @@
 			    {if $boldLabels}
 			      <strong>
 			    {/if}
-			      {$item['title'][0]}{if $labelColon|default:false}: {/if}
+			      {$item['title']}{if $labelColon|default:false}: {/if}
 			    {if $boldLabels}
 			      </strong>
 			    {/if}
 			  {/if}
 			{/capture}
 			{block name="itemLink"}
-			    <a href="{$item['linkUrl']}" class="{$item['class']|default:''}"{if $linkTarget || $item['linkTarget']} target="{if $item['linkTarget']}{$item['linkTarget']}{else}{$linkTarget}{/if}"{/if}>
+			    <a href="{$item['url']}" class="{$item['class']|default:''}"{if $linkTarget || $item['linkTarget']} target="{if $item['linkTarget']}{$item['linkTarget']}{else}{$linkTarget}{/if}"{/if}>
 			    {if $item['img']}
 			      <img src="{$item['img']}" alt="{$item['title'][0]}"{if $item['imgWidth']}
 			        width="{$item['imgWidth']}"{/if}{if $item['imgHeight']}
@@ -24,9 +24,9 @@
 			        alt="{$item['imgAlt']}"{/if} />
 			    {/if}
 			    {$listItemLabel}
-				    {if $item['description']}
+				    {if $item['subtitle']}
 				      {if $subTitleNewline|default:true}<div{else}&nbsp;<span{/if} class="smallprint">
-				        {$item['description'][0]}
+				        {$item['subtitle']}
 				      {if $subTitleNewline|default:true}</div>{else}</span>{/if}
 				    {/if}
 			    {if $item['badge']}

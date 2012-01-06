@@ -10,11 +10,11 @@
         <tr valign="top">
           <td align="right" class="label">{$item['label']}&nbsp;</td>
           <td class="value">
-            {if isset($item['linkUrl'])}
-              <a href="{$item['linkUrl']}" class="{$item['class']|default:''}">
+            {if isset($item['url'])}
+              <a href="{$item['url']}" class="{$item['class']|default:''}">
             {/if}
-                {$item['title'][0]}
-            {if isset($item['lihkUrl'])}
+                {$item['title']}
+            {if isset($item['url'])}
               </a>
             {/if}
           </td>

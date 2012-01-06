@@ -28,7 +28,7 @@
 		$category = '(file%20OR%20topic)';
 			
 		if (strlen($sitekeys) > 0) {
-     		$this->path = sprintf("userid=%s&q=title:syllabus+-hidden&omitHeader=true&fq=category:%s&start=0&rows=100&wt=json&fq=sitekey:%s&fl=topicid,title,sitekey,linkurl,description,category",$user->getUserID(),$category,$sitekeys);
+     		$this->path = sprintf("userid=%s&q=title:syllabus+-title:hidden&omitHeader=true&fq=category:%s&start=0&rows=100&wt=json&fq=sitekey:%s&fl=topicid,title,sitekey,linkurl,description,category",$user->getUserID(),$category,$sitekeys);
 	
 	        $data = $this->getParsedData();
 	        
@@ -40,7 +40,7 @@
 				$courseSyllabus->setTitle($course->getTitle());
 				$coursesSyllabusCollection[] = $courseSyllabus;
 			}
-	        
+			
 			foreach ($data['response']['docs'] as $item) {
 				$result = new SyllabusObject();
 				if (isset($item['title']))
@@ -109,6 +109,8 @@
     
     public function addSyllabusObject(SyllabusObject $o) {
     	if ($o->getKeyword() == $this->keyword) {
+//    		if ($o->getTopicId() == 844633)
+//    		var_export($o);
     		if (!$this->syllabus)
     			$this->syllabus = array();
     		// add files in place of topics for the same topic id

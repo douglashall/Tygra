@@ -2,11 +2,11 @@
 
 {block name="detail"}
   <li class="detail_{$key}{if !$item['label']} nolabel{/if}">
-    {if $item['linkUrl']}
-      <a href="{$item['linkUrl']}" class="{$item['class']|default:''}">
+    {if $item['url']}
+      <a href="{$item['url']}" class="{$item['class']|default:''}">
     {/if}
-        <div class="value">{$item['title'][0]}</div>
-    {if $item['linkUrl']}
+        <div class="value">{$item['title']}</div>
+    {if $item['url']}
       </a>
     {/if}
   </li>
