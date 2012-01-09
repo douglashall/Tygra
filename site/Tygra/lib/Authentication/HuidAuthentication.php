@@ -56,6 +56,7 @@ class HuidAuthentication extends AuthenticationAuthority
 		        $user->setFullName($person['firstName']." ".$person['lastName']."(".$person['id'].")");
 		        if (!isset($person['courses']))
 		        	return $user;
+		        	
 		        $courses = array();
 		        $vidCount = 0;
 	     		foreach ($person['courses'] as $course) {
@@ -69,6 +70,7 @@ class HuidAuthentication extends AuthenticationAuthority
 					$courses[] = $result;
 	     		}
 		        $user->setCourses($courses);
+
 		        
 /*		        $offset = 1;
 	        	        
@@ -104,6 +106,7 @@ class HuidAuthentication extends AuthenticationAuthority
 		        }
 */		        
 		        
+
 	        	return $user;
 	        }
         }
