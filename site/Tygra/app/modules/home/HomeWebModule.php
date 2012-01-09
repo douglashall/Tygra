@@ -65,15 +65,15 @@ class HomeWebModule extends WebModule {
         $this->assign('displayType', $this->getModuleVar('display_type'));
 
 // 		to be removed: test getTotalCount()         
-		foreach ($this->getAllModuleNavigationData(self::EXCLUDE_DISABLED_MODULES) as $type=>$modules) {
-            foreach ($modules as $id => $info) {
-              $module = self::factory($id);
-              if ($module->getOptionalModuleVar('totalCount')) {
-              	$total = $module->getTotalCount('k76521');
-              	$total = $module->getTotalCount('k68389');
-              }
-            }
-		}
+//		foreach ($this->getAllModuleNavigationData(self::EXCLUDE_DISABLED_MODULES) as $type=>$modules) {
+//            foreach ($modules as $id => $info) {
+//              $module = self::factory($id);
+//              if ($module->getOptionalModuleVar('totalCount')) {
+//              	$total = $module->getTotalCount('k76521');
+//              	$total = $module->getTotalCount('k68389');
+//              }
+//            }
+//		}
         break;
         
      case 'search':
