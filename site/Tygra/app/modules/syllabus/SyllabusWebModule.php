@@ -84,7 +84,6 @@ class SyllabusWebModule extends WebModule
 // if ($module->getOptionalModuleVar('totalCount')) {
 //     $total = $module->getTotalCount('k76521');
 	
-	
 	public function getTotalCount($keyword) {
 		$ret = 0;
 		$session = $this->getSession();
