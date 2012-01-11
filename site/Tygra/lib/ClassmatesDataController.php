@@ -1,30 +1,35 @@
 <?php
 
- class ClassmatesDataController extends DataController
+ class ClassmatesDataController extends AuthenticatedDataController
  {
      protected $cacheFolder = "Classmates"; // set the cache folder
      protected $cacheSuffix = "json";   // set the suffix for cache files
      protected $DEFAULT_PARSER_CLASS='JSONDataParser'; // the default parser
-
-     public function search($q)
+     
+    protected function init($args) {
+    	
+        parent::init($args);
+        
+        $baseURL = $this->baseURL;
+        $this->setBaseURL($baseURL.'groups/course_enrollment/');
+        
+    }
+     
+     public function search($keyword, $userId)
      {
-         // set the base url
-         $this->setBaseUrl('http://vm1.isites.harvard.edu/mobile/classmates.json');
-         //$this->setBaseUrl('http://localhost:8080/icommonsapi/whatsnew/by_user/10564158.json');
-         //$this->addFilter('alt', 'json'); //set the output format to json
-
+         $this->path = "$keyword/$userId.json";
          $data = $this->getParsedData();
+         //TODO: replace with random generated string
+		 $count = 0;
          $results = array();
-         foreach ($data['classes']['class'] as $class) {
-             foreach ($class['classmate'] as $item) {
-	             $person = new PersonObject();
-	             $person->setId($item['id']);
-	             $person->setFirstName($item['firstname']);
-	             $person->setLastName($item['lastname']);
-	             $person->setEmail($item['email']);
-	             $person->setThumbnail($item['thumbnail']);
-	             $results[] = $person->toArray();
-             }
+         foreach ($data['enrollment'] as $item) {
+             $person = new PersonObject();
+             $person->setId($count++);
+             $person->setHuid($item['id']);
+             $person->setFirstName($item['firstName']);
+             $person->setLastName($item['lastName']);
+             $person->setEmail($item['email']);
+             $results[] = $person->toArray();
          }
 
          return $results;
@@ -32,23 +37,23 @@
 
      // not used yet
      public function getItem($id){
-     	 $this->setBaseUrl('http://vm1.isites.harvard.edu/mobile/classmates.json');
-         $data = $this->getParsedData();
-         $person = new PersonObject();
-         foreach ($data['classes']['class'] as $class) {
-             foreach ($class['classmate'] as $item) {
-	             if ($item['id'] == $id) {
-	                 $person->setId($item['id']);
-	                 $person->setFirstName($item['firstname']);
-	                 $person->setLastName($item['lastname']);
-	                 $person->setEmail($item['email']);
-	                 $person->setThumbnail($item['thumbnail']);
-	                 break;
-	             }
-             }
-         }
-         
-         return $person->toArray();
+//     	 $this->setBaseUrl('http://vm1.isites.harvard.edu/mobile/classmates.json');
+//         $data = $this->getParsedData();
+//         $person = new PersonObject();
+//         foreach ($data['classes']['class'] as $class) {
+//             foreach ($class['classmate'] as $item) {
+//	             if ($item['id'] == $id) {
+//	                 $person->setHuid($item['id']);
+//	                 $person->setFirstName($item['firstName']);
+//	                 $person->setLastName($item['lastName']);
+//	                 $person->setEmail($item['email']);
+//	                 $person->setThumbnail($item['thumbnail']);
+//	                 break;
+//	             }
+//             }
+//         }
+//         
+//         return $person->toArray();
      }
 
  }

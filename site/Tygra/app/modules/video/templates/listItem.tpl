@@ -15,8 +15,10 @@
       <img src="{$item['img']}" class="thumbnail" alt="{$item['title']}" />
     {/if}
 	    <div class="ellipsis" id="ellipsis_{$ellipsisId}">
-	          <div class="title">{$item['title']}</div>
-	          {$item['subtitle']}
+	          <div class="title">{$item['title']}
+	          	<div class="moddate">Last modified: {$item['modDate']}</div>
+	          </div>
+	          
 	    </div>
     {if $item['badge']}
       <span class="badge">{$item['badge']}</span>

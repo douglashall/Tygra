@@ -5,17 +5,18 @@
  */
 class CourseObject implements KurogoObject
 {
-    protected $id;
-    protected $title;
-    protected $syllabus;
-    protected $enrollees;
+    protected $keyword; //site keyword
+    protected $title; // site title
+    protected $videos = array();
+    protected $siteId;
+    protected $numVideos;
     
-    public function setId($id) {
-        $this->id = $id;
+    public function setKeyword($keyword) {
+        $this->keyword = $keyword;
     }
 
-    public function getId() {
-        return $this->id;
+    public function getKeyword() {
+        return $this->keyword;
     }
     
     public function setTitle($title) {
@@ -26,23 +27,43 @@ class CourseObject implements KurogoObject
         return $this->title;
     }
     
-    public function getSyllabus() {
-        return $this->syllabus;
-    }
-
-    public function setSyllabus($syllabus) {
-        $this->syllabus = $syllabus;
+    public function setVideos($videos) {
+        $this->videos = $videos;
+       
     }
     
-    public function getEnrollees() {
-        return $this->enrollees;
+    public function getVideos() {
+    	 //print_r("CourseObject[ ".var_dump($this->videos)." ]<br />");
+        return $this->videos;
     }
-
-    public function setEnrollees($enrollees) {
-        $this->enrollees = $enrollees;
+    
+    public function setNumVideos($count) {
+        $this->numVideos = $count;
+       
+    }
+    
+    public function getNumVideos() {
+        return $this->numVideos;
+    }
+    
+    public function findVideoByEntryId($entryid){
+    	foreach($this->$videos as $video){
+    		if($video->getEntryId() == $entryid){
+    			return $video;
+    		}
+    	}
+    	return NULL;
+    }
+    
+    public function setSiteId($siteId) {
+        $this->siteId = $siteId;
+    }
+    
+    public function getSiteId() {
+        return $this->siteId;
     }
     
     public function toArray() {
-    	return get_object_vars($this);
+    	return array("keyword" => $this->keyword, "title" => $this->title, "videos" => $this->videos);
     }
 }

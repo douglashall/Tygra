@@ -4,21 +4,67 @@ class ClassmatesWebModule extends WebModule
 {
 	protected $id='classmates';
 	protected function initializeForPage() {
+		$session = $this->getSession();
+		$user = $session->getUser();
 		$controller = DataController::factory('ClassmatesDataController');
-		$userId = $_REQUEST['userId'];
 		
 		switch ($this->page)
 		{
+			// courses
 			case 'index':
-				$items = $controller->search($userId);
-				$this->assign('results', $items);
+				$courses = array();
+	 			foreach ($user->getCourses() as $course) {
+					$courses[] = array(
+					'title'=>$course->getTitle(),
+					'url'=>$this->buildBreadcrumbURL('people', array(
+            		'keyword'=>$course->getKeyword()))
+					);
+	 			}
+				$this->assign('courses', $courses);
 				break;
-			
+			//students
+			case 'people':
+				$keyword = $this->getArg('keyword');
+				$students = $user->getUserData('enrollee_'.$keyword);
+				if (!$students) {
+					$students = $controller->search($keyword, $user->getUserID());
+					$user->setUserData('enrollee_'.$keyword, $students);
+				}
+				
+				$pageTitle = $keyword;
+	 			foreach ($user->getCourses() as $course) {
+	 				if ($keyword == $course->getKeyword()) {
+	 					$pageTitle = $course->getTitle();
+	 					break;
+	 				}
+	 			}
+	 			foreach ($students as $student) {
+	 				$results[] = array(
+					'title'=>$student['firstName'].' '.$student['lastName'],
+					'url'=>$this->buildBreadcrumbURL('detail', array(
+            		'keyword'=>$keyword,
+            		'id'=>$student['id']))
+	 				);
+	 			}
+				
+				$this->setPageTitles($pageTitle);
+				$this->assign('students', $results);
+				break;
 			case 'detail':
 				$id = $this->getArg('id');
-				$item = $controller->getItem($id);
-				$this->assign('item', $item);
-				$this->assign('photoUrl', $this->getPhotoUrl($item['id']));
+				$keyword = $this->getArg('keyword');
+				$students = $user->getUserData('enrollee_'.$keyword);
+				if ($students) {
+					foreach ($students as $student) {
+						if ($id == $student['id']) {
+							$this->assign('item', $student);
+							$this->setPageTitle($student['firstName'].' '.$student['lastName']);
+							// TODO: add a valid photoUrl to the module config
+//							$this->assign('photoUrl', $this->getPhotoUrl($student['huid']));
+							break;
+						}
+					}
+	 			}
 				break;
 		}
 	}
