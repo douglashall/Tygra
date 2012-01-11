@@ -153,6 +153,13 @@ class VideoWebModule extends WebModule
 		}
 		return $videos;
 	}
+	
+	public function getTotalCount($keyword) {
+		$user = $session->getUser();
+		$huid = $user->getUserId();
+		$numVideos = $controller->findVideoCountByHuidAndKeyword($huid, $keyword);
+		return $numVideos;
+	}
 
 
 }

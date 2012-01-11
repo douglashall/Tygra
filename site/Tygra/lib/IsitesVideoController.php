@@ -44,8 +44,10 @@ class IsitesVideoController extends DataController
 		 * There are issues when you try to send the query in plain text to the search url.
 		 * Base64 encode the query to send it to the search service
 		 */
-		$b64EncodedQuery = base64_encode($formattedQuery);
-		$this->setBaseUrl($baseURL.'video/by_query/'.$b64EncodedQuery.'.json');
+		
+		//$b64EncodedQuery = base64_encode($formattedQuery);
+		
+		$this->setBaseUrl($baseURL.'video/by_query/'.urlencode($formattedQuery).'.json');
 		$data = $this->getParsedData();
 		$results = $data['video']['docs'];
 		 
@@ -64,6 +66,7 @@ class IsitesVideoController extends DataController
 		return $results;
 	}
 
+	
 	public function findVideoCountByHuidAndKeyword($huid, $keyword) {
 
 		$originalBaseURL = $this->baseURL;
