@@ -46,6 +46,9 @@ class HomeWebModule extends WebModule {
         break;
               
       case 'index':
+		$keyword = $this->getArg('keyword');
+		error_log("keyword=".$keyword);
+		
       	$this->assign('user', $user);
         if ($this->pagetype == 'tablet') {
           

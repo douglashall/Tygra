@@ -1,5 +1,31 @@
+{capture name="banner" assign="banner"}
+
+  <h1 id="homelogo"{if isset($topItem)} class="roomfornew"{/if}>
+    <img src="/modules/{$moduleID}/images/logo-home{$imageExt}" width="{$banner_width|default:265}" height="{$banner_height|default:45}" alt="{$strings.SITE_NAME|escape}" />
+  </h1>
+{/capture}
+
 {include file="findInclude:common/templates/header.tpl"}
 
+{if $showFederatedSearch}
+{block name="federatedSearch"}
+{include file="findInclude:common/templates/search.tpl"}
+{/block}
+{/if}
+
+<div class="homegrid">
+	{include file="findInclude:common/templates/springboard.tpl" springboardItems=$modules springboardID="homegrid"}
+</div>
+<ul class="results">
+	{foreach $courses as $course}
+	<li>
+		<a href="/home/?keyword={$course->getKeyword()}">{$course->getTitle()}</a>
+	</li>
+	{/foreach}
+</ul>
+
+
+<!--
 <ul class="results" id="activityList">
   {foreach $results as $item}
     {if !isset($item['separator'])}
@@ -52,5 +78,7 @@
     {/block}
   {/if}
 </ul>
+-->
+
 
 {include file="findInclude:common/templates/footer.tpl"}
