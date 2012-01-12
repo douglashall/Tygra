@@ -65,7 +65,6 @@ class IsitesVideoController extends DataController
 		$results = $data['video']['docs'];
 		return $results;
 	}
-
 	
 	public function findVideoCountByHuidAndKeyword($huid, $keyword) {
 
