@@ -11,7 +11,7 @@
 </div>
 <ul class="results">
 	{foreach $courses as $course}
-	<li badge="2">
+	<li>
 		<a href="/course/?keyword={$course->getKeyword()}">{$course->getTitle()}</a>
 	</li>
 	{/foreach}

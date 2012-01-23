@@ -7,6 +7,10 @@ class HarvardUser extends User
     // an array of CourseObject
     protected $courses = array();
     
+	public function getUserID(){
+		return $this->userID;
+	}
+
     public function getCourses() {
     	return $this->courses;
     }

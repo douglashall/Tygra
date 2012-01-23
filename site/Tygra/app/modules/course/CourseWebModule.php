@@ -44,12 +44,11 @@ class CourseWebModule extends WebModule {
 	
 	// get the course title for the page
 	$keyword = $this->getArg('keyword');
-	if($keyword) {
+//	if($keyword) {
 		
 		// set the title for the page
 		$course = $user->findCourseByKeyword($keyword);
 		$this->setPageTitle($course->getTitle());
-	
 	
   		switch ($this->page) {
       		case 'help':
@@ -88,35 +87,40 @@ class CourseWebModule extends WebModule {
         	break;
         
      		case 'search':
-        	$searchTerms = $this->getArg('filter');
+        		$searchTerms = $this->getArg('filter');
         
-        	$federatedResults = array();
+        		$federatedResults = array();
      
-        	foreach ($this->getAllModuleNavigationData(self::EXCLUDE_DISABLED_MODULES) as $type=>$modules) {
-        
-            	foreach ($modules as $id => $info) {
-            
-              		$module = self::factory($id);
-              		if ($module->getModuleVar('search')) {
-                		$results = array();
-                		$total = $module->federatedSearch($searchTerms, 2, $results);
-                		$federatedResults[] = array(
-                  			'title'   => $info['title'],
-                  			'results' => $results,
-                  			'total'   => $total,
-                  			'url'     => $module->urlForFederatedSearch($searchTerms),
-                			);
-                		unset($module);
-              		}
-            	}
-        	}
+        		foreach ($this->getAllModuleNavigationData(self::EXCLUDE_DISABLED_MODULES) as $type=>$modules) {
+        			//error_log(var_export($modules, 1));
+					
+            		foreach ($modules as $id => $info) {
+            			$module = self::factory($id);
+              			error_log($id);
+						if ($module->getModuleVar('search')) {
+                			error_log("has a search...");
+							$results = array();
+                			$total = $module->federatedSearch($searchTerms, 2, $results);
+                			$federatedResults[] = array(
+                  				'title'   => $info['title'],
+                  				'results' => $results,
+                  				'total'   => $total,
+                  				'url'     => $module->urlForFederatedSearch($searchTerms),
+                				);
+                			unset($module);
+              			}
+            		}
+        		}
 
-        	$this->assign('federatedResults', $federatedResults);
-        	$this->assign('searchTerms',      $searchTerms);
-        	$this->setLogData($searchTerms);
+
+				error_log(var_export($federatedResults, 1));
+			
+        		$this->assign('federatedResults', $federatedResults);
+        		$this->assign('searchTerms',      $searchTerms);
+        		$this->setLogData($searchTerms);
         	break;
-    	}
-	} // ending the if(keyword)
+    	} // end switch
+//	} // ending the if(keyword)
   }// ending initializeForPage()
 
 } // end of class

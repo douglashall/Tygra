@@ -60,14 +60,23 @@ class HomeWebModule extends WebModule
 		            return false;
 		        }
 
+				//error_log(var_export($session, 1));
+
+				$queryString = "userid=".$user->getUserID();
+				$queryString .= "&q=$searchTerms";
+				$queryString .= "&omitHeader=true";
+				$queryString .= "&wt=json";
+				$queryString .= "&rows=100";
+				
+
 		        $proxy = "proxy.unix.fas.harvard.edu:8888";
-				$url = "https://isites.harvard.edu/services/search/select/".$searchTerms;
+				$url = "https://isites.harvard.edu/services/search/select/".$queryString;
 		        $userpwd = "F7455492-E3B1-11E0-B26E-E0A8BADA4195:lcnnWEMnqrDLSVL5CifU";
 
 		        curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
 		        curl_setopt($ch, CURLOPT_USERPWD, $userpwd);
 		        curl_setopt($ch, CURLOPT_URL, $url);
-				curl_setopt($ch, CURLOPT_PROXY, $proxy);
+				//curl_setopt($ch, CURLOPT_PROXY, $proxy);
 		        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 		        curl_setopt($ch, CURLOPT_HEADER, 0);
 		        curl_setopt($ch, CURLOPT_TIMEOUT, 25);
@@ -75,36 +84,25 @@ class HomeWebModule extends WebModule
 		        $data = curl_exec($ch);
 		        $info = curl_getinfo($ch);
 		        $result = array('data' => $data, 'info' => $info);
-
-		        error_log(var_export($result, 1));
+				$decoded = json_decode($data);
+				
+				$searchResultArray = array();
+				$number = 1;
+				foreach($decoded->response->docs as $item){
+					$sitetitle = $item->sitetitle;
+					$topictitle = $item->topictitle;
+					$linkurl = $item->linkurl;
+					
+					//error_log($sitetitle." => ".$linkurl);
+					$searchResultArray["$number) $sitetitle ($topictitle)"] = $linkurl;
+					$number++;
+				}
 
 		        curl_close($ch);
 		
+				$this->assign('searchResultArray', $searchResultArray);
 	
-	
-				$federatedResults = array();
-
-	        	foreach ($this->getAllModuleNavigationData(self::EXCLUDE_DISABLED_MODULES) as $type=>$modules) {
-
-	            	foreach ($modules as $id => $info) {
-
-	              		$module = self::factory($id);
-	              		if ($module->getModuleVar('search')) {
-	                		$results = array();
-	                		$total = $module->federatedSearch($searchTerms, 2, $results);
-	                		$federatedResults[] = array(
-	                  			'title'   => $info['title'],
-	                  			'results' => $results,
-	                  			'total'   => $total,
-	                  			'url'     => $module->urlForFederatedSearch($searchTerms),
-	                			);
-	                		unset($module);
-	              		}
-	            	}
-	        	}
-
-	        	$this->assign('federatedResults', $federatedResults);
-	        	$this->assign('searchTerms',      $searchTerms);
+				$this->assign('searchTerms', $searchTerms);
 	        	$this->setLogData($searchTerms);
 	
 				break;
