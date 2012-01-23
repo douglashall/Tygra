@@ -31,7 +31,7 @@ h1.roomfornew {
 	right: -9px;
 	width: 80px;
 	height: 80px;
-	background-image: url(/modules/home/images/newbig.png);
+	background-image: url(/modules/course/images/newbig.png);
 	background-repeat: no-repeat;
 	color: #fff;
 	font-size: 70.59%;
@@ -96,7 +96,7 @@ form {
   margin: 1px;
   padding: 0;
   padding-left: 52px;
-  background: transparent url(/modules/home/images/pane-header-bg.png) repeat-x left top;
+  background: transparent url(/modules/course/images/pane-header-bg.png) repeat-x left top;
   color: white;
   font-size: 120%;
   text-align: left;

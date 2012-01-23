@@ -1,3 +1,4 @@
+
   {if $moduleDebug && count($moduleDebugStrings)}
     <p class="legend nonfocal">
       {foreach $moduleDebugStrings as $string}
@@ -18,7 +19,6 @@
    {block name="footerKurogo"}{$footerKurogo}{/block}
   {/capture}
 
-  
   {block name="footerNavLinks"}
     {if !$hideFooterLinks}
       <div id="footerlinks">
