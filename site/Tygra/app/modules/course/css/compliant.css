@@ -1,5 +1,10 @@
-.homegrid {
-	height: 100px;
+.badge {
+	color: white;
+	background: red;
+	position: absolute;
+	top: 10px;
+	right: 10px;
+	padding: 2px 2px 2px 2px;
 }
 #homelogo {
 	font-size: 200%;
@@ -18,7 +23,7 @@ h1.roomfornew {
 	right: -9px;
 	width: 80px;
 	height: 80px;
-	background-image: url(/modules/home/images/newbig.png);
+	background-image: url(/modules/course/images/newbig.png);
 	background-repeat: no-repeat;
 	color: #fff;
 	font-size: 70.59%;

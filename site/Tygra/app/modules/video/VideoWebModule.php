@@ -7,19 +7,18 @@ class VideoWebModule extends WebModule
 
 	protected function initializeForPage() {
 			
-		//instantiate controller
-		$controller = DataController::factory('IsitesVideoController');
+	//instantiate controller
+	$controller = DataController::factory('IsitesVideoController');
 			
-		// get the current logged in user
-		$session = $this->getSession();
-	 $user = $session->getUser();
-	 $huid = $user->getUserID();
+	// get the current logged in user
+	$session = $this->getSession();
+	$user = $session->getUser();
+	$huid = $user->getUserID();
 
 	 switch ($this->page) {
 	 	case 'index':
 	 			
 	 		$siteList = array();
-	 			
 	 		$courses = $user->getCourses();
 	 			
 	 		foreach ($courses as $course){
@@ -153,6 +152,13 @@ class VideoWebModule extends WebModule
 		}
 		return $videos;
 	}
-
-
+	
+	public function getTotalCount($keyword) {
+		$session = $this->getSession();
+		$user = $session->getUser();
+		$huid = $user->getUserId();
+		$controller = DataController::factory('IsitesVideoController');
+		$numVideos = $controller->findVideoCountByHuidAndKeyword($huid, $keyword);
+		return $numVideos;
+	}
 }
