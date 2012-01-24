@@ -1,12 +1,12 @@
 <?php
 
-class IsitesVideoController extends DataController
+class IsitesVideoController extends AuthenticatedDataController
 {
 	protected $cacheFolder = "Videos"; // set the cache folder
 	protected $DEFAULT_PARSER_CLASS='JSONDataParser'; // the default parser
 
 	public function search($user, $query) {
-
+error_log("***$user***");
 		$baseURL = $this->baseURL;
 		$huid = $user->getUserID();
 		$courses = $user->getCourses();

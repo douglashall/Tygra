@@ -10,7 +10,6 @@
   */
 class CourseWebModule extends WebModule {
   protected $id = 'course';
-  protected $canBeAddedToHomeScreen = false;
   protected $hideFooterLinks = false;
 
   protected function showLogin() {
@@ -36,6 +35,16 @@ class CourseWebModule extends WebModule {
     }
    
     return $modulePanes;
+  }
+
+	// overriding this method from Module.php because it's hard coded for home...  which is kinda silly
+  protected function getModuleNavigationConfig() {
+      static $moduleNavConfig;
+      if (!$moduleNavConfig) {
+          $moduleNavConfig = ModuleConfigFile::factory('course', 'module');
+      }
+      
+      return $moduleNavConfig;
   }
      
   protected function initializeForPage() {
@@ -63,8 +72,12 @@ class CourseWebModule extends WebModule {
           			$this->addInternalJavascript('/common/javascript/lib/ellipsizer.js');
           			$this->addOnOrientationChange('moduleHandleWindowResize();');
         		} else {
-          			$this->assign('modules', $this->getModuleNavList());
-          			$this->assign('hideImages', $this->getOptionalModuleVar('HIDE_IMAGES', false));
+	
+					$modules = $this->getModuleNavList();
+          			$this->assign('modules', $modules);
+
+
+					$this->assign('hideImages', $this->getOptionalModuleVar('HIDE_IMAGES', false));
         		}
         
         		if ($this->getOptionalModuleVar('SHOW_FEDERATED_SEARCH', true)) {
@@ -100,8 +113,10 @@ class CourseWebModule extends WebModule {
 						if ($module->getModuleVar('search')) {
                 			error_log("has a search...");
 							$results = array();
-                			$total = $module->federatedSearch($searchTerms, 2, $results);
-                			$federatedResults[] = array(
+                			error_log("---");
+							$total = $module->federatedSearch($searchTerms, 2, $results);
+                			error_log("---");
+							$federatedResults[] = array(
                   				'title'   => $info['title'],
                   				'results' => $results,
                   				'total'   => $total,

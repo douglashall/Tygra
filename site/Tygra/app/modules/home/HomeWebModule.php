@@ -28,10 +28,10 @@ class HomeWebModule extends WebModule
 		        }
 				$modules = $this->getModuleNavList();
 
-				$modules2 = array();
-				$modules2['updates'] = $modules['updates'];
-				$modules2['links'] = $modules['links'];
-				$modules2['logout'] = $modules['logout'];
+				//$modules2 = array();
+				//$modules2['updates'] = $modules['updates'];
+				//$modules2['links'] = $modules['links'];
+				//$modules2['logout'] = $modules['logout'];
 				
 				//error_log(var_export($modules2['updates'], 1));
 				// add badges...
@@ -39,7 +39,7 @@ class HomeWebModule extends WebModule
 				
 				
 				
-		      	$this->assign('modules', $modules2);
+		      	$this->assign('modules', $modules);
 		
 				//error_log(var_export($user, 1));
 	    		$courses = $user->getCourses();
