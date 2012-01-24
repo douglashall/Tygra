@@ -53,23 +53,27 @@ class HuidAuthentication extends AuthenticationAuthority
 		        $user->setEmail($person['email']);
 		        $user->setFirstName($person['firstName']);
 		        $user->setLastName($person['lastName']);
-		        
 		        $user->setFullName($person['firstName']." ".$person['lastName']."(".$person['id'].")");
 		        if (!isset($person['courses']))
 		        	return $user;
+		        	
 		        $courses = array();
+		        $vidCount = 0;
 	     		foreach ($person['courses'] as $course) {
 					$result = new CourseObject();
 					if (isset($course['title']))
 	     				$result->setTitle($course['title']);
-					if (isset($course['keyword']))
+					if (isset($course['keyword'])) {
 	     				$result->setKeyword($course['keyword']);
-	     			
+					}
+
 					$courses[] = $result;
 	     		}
 		        $user->setCourses($courses);
+
 		        
-	        	/*	        
+/*		        $offset = 1;
+	        	        
 		        foreach($user->getCourses() as $course){
 		        	$videos = array();
 		        	// get the course keyword
@@ -84,25 +88,25 @@ class HuidAuthentication extends AuthenticationAuthority
         			
 		        	// add videos to the course object
 		        	foreach($results as $video){
-		        		
-		        		$videoObject = new VideoObject();
-		        		// set each field
-		        		preg_match_all('/([\d]+)/', $video['id'], $matches);
-      					$videoObject->setEntryId($matches[0][1]);
-      					$videoObject->setEntity($video['entity']);
-      					$videoObject->setLinkUrl($video['linkurl']);
-      					$videoObject->setSiteId($video['siteid']);
-      					$videoObject->setTopicid($video['topicid']);
-      					$videoObject->setShared($video['shared']);
-      					$videoObject->setModifiedOn($video['modifiedon']);
-      					$videoObject->setTitle($video['title'][0]);
-      					$videoObject->setDescription($video['description'][0]);
-      					$videoObject->setImgUrl($video['imageurl']);
-      					array_push($videos, $videoObject);
+		        		$videoObject = new VideoObject($video);
+		        		//print_r($videoObject->getEntryId().'<br />');
+		        		$videos[$videoObject->getEntryId()] = $videoObject;
+		        		//print_r(var_dump($videos).'<br /><br />');
+      					//array_push($videos, $videoObject);
 		        	}
+		        	//print_r(var_dump($videos));
+		        	//print_r(var_dump(array_keys($videos)));
+		        	
+		        	
+		    //foreach ($videos as $key => $value){
+ 			//	print_r( $key.'=>'.$value.'<br />');
+			//}
+		        	
         			$course->setVideos($videos);
 		        }
-		        */
+*/		        
+		        
+
 	        	return $user;
 	        }
         }

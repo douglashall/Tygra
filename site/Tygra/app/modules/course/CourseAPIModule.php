@@ -1,8 +1,8 @@
 <?php
 
-class HomeAPIModule extends APIModule
+class CourseAPIModule extends APIModule
 {
-    protected $id = 'home';
+    protected $id = 'course';
     protected $vmin = 1;
     protected $vmax = 1;
 
