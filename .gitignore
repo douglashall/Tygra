@@ -8,3 +8,5 @@ site/*/logs/*
 *-local.ini
 nbrproject
 nbproject/*
+.buildpath
+.project
