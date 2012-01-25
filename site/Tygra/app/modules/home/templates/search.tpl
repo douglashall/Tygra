@@ -3,9 +3,9 @@
 {include file="findInclude:common/templates/search.tpl" emphasized=false}
 
 <ul class="results">
-	{foreach $searchResultArray as $title => $url}
+	{foreach $searchResults as $result}
 	<li>
-		<a href="{$url}">{$title}</a>
+		<a href="{$result['url']}">{$result['title']}</a>
 	</li>
 	{/foreach}
 </ul>
