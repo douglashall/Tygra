@@ -10,3 +10,4 @@ nbrproject
 nbproject/*
 .buildpath
 .project
+.settings
