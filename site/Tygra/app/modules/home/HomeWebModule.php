@@ -51,7 +51,7 @@ class HomeWebModule extends WebModule
 		$sitetitle = $item['sitetitle'];
 		$topictitle = isset($item['topictitle']) ? $item['topictitle'] : '';
 		$linkurl = $item['linkurl'];
-		$title = $sitetitle . ($topictitle !== '' ? "($topictitle)" : '');
+		$title = $sitetitle . ($topictitle !== '' ? " ($topictitle)" : '');
 
 		$result = array(
 			'title' => $this->htmlEncodeString($title),
