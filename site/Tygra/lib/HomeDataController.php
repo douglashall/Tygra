@@ -12,6 +12,7 @@ class HomeDataController extends AuthenticatedDataController {
             ."&fq=userid:$huid"
             ."&omitHeader=true"
             //."&defType=dismax" //  use this solr parser for user-submitted queries
+            ."&fl=sitetitle,topictitle,linkurl"
             ."&wt=json"
             ."&start=0"
             ."&rows=100";
