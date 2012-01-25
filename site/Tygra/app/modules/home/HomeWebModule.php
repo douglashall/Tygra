@@ -41,13 +41,13 @@ class HomeWebModule extends WebModule
 
 		$searchResults = array();
 		foreach($items as $item) {
-			$searchResults[] = $this->linkForItem($item);
+			$searchResults[] = $this->linkForSearchItem($item);
 		}
 
 		return $searchResults;
 	}
 
-	public function linkForItem($item, $options=null) {
+	public function linkForSearchItem($item, $options=null) {
 		$sitetitle = $item['sitetitle'];
 		$topictitle = isset($item['topictitle']) ? $item['topictitle'] : '';
 		$linkurl = $item['linkurl'];
