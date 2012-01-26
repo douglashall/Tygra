@@ -8,11 +8,11 @@ class HomeDataController extends AuthenticatedDataController {
 		$huid = $user->getUserID();
 
 		$formattedQuery = "userid=$huid"
+            ."&fq=".rawurlencode("userid:$huid")
+            ."&fl=".rawurlencode('sitetitle,topictitle,linkurl')
             ."&q=".rawurlencode($query)
-            ."&fq=userid:$huid"
+            ."&qt=dismax" // use the dismax solr parser for user-submitted queries
             ."&omitHeader=true"
-            //."&defType=dismax" //  use this solr parser for user-submitted queries
-            ."&fl=sitetitle,topictitle,linkurl"
             ."&wt=json"
             ."&start=0"
             ."&rows=100";
