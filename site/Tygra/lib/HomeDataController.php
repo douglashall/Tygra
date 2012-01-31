@@ -7,19 +7,22 @@ class HomeDataController extends AuthenticatedDataController {
 	public function search($user, $query = '') {
 		$huid = $user->getUserID();
 
-		$formattedQuery = "userid=$huid"
-            ."&fq=".rawurlencode("userid:$huid")
-            ."&fl=".rawurlencode('sitetitle,topictitle,linkurl')
-            ."&q=".rawurlencode($query)
-            ."&qt=dismax" // use the dismax solr parser for user-submitted queries
-            ."&omitHeader=true"
-            ."&wt=json"
-            ."&start=0"
-            ."&rows=100";
+		$query = str_replace(array('\\', '/'), ' ', $query); // tomcat doesn't like encoded slashes
+		$query = trim($query);
 
-    	$this->setBaseUrl($this->baseURL.'search/select/'.$formattedQuery);
-    	$data = $this->getParsedData();
-    	$results = $data['response']['docs'];
+		$formattedQuery = "userid=$huid"
+			."&fq=".rawurlencode("userid:$huid")
+			."&fl=".rawurlencode('sitetitle,topictitle,linkurl')
+			."&q=".rawurlencode($query)
+			."&qt=dismax" // use the dismax solr parser for user-submitted queries
+			."&omitHeader=true"
+			."&wt=json"
+			."&start=0"
+			."&rows=100";
+
+		$this->setBaseUrl($this->baseURL.'search/select/'.$formattedQuery);
+		$data = $this->getParsedData();
+		$results = $data['response']['docs'];
 
 		return $results;
 	}
