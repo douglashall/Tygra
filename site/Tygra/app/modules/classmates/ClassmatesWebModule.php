@@ -7,13 +7,15 @@ class ClassmatesWebModule extends WebModule
 		$session = $this->getSession();
 		$user = $session->getUser();
 		$controller = DataController::factory('ClassmatesDataController');
-		$navPage = 'index';
 		$keyword = $this->getArg('keyword');
-		
-		if ($keyword)
-	    	$navPage = 'people';
-	    	
-		switch ($navPage)
+		$id = $this->getArg('id');		
+		if ($keyword) {
+			if ($id)
+		    	$this->page = 'detail';
+	    	else
+  		    	$this->page = 'people';
+		}
+		switch ($this->page)
 		{
 			// courses
 			case 'index':
@@ -25,10 +27,11 @@ class ClassmatesWebModule extends WebModule
             		'keyword'=>$course->getKeyword()))
 					);
 	 			}
-				$this->assign('courses', $courses);
+				$this->assign('results', $courses);
 				break;
 			//students
 			case 'people':
+				$results = array();
 				$keyword = $this->getArg('keyword');
 				$students = $user->getUserData('enrollee_'.$keyword);
 				if (!$students) {
@@ -51,9 +54,8 @@ class ClassmatesWebModule extends WebModule
             		'id'=>$student['id']))
 	 				);
 	 			}
-				
 				$this->setPageTitles($pageTitle);
-				$this->assign('students', $results);
+				$this->assign('results', $results);
 				break;
 			case 'detail':
 				$id = $this->getArg('id');
@@ -65,7 +67,7 @@ class ClassmatesWebModule extends WebModule
 							$this->assign('item', $student);
 							$this->setPageTitle($student['firstName'].' '.$student['lastName']);
 							// TODO: add a valid photoUrl to the module config
-							$this->assign('photoUrl', $this->getPhotoUrl($student['huid']));
+//							$this->assign('photoUrl', $this->getPhotoUrl($student['huid']));
 							break;
 						}
 					}
