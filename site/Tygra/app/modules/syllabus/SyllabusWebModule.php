@@ -7,8 +7,13 @@ class SyllabusWebModule extends WebModule
 		$session = $this->getSession();
 		$user = $session->getUser();
 		$controller = DataController::factory('SyllabusDataController');
-	    
-		switch ($this->page)
+		$navPage = 'index';
+		$keyword = $this->getArg('keyword');
+		
+		if ($keyword)
+	    	$navPage = 'detail';
+	    	
+		switch ($navPage)
 		{
 			case 'index':
 				$items = $user->getUserData('syllabus');

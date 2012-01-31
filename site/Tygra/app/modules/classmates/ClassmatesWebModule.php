@@ -7,8 +7,13 @@ class ClassmatesWebModule extends WebModule
 		$session = $this->getSession();
 		$user = $session->getUser();
 		$controller = DataController::factory('ClassmatesDataController');
+		$navPage = 'index';
+		$keyword = $this->getArg('keyword');
 		
-		switch ($this->page)
+		if ($keyword)
+	    	$navPage = 'people';
+	    	
+		switch ($navPage)
 		{
 			// courses
 			case 'index':
@@ -60,7 +65,7 @@ class ClassmatesWebModule extends WebModule
 							$this->assign('item', $student);
 							$this->setPageTitle($student['firstName'].' '.$student['lastName']);
 							// TODO: add a valid photoUrl to the module config
-//							$this->assign('photoUrl', $this->getPhotoUrl($student['huid']));
+							$this->assign('photoUrl', $this->getPhotoUrl($student['huid']));
 							break;
 						}
 					}
