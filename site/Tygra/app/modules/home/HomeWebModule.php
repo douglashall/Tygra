@@ -26,10 +26,15 @@ class HomeWebModule extends WebModule
 				break;
 			case 'search':
 				$searchTerms = $this->getArg('filter');
-				$searchResults = $this->searchItems($searchTerms);
-				$this->assign('searchTerms', $searchTerms);
-				$this->assign('searchResults', $searchResults);
-				$this->setLogData($searchTerms);
+				if($searchTerms) {
+					$searchResults = $this->searchItems($searchTerms);
+					$this->assign('searchTerms', $searchTerms);
+					$this->assign('searchResults', $searchResults);
+					$this->setLogData($searchTerms);
+				} else {
+					$this->redirectToModule($this->id, 'index'); // search was blank
+				}
+				break;
 		}
 	}
 
