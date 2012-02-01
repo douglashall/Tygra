@@ -5,7 +5,7 @@
 {include file="findInclude:common/templates/search.tpl"}
 {/block}
 {/if}
-  
+ 
 {if $displayType == 'springboard'}
   {include file="findInclude:common/templates/springboard.tpl" springboardItems=$modules springboardID="homegrid"}
   
