@@ -9,13 +9,19 @@
 <div class="homegrid" style="height:100px">
 	{include file="findInclude:common/templates/springboard.tpl" springboardItems=$modules springboardID="homegrid"}
 </div>
-<ul class="results">
-	{foreach $courses as $course}
-	<li>
-		<a href="/course/?keyword={$course->getKeyword()}">{$course->getTitle()}</a>
-	</li>
-	{/foreach}
-</ul>
+{if $courses}
+	<ul class="results">
+		{foreach $courses as $course}
+		<li>
+			<a href="/course/?keyword={$course->getKeyword()}">{$course->getTitle()}</a>
+		</li>
+		{/foreach}
+	</ul>
+{else}
+	<ul class="results">
+		<li>You are not enrolled in any courses</li>
+	</ul>
+{/if}
 
 
 
