@@ -77,7 +77,7 @@ class CourseWebModule extends WebModule {
  					foreach($this->getAllModuleNavigationData() as $type => $moduleObjs){
 						foreach($moduleObjs as $id => $info){
 							$module = self::factory($id);
-							$modules[$id]['url'] .= "?keyword=$keyword";
+							$modules[$id]['url'] = $this->buildBreadcrumbURLForModule($id, '', array('keyword' => $keyword));
 							$modules[$id]['class'] = "module";
 
 							if($module->getOptionalModuleVar('totalCount')){
@@ -90,15 +90,10 @@ class CourseWebModule extends WebModule {
 									unset($modules[$id]['url']);
 								}
 							}
-
 						}
-
-
 					}
 					
 					$this->assign('modules', $modules);
-
-
 					$this->assign('hideImages', $this->getOptionalModuleVar('HIDE_IMAGES', false));
         		}
         
