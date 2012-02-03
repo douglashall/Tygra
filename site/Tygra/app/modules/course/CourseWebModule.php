@@ -11,6 +11,9 @@
 class CourseWebModule extends WebModule {
   protected $id = 'course';
   protected $hideFooterLinks = false;
+	protected $encoding = 'UTF-8';
+
+	protected $keyword = '';
 
   protected function showLogin() {
     return $this->getOptionalModuleVar('SHOW_LOGIN', true);
@@ -53,6 +56,10 @@ class CourseWebModule extends WebModule {
 	
 	// get the course title for the page
 	$keyword = $this->getArg('keyword');
+	$extraArgs = array(
+		'keyword' => $keyword
+	);
+	$this->assign('extraArgs',$extraArgs);
 //	if($keyword) {
 		
 		// set the title for the page
@@ -85,6 +92,7 @@ class CourseWebModule extends WebModule {
 								if($total > 0){
 									$modules[$id]['badge'] = $total;
 								} else {
+									// this is not a good way to do this -- the images should have better names
 									$modules[$id]['img'] = preg_replace("/\.png/", "Gray.png", $modules[$id]['img']);
 									$modules[$id]['img'] = preg_replace("/images\//", "images\/tygra_", $modules[$id]['img']);
 									unset($modules[$id]['url']);
@@ -119,8 +127,14 @@ class CourseWebModule extends WebModule {
         	break;
         
      		case 'search':
-        		$searchTerms = $this->getArg('filter');
         
+				$searchTerms = $this->getArg('filter');
+				$searchResults = $this->searchItems($searchTerms, 0, $keyword);
+				$this->assign('searchTerms', $searchTerms);
+				$this->assign('searchResults', $searchResults);
+				$this->setLogData($searchTerms);
+
+/*
         		$federatedResults = array();
      
         		foreach ($this->getAllModuleNavigationData(self::EXCLUDE_DISABLED_MODULES) as $type=>$modules) {
@@ -152,9 +166,44 @@ class CourseWebModule extends WebModule {
         		$this->assign('federatedResults', $federatedResults);
         		$this->assign('searchTerms',      $searchTerms);
         		$this->setLogData($searchTerms);
+*/
         	break;
     	} // end switch
 //	} // ending the if(keyword)
   }// ending initializeForPage()
+
+
+	public function searchItems($searchTerms, $limit=null, $keyword=null) {
+		//error_log($keyword);
+		$session = $this->getSession();
+		$user = $session->getUser();
+		$controller = DataController::factory('CourseDataController');
+		$items = $controller->search($user, $keyword, $searchTerms);
+
+		$searchResults = array();
+		foreach($items as $item) {
+			$searchResults[] = $this->linkForSearchItem($item);
+		}
+
+		return $searchResults;
+	}
+
+	public function linkForSearchItem($item, $options=null) {
+		$sitetitle = $item['sitetitle'];
+		$topictitle = isset($item['topictitle']) ? $item['topictitle'] : '';
+		$linkurl = $item['linkurl'];
+		$title = $sitetitle . ($topictitle !== '' ? " ($topictitle)" : '');
+
+		$result = array(
+			'title' => $this->htmlEncodeString($title),
+			'url' => $linkurl
+		);
+
+		return $result;
+	}
+
+	protected function htmlEncodeString($string) {
+		return mb_convert_encoding($string, 'HTML-ENTITIES', $this->encoding);
+	}
 
 } // end of class
