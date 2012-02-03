@@ -74,43 +74,6 @@ class PinAuthentication extends AuthenticationAuthority
 			        $user->setCourses($courses);
 		        }
 		        
-		        // add video data to courses
-		        $videos = array();
-		        foreach($user->getCourses() as $course){
-		        	// get the course keyword
-		        	$keyword = $course->getKeyword();
-		        	
-		        	// get the huid of the user
-		        	$huid    = $user->getUserId();
-		        	
-		        	// get the videos associated with the user and course
-		        	$this->setBaseUrl($baseURL.'video/by_userandkeyword/'.$huid.'/'.$keyword.'.json');
-        			$data = $this->getParsedData();
-        			$results = $data['video']['docs'];
-        			
-		        	// add videos to the course object
-		        	foreach($results as $video){
-		        		
-		        		print_r($video);
-		        		
-		        		$videoObject = new VideoObject();
-		        		// set each field
-		        		preg_match_all('/([\d]+)/', $video['id'], $matches);
-      					$videoObject->setEntryId($matches[0][1]);
-      					$videoObject->setEntit($video['entity']);
-      					$videoObject->setLinkUrl($video['linkurl']);
-      					$videoObject->setSiteId($video['siteid']);
-      					$videoObject->setTopicid($video['topicid']);
-      					$videoObject->setShared($video['shared']);
-      					$videoObject->setModifiedOn($video['modifiedon']);
-      					$videoObject->setTitle($video['"title'][0]);
-      					$videoObject->setImgUrl($video['imageurl']);
-      					array_push($videos, $videoObject);
-		        	}
-        			$course->setVideos($videos);
-        			
-		        	// create video object to store course info
-		        }
 	        	return $user;
 	        }
         }
