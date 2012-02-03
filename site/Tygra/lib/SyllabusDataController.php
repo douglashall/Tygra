@@ -17,19 +17,27 @@
 
      public function search($user)
      {
+		$huid = $user->getUserID();	
 		$results = array();
 		$sitekeys = '';
 		foreach ($user->getCourses() as $course) {
 			if (strlen($sitekeys) > 0)
-				$sitekeys = $sitekeys.'%20OR%20';
+				$sitekeys = $sitekeys.' OR ';
 			$sitekeys = $sitekeys.$course->getKeyword();
 		}
 			
-		$category = '(file%20OR%20topic)';
-			
 		if (strlen($sitekeys) > 0) {
-     		$this->path = sprintf("userid=%s&q=title:syllabus+-title:hidden&omitHeader=true&fq=category:%s&start=0&rows=100&wt=json&fq=sitekey:%s&fl=topicid,title,sitekey,linkurl,description,category",$user->getUserID(),$category,$sitekeys);
-	
+			
+     		$this->path = "userid=$huid"
+     		."&q=".rawurlencode('title:syllabus -title:hidden')
+     		."&fq=category:".rawurlencode('file OR topic')
+     		."&fq=sitekey:".rawurlencode($sitekeys)
+     		."&fl=".rawurlencode('topicid,title,sitekey,linkurl,description,category')
+            ."&omitHeader=true"
+            ."&wt=json"
+            ."&start=0"
+            ."&rows=100";
+     		
 	        $data = $this->getParsedData();
 	        
 	        // initialize a CourseSyllabus object fro each course

@@ -14,56 +14,27 @@ class VideoWebModule extends WebModule
 	$session = $this->getSession();
 	$user = $session->getUser();
 	$huid = $user->getUserID();
-
+		
 	 switch ($this->page) {
 	 	case 'index':
-	 			
-	 		$siteList = array();
-	 		$courses = $user->getCourses();
-	 			
-	 		foreach ($courses as $course){
-
-	 			$numVideos = $controller->findVideoCountByHuidAndKeyword($huid, $course->getKeyword());
-	 			$course->setNumVideos($numVideos);
-
-	 			$results[] = array(
-             		'keyword'=>$course->getTitle(),
-             		'numVideos'=>$numVideos,
-             		'url'=>$this->buildBreadcrumbURL('list-course-videos', 
-	 			array('keyword'=>$course->getKeyword(), 'title'=>$course->getTitle(), ))
-	 			);
-	 		}
-	 		$this->assign('noResultsText',"No courses found");
-	 		$this->assign('results', $results);
-	 			
-	 		break;
-	 	case 'list-course-videos':
-	 			
 	 		$keyword = $this->getArg('keyword');
-	 		$title = $this->getArg('title');
-	 		$this->setPageTitles($title);
 	 		$course = $user->findCourseByKeyword($keyword);
-	 		//icb.topic632609.icb.video17492
-	 			
-	 		$vs = $controller->findVideosByHuidAndKeyword($huid, $keyword);
-	 			
-	 		//print_r(var_dump($vs));
-	 			
-	 		$varray = array();
-	 		foreach($vs as $v){
-	 			$vid = new VideoObject($v);
-	 			array_push($varray, $vid);
-	 		}
-	 			
-	 		$videoArrayList = array();
-	 		//if(!empty( $varrays)){
+	 		$title = $course->getTitle();
+	 		 		
+	 		if($vs = $controller->findVideosByHuidAndKeyword($huid, $keyword)){
+	 			 			
+		 		$varray = array();
+		 		foreach($vs as $v){
+		 			$vid = new VideoObject($v);
+		 			array_push($varray, $vid);
+		 		}
+		 			
+		 		$videos = array();
 				foreach( $varray as $value) {
-
 					$vidArray = $value->toArray();
 					$entryid = $value->getEntryId();
 					$topicid = $value->getTopicId();
 					$entityid = $value->getEntity();
-					//print_r($entityid);
 					$modDate = $value->getModifiedOn();
 					$datetime = date("F j, Y g:i a", strtotime($modDate));
 					$urlArray = array('modDate'=>$datetime,
@@ -73,53 +44,55 @@ class VideoWebModule extends WebModule
 														 'entity'=>$entityid,
 												  	     'keyword'=>$keyword, 
 												  	     'topicid'=>$topicid
-					)
-					)
+							)
+						)
 					);
 					$merged = $vidArray + $urlArray;
-					$videoArrayList[] = $merged;
-
+					$videos[] = $merged;
 				}
-				//}
-					
-				$this->assign('videos', $videoArrayList);
-				$this->assign('noResultsText',"No videos found");
-					
-				break;
-	 	case 'detail':
+				
+				$this->assign('videos', $videos);
+				$this->assign('pageTitle', $title);
+				$this->assign('listcourses',"false");
+				$this->assign('noResultsText',"[list-course-videos] No videos found");
+	 		}
+	 		else {
+	 			$this->redirectTo('home');
 	 			
+	 		}
+	 		break;
+	 	case 'detail':
 	 		$videoid = $this->getArg('videoid');
 	 		$keyword = $this->getArg('keyword');
 	 		$topicid = $this->getArg('topicid');
 	 		$entityid = $this->getArg('entity');
 	 		$huid = $user->getUserId();
-	 		//icb.topic632609.icb.video17492
 	 		$videoStr = $entityid.'.icb.video'.$videoid;
-	 		//print_r('str: '.$videoStr.'<br />');
-	 		$vid = $controller->findVideoByUserAndEntryId($huid, $videoStr);
-	 		//print_r(var_dump($vid));
-	 		$video = new VideoObject($vid);
-	 		//print_r('one: '.$vid['id']);
-	 		$thumbnail = $video->getImgUrl();
-	 		$title = $video->getTitle();
-	 		$desc = $video->getDescription();
-	 		$modDate = $video->getModifiedOn();
-	 		$datetime = date("F j, Y g:i a", strtotime($modDate));
-	 		//print_r(var_dump($modDate).'<br />');
-	 		//print_r(var_dump($datetime));
-	 			
-	 		$this->assign('keyword',$keyword);
-	 		$this->assign('videoTitle', $title);
-	 		$this->assign('videoThumbnail', $thumbnail);
-	 		$this->assign('videoDescription', $desc);
-	 		$this->assign('modifiedOn', $datetime );
-	 		$this->assign('topicid',$topicid);
-	 		$this->assign('entryid',$videoid);
-	 			
+	 		
+	 		if($vid = $controller->findVideoByUserAndEntryId($huid, $videoStr)){
+		 		$video = new VideoObject($vid);
+		 		$thumbnail = $video->getImgUrl();
+		 		$title = $video->getTitle();
+	    			$this->setPageTitles($title);
+		 		$desc = $video->getDescription();
+		 		$modDate = $video->getModifiedOn();
+		 		$datetime = date("F j, Y g:i a", strtotime($modDate));
+		 			
+		 		$this->assign('keyword',$keyword);
+		 		$this->assign('videoTitle', $title);
+		 		$this->assign('videoThumbnail', $thumbnail);
+		 		$this->assign('videoDescription', $desc);
+		 		$this->assign('modifiedOn', $datetime );
+		 		$this->assign('topicid',$topicid);
+		 		$this->assign('entryid',$videoid);
+	 		}
+	 		else {
+	 			$this->redirectTo('home');
+	 		}
 	 		break;
-	 }
+	 	}
 	}
-
+/*
 	protected function htmlEncodeString($string) {
 		return mb_convert_encoding($string, 'HTML-ENTITIES', $this->encoding);
 	}
@@ -152,7 +125,7 @@ class VideoWebModule extends WebModule
 		}
 		return $videos;
 	}
-	
+*/
 	public function getTotalCount($keyword) {
 		$session = $this->getSession();
 		$user = $session->getUser();

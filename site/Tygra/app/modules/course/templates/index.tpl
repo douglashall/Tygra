@@ -2,10 +2,10 @@
 
 {if $showFederatedSearch}
 {block name="federatedSearch"}
-{include file="findInclude:common/templates/search.tpl"}
+{include file="findInclude:common/templates/search.tpl" extraArgs=$extraArgs}
 {/block}
 {/if}
-  
+ 
 {if $displayType == 'springboard'}
   {include file="findInclude:common/templates/springboard.tpl" springboardItems=$modules springboardID="homegrid"}
   

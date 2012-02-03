@@ -53,11 +53,16 @@ class CourseWebModule extends WebModule {
 	$user = $session->getUser();
 	
 	// get the course title for the page
-	$this->keyword = $this->getArg('keyword');
+	$keyword = $this->getArg('keyword');
+	$extraArgs = array(
+		'keyword' => $keyword
+	);
+	$this->assign('extraArgs',$extraArgs);
+	error_log($keyword);
 //	if($keyword) {
 		
 		// set the title for the page
-		$course = $user->findCourseByKeyword($this->keyword);
+		$course = $user->findCourseByKeyword($keyword);
 		$this->setPageTitle($course->getTitle());
 	
   		switch ($this->page) {
@@ -78,11 +83,11 @@ class CourseWebModule extends WebModule {
  					foreach($this->getAllModuleNavigationData() as $type => $moduleObjs){
 						foreach($moduleObjs as $id => $info){
 							$module = self::factory($id);
-							$modules[$id]['url'] .= "?keyword=".$this->keyword;
+							$modules[$id]['url'] = $this->buildBreadcrumbURLForModule($id, '', array('keyword' => $keyword));
 							$modules[$id]['class'] = "module";
 
 							if($module->getOptionalModuleVar('totalCount')){
-								$total = $module->getTotalCount($this->keyword);
+								$total = $module->getTotalCount($keyword);
 								if($total > 0){
 									$modules[$id]['badge'] = $total;
 								} else {
@@ -92,15 +97,10 @@ class CourseWebModule extends WebModule {
 									unset($modules[$id]['url']);
 								}
 							}
-
 						}
-
-
 					}
 					
 					$this->assign('modules', $modules);
-
-
 					$this->assign('hideImages', $this->getOptionalModuleVar('HIDE_IMAGES', false));
         		}
         
@@ -128,7 +128,7 @@ class CourseWebModule extends WebModule {
      		case 'search':
         
 				$searchTerms = $this->getArg('filter');
-				$searchResults = $this->searchItems($searchTerms);
+				$searchResults = $this->searchItems($searchTerms, 0, $keyword);
 				$this->assign('searchTerms', $searchTerms);
 				$this->assign('searchResults', $searchResults);
 				$this->setLogData($searchTerms);
@@ -172,11 +172,12 @@ class CourseWebModule extends WebModule {
   }// ending initializeForPage()
 
 
-	public function searchItems($searchTerms, $limit=null, $options=null) {
+	public function searchItems($searchTerms, $limit=null, $keyword=null) {
+		//error_log($keyword);
 		$session = $this->getSession();
 		$user = $session->getUser();
 		$controller = DataController::factory('CourseDataController');
-		$items = $controller->search($user, $this->keyword, $searchTerms);
+		$items = $controller->search($user, $keyword, $searchTerms);
 
 		$searchResults = array();
 		foreach($items as $item) {
