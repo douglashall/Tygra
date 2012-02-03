@@ -22,7 +22,18 @@ class HomeWebModule extends WebModule
 					$this->assign('placeholder', $this->getLocalizedString("SEARCH_PLACEHOLDER", Kurogo::getSiteString('SITE_NAME')));
 				}
 				$this->assign('modules', $this->getModuleNavList());
-				$this->assign('courses', $user->getCourses());
+
+				$courses = $user->getCourses();
+				$courseItems = array();
+				foreach($courses as $course) {
+					$courseItems[] = array(
+						'title' => $course->getTitle(),
+						'url'   => $this->buildBreadcrumbURLForModule('course', '', array(
+							'keyword' => $course->getKeyword()
+						))
+					);
+				}
+				$this->assign('courses', $courseItems);
 				break;
 			case 'search':
 				$searchTerms = $this->getArg('filter');

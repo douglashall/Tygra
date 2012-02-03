@@ -20,7 +20,7 @@
          $this->path = "$keyword/$userId.json";
          $data = $this->getParsedData();
          //TODO: replace with random generated string
-		 $count = 0;
+		 $count = 10;
          $results = array();
          foreach ($data['enrollment'] as $item) {
              $person = new PersonObject();

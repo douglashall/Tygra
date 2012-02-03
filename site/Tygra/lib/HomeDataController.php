@@ -6,23 +6,37 @@ class HomeDataController extends AuthenticatedDataController {
 
 	public function search($user, $query = '') {
 		$huid = $user->getUserID();
+		$courses = $user->getCourses();
+		$result = array();
+		$sitekeys = '';
 
-		$query = str_replace(array('\\', '/'), ' ', $query); // tomcat doesn't like encoded slashes
-		$query = trim($query);
+		foreach ($courses as $course) {
+			if (strlen($sitekeys) > 0) {
+				$sitekeys = $sitekeys.' OR ';
+			}
+			$sitekeys = $sitekeys.$course->getKeyword();
+		}
 
-		$formattedQuery = "userid=$huid"
-			."&fq=".rawurlencode("userid:$huid")
-			."&fl=".rawurlencode('sitetitle,topictitle,linkurl')
-			."&q=".rawurlencode($query)
-			."&qt=dismax" // use the dismax solr parser for user-submitted queries
-			."&omitHeader=true"
-			."&wt=json"
-			."&start=0"
-			."&rows=100";
+		if(strlen($sitekeys) > 0) {
+			$query = str_replace(array('\\', '/'), ' ', $query); // tomcat doesn't like encoded slashes
+			$query = trim($query);
 
-		$this->setBaseUrl($this->baseURL.'search/select/'.$formattedQuery);
-		$data = $this->getParsedData();
-		$results = $data['response']['docs'];
+			$formattedQuery = "userid=$huid"
+				."&fq=".rawurlencode("userid:$huid")
+				."&fq=sitekey:".rawurlencode($sitekeys)
+				."&fq=-category:".rawurlencode('page OR site')
+				."&fl=".rawurlencode('sitetitle,topictitle,linkurl')
+				."&q=".rawurlencode($query)
+				."&qt=dismax" // use the dismax solr parser for user-submitted queries
+				."&omitHeader=true"
+				."&wt=json"
+				."&start=0"
+				."&rows=100";
+
+			$this->setBaseUrl($this->baseURL.'search/select/'.$formattedQuery);
+			$data = $this->getParsedData();
+			$results = $data['response']['docs'];
+		}
 
 		return $results;
 	}

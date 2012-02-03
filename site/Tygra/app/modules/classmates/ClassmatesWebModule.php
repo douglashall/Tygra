@@ -8,9 +8,9 @@ class ClassmatesWebModule extends WebModule
 		$user = $session->getUser();
 		$controller = DataController::factory('ClassmatesDataController');
 		$keyword = $this->getArg('keyword');
-		$id = $this->getArg('id');		
+		$studentId = $this->getArg('id');		
 		if ($keyword) {
-			if ($id)
+			if ($studentId)
 		    	$this->page = 'detail';
 	    	else
   		    	$this->page = 'people';
@@ -58,16 +58,15 @@ class ClassmatesWebModule extends WebModule
 				$this->assign('results', $results);
 				break;
 			case 'detail':
-				$id = $this->getArg('id');
 				$keyword = $this->getArg('keyword');
 				$students = $user->getUserData('enrollee_'.$keyword);
 				if ($students) {
 					foreach ($students as $student) {
-						if ($id == $student['id']) {
+						if ($studentId == $student['id']) {
 							$this->assign('item', $student);
 							$this->setPageTitle($student['firstName'].' '.$student['lastName']);
 							// TODO: add a valid photoUrl to the module config
-//							$this->assign('photoUrl', $this->getPhotoUrl($student['huid']));
+							$this->assign('photoUrl', $this->getPhotoUrl($student['huid']));
 							break;
 						}
 					}
