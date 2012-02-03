@@ -25,7 +25,7 @@ class CourseDataController extends AuthenticatedDataController {
 			."&wt=json"
 			."&start=0"
 			."&rows=100";
-
+error_log($this->baseURL.'search/select/'.$formattedQuery);
 		$this->setBaseUrl($this->baseURL.'search/select/'.$formattedQuery);
 		$data = $this->getParsedData();
 		$results = $data['response']['docs'];

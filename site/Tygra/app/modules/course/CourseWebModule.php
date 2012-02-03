@@ -11,6 +11,8 @@
 class CourseWebModule extends WebModule {
   protected $id = 'course';
   protected $hideFooterLinks = false;
+	protected $encoding = 'UTF-8';
+
 	protected $keyword = '';
 
   protected function showLogin() {
@@ -58,7 +60,6 @@ class CourseWebModule extends WebModule {
 		'keyword' => $keyword
 	);
 	$this->assign('extraArgs',$extraArgs);
-	error_log($keyword);
 //	if($keyword) {
 		
 		// set the title for the page
