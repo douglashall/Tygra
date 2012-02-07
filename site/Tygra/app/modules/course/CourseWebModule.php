@@ -92,9 +92,7 @@ class CourseWebModule extends WebModule {
 								if($total > 0){
 									$modules[$id]['badge'] = $total;
 								} else {
-									// this is not a good way to do this -- the images should have better names
-									$modules[$id]['img'] = preg_replace("/\.png/", "Gray.png", $modules[$id]['img']);
-									$modules[$id]['img'] = preg_replace("/images\//", "images\/tygra_", $modules[$id]['img']);
+									$modules[$id]['img'] = DS. implode(DS, array('modules', 'home', 'images', $id.'Gray'.$this->imageExt)); 
 									unset($modules[$id]['url']);
 								}
 							}
