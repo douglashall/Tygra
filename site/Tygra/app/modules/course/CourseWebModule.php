@@ -90,7 +90,9 @@ class CourseWebModule extends WebModule {
 							if($module->getOptionalModuleVar('totalCount')){
 								$total = $module->getTotalCount($keyword);
 								if($total > 0){
-									$modules[$id]['badge'] = $total;
+									if($module->getOptionalModuleVar('displayTotalCount')) {
+										$modules[$id]['badge'] = $total;
+									}
 								} else {
 									$modules[$id]['img'] = DS. implode(DS, array('modules', 'home', 'images', $id.'Gray'.$this->imageExt)); 
 									unset($modules[$id]['url']);
