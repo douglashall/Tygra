@@ -33,7 +33,7 @@ class HomeWebModule extends WebModule
 						))
 					);
 				}
-				$this->assign('courses', $courseItems);
+				$this->assign('courseItems', $courseItems);
 				break;
 			case 'search':
 				$searchTerms = $this->getArg('filter');
