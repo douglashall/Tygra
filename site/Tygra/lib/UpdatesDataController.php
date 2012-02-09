@@ -22,19 +22,24 @@ class UpdatesDataController extends AuthenticatedDataController {
 		$this->setBaseUrl($this->baseURL."by_keyword/$keyword.json");
 		$this->addFilter('userId', $user_id);
 
-		$data = $this->getParsedData();
-		$results = $data['whatsnews']['sections'];
-
-		return $results;
+		return $this->getSections();
 	}
 
 	public function findByUser($user_id) {
 		$this->setBaseUrl($this->baseURL."by_user/$user_id.json");
 
-		$data = $this->getParsedData();
-		$results = $data['whatsnews']['sections'];
+		return $this->getSections();
+	}
 
-		return $results;
+	public function getSections() {
+		$data = $this->getParsedData();
+
+		$sections = array();
+		if(isset($data['whatsnews']) && isset($data['whatsnews']['sections'])) {
+			$sections = $data['whatsnews']['sections'];
+		}
+
+		return $sections;
 	}
 
 	// not used yet
