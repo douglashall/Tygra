@@ -12,6 +12,7 @@ class HomeWebModule extends WebModule
 	protected function initializeForPage() {
 		$session = $this->getSession();
 		$user = $session->getUser();
+		$this->setPageTitles('My Courses');
 
 		switch ($this->page)
 		{

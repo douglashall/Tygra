@@ -39,13 +39,6 @@ class ClassmatesWebModule extends WebModule
 					$user->setUserData('enrollee_'.$keyword, $students);
 				}
 				
-				$pageTitle = $keyword;
-	 			foreach ($user->getCourses() as $course) {
-	 				if ($keyword == $course->getKeyword()) {
-	 					$pageTitle = $course->getTitle();
-	 					break;
-	 				}
-	 			}
 	 			foreach ($students as $student) {
 	 				$results[] = array(
 					'title'=>$student['firstName'].' '.$student['lastName'],
@@ -54,7 +47,6 @@ class ClassmatesWebModule extends WebModule
             		'id'=>$student['id']))
 	 				);
 	 			}
-				$this->setPageTitles($pageTitle);
 				$this->assign('results', $results);
 				break;
 			case 'detail':

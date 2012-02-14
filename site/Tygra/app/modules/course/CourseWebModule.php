@@ -64,7 +64,7 @@ class CourseWebModule extends WebModule {
 		
 		// set the title for the page
 		$course = $user->findCourseByKeyword($keyword);
-		$this->setPageTitle($course->getTitle());
+		$this->setPageTitles($course->getTitle());
 	
   		switch ($this->page) {
       		case 'help':
