@@ -1,4 +1,11 @@
-{include file="findInclude:common/templates/header.tpl"}
+{capture name="banner" assign="banner"}
+
+  <h1 id="homelogo"{if isset($topItem)} class="roomfornew"{/if}>
+    <img src="/modules/{$moduleID}/images/logo-home{$imageExt}" width="{$banner_width|default:265}" height="{$banner_height|default:45}" alt="{$strings.SITE_NAME|escape}" />
+  </h1>
+{/capture}
+
+{include file="findInclude:common/templates/header.tpl" customHeader=$banner scalable=false}
 
 {if $courseItems}
 	{if $showFederatedSearch}
