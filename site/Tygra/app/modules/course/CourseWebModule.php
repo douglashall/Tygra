@@ -64,7 +64,6 @@ class CourseWebModule extends WebModule {
 		
 		// set the title for the page
 		$course = $user->findCourseByKeyword($keyword);
-		$this->setPageTitles($course->getTitle());
 	
   		switch ($this->page) {
       		case 'help':
@@ -72,6 +71,7 @@ class CourseWebModule extends WebModule {
               
       		case 'index':
 		
+      			$this->setPageTitles($course->getTitle());
       			$this->assign('user', $user);
         		if ($this->pagetype == 'tablet') {
           

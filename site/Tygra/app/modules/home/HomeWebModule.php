@@ -12,11 +12,11 @@ class HomeWebModule extends WebModule
 	protected function initializeForPage() {
 		$session = $this->getSession();
 		$user = $session->getUser();
-		$this->setPageTitles('My Courses');
 
 		switch ($this->page)
 		{
 			case 'index':
+				$this->setPageTitles('My Courses');
 				$this->assign('results', array());
 				if ($this->getOptionalModuleVar('SHOW_FEDERATED_SEARCH', true)) {
 					$this->assign('showFederatedSearch', true);
