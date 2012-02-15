@@ -12,6 +12,7 @@ class HomeWebModule extends WebModule
 	protected function initializeForPage() {
 		$session = $this->getSession();
 		$user = $session->getUser();
+		$this->setPageTitles('My Courses');
 
 		switch ($this->page)
 		{
@@ -33,7 +34,7 @@ class HomeWebModule extends WebModule
 						))
 					);
 				}
-				$this->assign('courses', $courseItems);
+				$this->assign('courseItems', $courseItems);
 				break;
 			case 'search':
 				$searchTerms = $this->getArg('filter');

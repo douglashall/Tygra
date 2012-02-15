@@ -1,45 +1,50 @@
 <?php
 
- class UpdatesDataController extends AuthenticatedDataController
- {
-     protected $cacheFolder = "Updates"; // set the cache folder
-     protected $cacheSuffix = "json";   // set the suffix for cache files
-     protected $DEFAULT_PARSER_CLASS='JSONDataParser'; // the default parser
-	 protected $path;
-    
-    protected function init($args) {
-    	
-        parent::init($args);
-        
-        $baseURL = $this->baseURL;
-        $this->setBaseURL($baseURL."whatsnew/by_user/");
-        
-    }
-    
-	protected function url() {
-        $url = $this->baseURL;
-        if ($this->path) {
-        	$url .= $this->path;
-        }
-        if (count($this->filters)>0) {
-            $glue = strpos($this->baseURL, '?') !== false ? '&' : '?';
-            $url .= $glue . http_build_query($this->filters);
-        }
-        
-        return $url;
-    }
-    
-     public function search($q)
-     {
-		 $this->path = "$q.json";
-         $data = $this->getParsedData();
-         
-         $results = $data['whatsnews']['sections'];
+class UpdatesDataController extends AuthenticatedDataController {
+	protected $cacheFolder = "Updates"; // set the cache folder
+	protected $cacheSuffix = "json";   // set the suffix for cache files
+	protected $DEFAULT_PARSER_CLASS='JSONDataParser'; // the default parser
 
-         return $results;
-     }
+	protected function init($args) {
+		parent::init($args);
+		$this->setBaseURL($this->baseURL."whatsnew/");
+	}
 
-     // not used yet
-     public function getItem($id){}
+	public function search($user_id, $keyword) {
+		if($keyword) {
+			return $this->findByKeyword($user_id, $keyword);
+		}
 
- }
+		return $this->findByUser($user_id);
+	}
+
+	public function findByKeyword($user_id, $keyword) {
+		$this->setBaseUrl($this->baseURL."by_keyword/$keyword.json");
+		$this->addFilter('userId', $user_id);
+
+		return $this->getSections();
+	}
+
+	public function findByUser($user_id) {
+		$this->setBaseUrl($this->baseURL."by_user/$user_id.json");
+
+		return $this->getSections();
+	}
+
+	public function getSections() {
+		$data = $this->getParsedData();
+
+		$sections = array();
+		if(isset($data['whatsnews']) && isset($data['whatsnews']['sections'])) {
+			$sections = $data['whatsnews']['sections'];
+		}
+
+		return $sections;
+	}
+
+	// not used yet
+	public function getItem($id){}
+
+}
+
+?>
