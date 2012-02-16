@@ -33,6 +33,23 @@ class UpdatesWebModule extends WebModule
 
 		return $totalCount;
 	}
+	
+	public function getTotalCountForCourses() {
+		$session = $this->getSession();
+		$user = $session->getUser();
+		$controller = DataController::factory('UpdatesDataController');
+		$sections = $controller->findByUser($user->getUserID());
+
+		$totalCount = 0;
+		if($sections) {
+			foreach($sections as $section) {
+				$totalCount += count($section['items']);
+			}
+		}
+
+		return $totalCount;
+	}
+	
 }
 
 ?>
