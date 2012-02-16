@@ -473,13 +473,13 @@ a.module img {
 .springboard a {
 	display: block;
 	text-decoration: none;
-	padding: 8px 5px;
+	/*padding: 8px 5px;*/
 	word-wrap: normal;
 }
 
 .springboard a img {
-	height: 60px;
-	width: 60px;
+	height: 64px;
+	width: 64px;
 	margin-bottom: 1px;
 }
 
