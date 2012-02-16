@@ -22,7 +22,20 @@ class HomeWebModule extends WebModule
 					$this->assign('showFederatedSearch', true);
 					$this->assign('placeholder', $this->getLocalizedString("SEARCH_PLACEHOLDER", Kurogo::getSiteString('SITE_NAME')));
 				}
-				$this->assign('modules', $this->getModuleNavList());
+
+				$navModules = $this->getModuleNavList();
+				if(isset($navModules['updates'])) {
+				    $updatesModule = self::factory('updates');
+				    if($updatesModule->getOptionalModuleVar('totalCount')) {
+				        $keywords = array();
+				        $total = $updatesModule->getTotalCountForCourses($user->getCourseKeywords());
+				        if($total == 0) {
+				            $navModules['updates']['img'] = '/modules/home/images/updatesGray'.$this->imageExt;
+				            unset($navModules['updates']['url']);
+				        }
+				    }
+				}
+				$this->assign('modules', $navModules);
 
 				$courses = $user->getCourses();
 				$courseItems = array();
