@@ -26,7 +26,7 @@ class HomeWebModule extends WebModule
 				$navModules = $this->getModuleNavList();
 				if(isset($navModules['updates'])) {
 				    $updatesModule = self::factory('updates');
-				    if($updatesModule->getOptionalModuleVar('totalCount')) {
+				    if($updatesModule->getOptionalModuleVar('totalCountForCourses')) {
 				        $keywords = array();
 				        $total = $updatesModule->getTotalCountForCourses($user->getCourseKeywords());
 				        if($total == 0) {
