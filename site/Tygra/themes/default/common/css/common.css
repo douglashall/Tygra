@@ -5,7 +5,7 @@
 
 body {
 	/* Site-wide page background color, and base font family, size and line spacing */
-	background-color: #eae7e2;
+	background: #e3e0dc;
 	font: 17px/1.33em sans-serif;
 }
 
@@ -70,7 +70,7 @@ dt, .label, .legend, .legend h2, .legend h3, .searchlegend {
 /* Text labels for springboards (grids of icons, e.g., homescreen) */
 
 .springboard a, .springboard a:visited {
-	color: #036;
+	color: #6f121e;
 }
 
 
@@ -110,14 +110,16 @@ dt, .label, .legend, .legend h2, .legend h3, .searchlegend {
 /* Nav bar at top of all screens other than home screen */
 
 #navbar {
-	height: 48px; 
-	background: transparent url(/common/images/navback.png) repeat-x;
+	
+	background: transparent url(/common/images/menuBkg.png) repeat-x;
 	font-size: 94.1%;
+	padding-top:4px;
 }
 
 .breadcrumbs, .breadcrumbs a, .breadcrumbs a:visited, .pagetitle {
  	/* All breadcrumb links in nav bar */
-	color: #036;
+	color: #fde5c4;
+	font-weight: normal;
 }
 
 

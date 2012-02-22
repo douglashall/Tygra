@@ -14,6 +14,14 @@ class HarvardUser extends User
     public function getCourses() {
     	return $this->courses;
     }
+
+    public function getCourseKeywords() {
+    	$keywords = array();
+    	foreach($this->courses as $course) {
+    		$keywords[] = $course->getKeyword();
+    	}
+    	return $keywords;
+    }
     
     public function findCourseByKeyword($keyword) {
     	$courseObject = new CourseObject();

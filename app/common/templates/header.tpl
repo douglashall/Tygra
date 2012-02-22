@@ -149,6 +149,7 @@
       onload="{if count($onLoadBlocks)}onLoad();{/if}onOrientationChange();"
     {/if}
   {/block}>
+  
   <div id="nonfooternav">
     <a name="top"> </a>
     {if isset($customHeader)}

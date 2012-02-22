@@ -16,12 +16,26 @@ class HomeWebModule extends WebModule
 		switch ($this->page)
 		{
 			case 'index':
+				$this->setPageTitles('My Courses');
 				$this->assign('results', array());
 				if ($this->getOptionalModuleVar('SHOW_FEDERATED_SEARCH', true)) {
 					$this->assign('showFederatedSearch', true);
 					$this->assign('placeholder', $this->getLocalizedString("SEARCH_PLACEHOLDER", Kurogo::getSiteString('SITE_NAME')));
 				}
-				$this->assign('modules', $this->getModuleNavList());
+
+				$navModules = $this->getModuleNavList();
+				if(isset($navModules['updates'])) {
+				    $updatesModule = self::factory('updates');
+				    if($updatesModule->getOptionalModuleVar('totalCountForCourses')) {
+				        $keywords = array();
+				        $total = $updatesModule->getTotalCountForCourses($user->getCourseKeywords());
+				        if($total == 0) {
+				            $navModules['updates']['img'] = '/modules/home/images/updatesGray'.$this->imageExt;
+				            unset($navModules['updates']['url']);
+				        }
+				    }
+				}
+				$this->assign('modules', $navModules);
 
 				$courses = $user->getCourses();
 				$courseItems = array();
@@ -33,11 +47,11 @@ class HomeWebModule extends WebModule
 						))
 					);
 				}
-				$this->assign('courses', $courseItems);
+				$this->assign('courseItems', $courseItems);
 				break;
 			case 'search':
 				$searchTerms = $this->getArg('filter');
-				if($searchTerms) {
+				if(strlen($searchTerms) > 0) {
 					$searchResults = $this->searchItems($searchTerms);
 					$this->assign('searchTerms', $searchTerms);
 					$this->assign('searchResults', $searchResults);

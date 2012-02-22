@@ -19,7 +19,6 @@ class HomeDataController extends AuthenticatedDataController {
 
 		if(strlen($sitekeys) > 0) {
 			$query = str_replace(array('\\', '/'), ' ', $query); // tomcat doesn't like encoded slashes
-			$query = trim($query);
 
 			$formattedQuery = "userid=$huid"
 				."&fq=".rawurlencode("userid:$huid")

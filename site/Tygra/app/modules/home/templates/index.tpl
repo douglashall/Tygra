@@ -1,6 +1,13 @@
-{include file="findInclude:common/templates/header.tpl"}
+{capture name="banner" assign="banner"}
 
-{if $courses}
+  <h1 id="homelogo"{if isset($topItem)} class="roomfornew"{/if}>
+    <img src="/modules/{$moduleID}/images/logo-home{$imageExt}" width="{$banner_width|default:265}" height="{$banner_height|default:45}" alt="{$strings.SITE_NAME|escape}" />
+  </h1>
+{/capture}
+
+{include file="findInclude:common/templates/header.tpl" customHeader=$banner scalable=false}
+
+{if $courseItems}
 	{if $showFederatedSearch}
 	{block name="federatedSearch"}
 	{include file="findInclude:common/templates/search.tpl"}
@@ -11,17 +18,9 @@
 		{include file="findInclude:common/templates/springboard.tpl" springboardItems=$modules springboardID="homegrid"}
 	</div>
 
-	<ul class="results">
-		{foreach $courses as $course}
-		<li>
-			<a href="{$course['url']}">{$course['title']}</a>
-		</li>
-		{/foreach}
-	</ul>
+	{include file="findInclude:common/templates/navlist.tpl" navlistItems=$courseItems}
 {else}
-	<div style="margin: 1em">
-		<p>No courses found</p>
-	</div>
+	{include file="findInclude:common/templates/emptylist.tpl" emptyMessage="No courses found"}
 {/if}
 
 {include file="findInclude:common/templates/footer.tpl"}
