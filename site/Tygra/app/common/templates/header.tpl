@@ -2,7 +2,12 @@
 
 {block name="breadcrumbs"}
   {if !$isModuleHome}
-    {foreach $breadcrumbs as $breadcrumb}
+    {foreach $breadcrumbs as $breadcrumb}	
+    	{if $breadcrumb@first && ($breadcrumb['p'] == 'index' && $breadcrumb['m'] == 'home')}
+    		{* Skip the home/index breadcrumb because the $homeLink is already displayed *}
+    		{continue}
+    	{/if}
+    	
       {if $breadcrumb@first || ($breadcrumb['p'] == 'index')}
         {$crumbClass = 'module'}
       {elseif count($breadcrumbs) == 1}

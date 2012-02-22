@@ -51,7 +51,7 @@ class HomeWebModule extends WebModule
 				break;
 			case 'search':
 				$searchTerms = $this->getArg('filter');
-				if($searchTerms) {
+				if(strlen($searchTerms) > 0) {
 					$searchResults = $this->searchItems($searchTerms);
 					$this->assign('searchTerms', $searchTerms);
 					$this->assign('searchResults', $searchResults);
