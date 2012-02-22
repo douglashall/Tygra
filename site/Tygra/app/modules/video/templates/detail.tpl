@@ -1,10 +1,18 @@
 {include file="findInclude:common/templates/header.tpl"}
+  <script type="text/javascript" src="http://isites.harvard.edu/jwplayer/jwplayer.js"></script>
 
 <h1 class="focal videoTitle">{$videoTitle}</h1>
 <p class="nonfocal">
-<a href="http://isites.harvard.edu/icb/ajax/playListFromCollection.do?keyword={$keyword}&topicId=icb.topic{$topicid}&entry={$entryid}">
-<img class="videoThumbnail" src="{$videoThumbnail}">
+
+<!-- {foreach $mediaurls as $url}
+<a href="{$url}">
+<img class="videoThumbnail" src="http://isites.harvard.edu/remote/video//js/videotool/resources/images/no-thumbnail.gif">
 </a>
+{/foreach}
+ -->
+ 
+ embed: {$embed}
+
 </p>
 <p class="focal">
 {$videoDescription}

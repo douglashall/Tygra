@@ -6,45 +6,49 @@
 class VideoObject implements KurogoObject
 {
     protected $entryid; 
-    protected $entity; 
-    protected $linkurl;
-    protected $siteid;
-    protected $topicid;
-    protected $shared;
+    protected $linkurl = array();
     protected $modifiedon;
     protected $title;
     protected $description;
     protected $imgurl;
     
 	function __construct($video) {
+				
 		if(isset($video['id'])){
-    		preg_match_all('/([\d]+)/', $video['id'], $matches);
-   			$this->entryid = $matches[0][1];
+   			$this->entryid = $video['id'];
 		}
-		if(isset($video['entity'])){
-      		$this->entity  = $video['entity'];
+
+		if(isset($video['asset']['videoFileRefs'][0]['sourceUrl'])){
+			
+			/*
+			 * In this case we have a list of videos and possibly an audio(mp3) file.
+			 */
+			foreach($video['asset']['videoFileRefs'] as $v){
+				array_push($this->linkurl, $v['sourceUrl']);
+			}
+			
 		}
-		if(isset($video['linkurl'])){
-      		$this->linkurl = $video['linkurl'];
+
+		if(isset($video['asset']['videoFileRefs'][0]['dateCreated'])){
+			
+			foreach($video['asset']['videoFileRefs'] as $v){
+				if($v['mediaType'] == "video"){
+					$this->modifiedon = $v['dateCreated'];
+				}
+			}
 		}
-		if(isset($video['siteid'])){
-      		$this->siteid  = $video['siteid'];
-		}
-		if(isset($video['topicid'])){
-      		$this->topicid = $video['topicid'];
-		}
-		if(isset($video['shared'])){
-      		$this->shared  = $video['shared'];
-		}
-		if(isset($video['modifiedon'])){
-      		$this->modifiedon = $video['modifiedon'];
-		}
+		
 		if(isset($video['title'][0])){
       		$this->title   = $video['title'][0];
 		}
-		if(isset($video['description'][0])){
-      	$this->description = $video['description'][0];
+		elseif(isset($video['displayTitle'])){
+			$this->title   = $video['displayTitle'];
 		}
+		
+		if(isset($video['caption'])){
+      	$this->description = $video['caption'];
+		}
+		
 		if(isset($video['imageurl'])){
       		$this->imgurl  = $video['imageurl'];
 		}
@@ -58,44 +62,12 @@ class VideoObject implements KurogoObject
         return $this->entryid;
     }
     
-    public function setEntity($entity) {
-        $this->entity = $entity;
-    }
-    
-    public function getEntity() {
-        return $this->entity;
-    }
-    
     public function setLinkUrl($linkurl) {
         $this->linkurl = $linkurl;
     }
     
     public function getLinkUrl() {
         return $this->linkurl;
-    }
-    
-    public function setSiteId($siteid) {
-        $this->siteid = $siteid;
-    }
-    
-    public function getSiteId() {
-        return $this->siteid;
-    }
-    
-    public function setTopicId($topicid) {
-        $this->topicid = $topicid;
-    }
-    
-    public function getTopicId() {
-        return $this->topicid;
-    }
-    
-    public function setShared($shared) {
-        $this->shared = $shared;
-    }
-    
-    public function getShared() {
-        return $this->shared;
     }
     
     public function setModifiedOn($modifiedon) {

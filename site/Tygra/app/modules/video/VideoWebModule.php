@@ -17,11 +17,22 @@ class VideoWebModule extends WebModule
 		
 	 switch ($this->page) {
 	 	case 'index':
+		
 	 		$keyword = $this->getArg('keyword');
 	 		$course = $user->findCourseByKeyword($keyword);
+	 		$vs = $controller->findVideosByKeyword($keyword);
 	 		$title = $course->getTitle();
+	 		
+	 		//print_r($huid."<br />");
+	 		//print_r($keyword."<br />");
+	 		
+	 		//$list = $controller->findVideosByKeyword($keyword);
+	 		
+	 		//if($vid = $controller->findVideoByUserAndEntryId($huid, $videoStr)){
+	 		
+	 		//print_r(var_dump($list));
 	 		 		
-	 		if($vs = $controller->findVideosByHuidAndKeyword($huid, $keyword)){
+	 		if($vs = $controller->findVideosByKeyword($keyword)){
 	 			 			
 		 		$varray = array();
 		 		foreach($vs as $v){
@@ -33,17 +44,13 @@ class VideoWebModule extends WebModule
 				foreach( $varray as $value) {
 					$vidArray = $value->toArray();
 					$entryid = $value->getEntryId();
-					$topicid = $value->getTopicId();
-					$entityid = $value->getEntity();
 					$modDate = $value->getModifiedOn();
 					$datetime = date("F j, Y g:i a", strtotime($modDate));
 					$urlArray = array('modDate'=>$datetime,
 									  'url'=>$this->buildBreadcrumbURL(
 									  		             'detail', array(
 													     'videoid'=>$entryid, 
-														 'entity'=>$entityid,
-												  	     'keyword'=>$keyword, 
-												  	     'topicid'=>$topicid
+												  	     'keyword'=>$keyword
 							)
 						)
 					);
@@ -56,42 +63,76 @@ class VideoWebModule extends WebModule
 				$this->assign('listcourses',"false");
 				$this->assign('noResultsText',"[list-course-videos] No videos found");
 	 		}
-	 		else {
+	 		/*else {
 	 			$this->redirectTo('home');
 	 			
-	 		}
+	 		}*/
 	 		break;
 	 	case 'detail':
 	 		$videoid = $this->getArg('videoid');
 	 		$keyword = $this->getArg('keyword');
-	 		$topicid = $this->getArg('topicid');
-	 		$entityid = $this->getArg('entity');
+	 		
+	 		//print_r($keyword."<br />");
+	 		//print_r($huid);
+	 		
+	 		//$topicid = $this->getArg('topicid');
+	 		//$entityid = $this->getArg('entity');
+	 		
 	 		$huid = $user->getUserId();
 	 		$videoStr = $entityid.'.icb.video'.$videoid;
 	 		
-	 		if($vid = $controller->findVideoByUserAndEntryId($huid, $videoStr)){
-		 		$video = new VideoObject($vid);
-		 		$thumbnail = $video->getImgUrl();
-		 		$title = $video->getTitle();
-	    			$this->setPageTitles($title);
-		 		$desc = $video->getDescription();
-		 		$modDate = $video->getModifiedOn();
-		 		$datetime = date("F j, Y g:i a", strtotime($modDate));
-		 			
+	 		//if($vid = $controller->findVideoByUserAndEntryId($huid, $videoStr)){
+	 		
+		 		$vs = $controller->findVideosByKeyword($keyword);
+		 		$urls = array();
+		 		foreach($vs as $v){
+		 			if($v['id']==$videoid){
+		 				foreach($v['asset']['videoFileRefs'] as $ref){
+		 					if($ref['mediaType']=="video"){
+								//array_push($urls, $url['sourceUrl']);
+								$embed = $ref['embed'];
+		 					}
+						}
+		 			}
+		 		}
+		 		
+	 			$video = new VideoObject($vid);
+		 		
+		 		//$thumbnail = $video->getImgUrl();
+		 		//$title = $video->getTitle();
+	    			//$this->setPageTitles($title);
+		 		//$desc = $video->getDescription();
+		 		//$modDate = $video->getModifiedOn();
+		 		//$datetime = date("F j, Y g:i a", strtotime($modDate));
+
+		 		//$this->assign('mediaurls', $urls);
+		 		//print_r("embed: ".$embed);
 		 		$this->assign('keyword',$keyword);
 		 		$this->assign('videoTitle', $title);
 		 		$this->assign('videoThumbnail', $thumbnail);
+		 		$this->assign('embed', $embed);
 		 		$this->assign('videoDescription', $desc);
 		 		$this->assign('modifiedOn', $datetime );
 		 		$this->assign('topicid',$topicid);
 		 		$this->assign('entryid',$videoid);
-	 		}
-	 		else {
-	 			$this->redirectTo('home');
-	 		}
+	 		//}
+	 	//	else {
+	 	//		$this->redirectTo('home');
+	 	//	}
 	 		break;
 	 	}
 	}
+	
+	// overriding this method from Module.php because it's hard coded for home...  which is kinda silly
+  protected function getModuleNavigationConfig() {
+      static $moduleNavConfig;
+      if (!$moduleNavConfig) {
+          $moduleNavConfig = ModuleConfigFile::factory('video', 'module');
+      }
+      
+      return $moduleNavConfig;
+  }
+	
 /*
 	protected function htmlEncodeString($string) {
 		return mb_convert_encoding($string, 'HTML-ENTITIES', $this->encoding);
@@ -126,12 +167,30 @@ class VideoWebModule extends WebModule
 		return $videos;
 	}
 */
+  /*
 	public function getTotalCount($keyword) {
 		$session = $this->getSession();
 		$user = $session->getUser();
 		$huid = $user->getUserId();
 		$controller = DataController::factory('IsitesVideoController');
 		$numVideos = $controller->findVideoCountByHuidAndKeyword($huid, $keyword);
-		return $numVideos;
+		return 5;
 	}
+	*/
+  
+  	public function getTotalCount($keyword){
+  		$session = $this->getSession();
+		$user = $session->getUser();
+		$huid = $user->getUserId();
+  		$controller = DataController::factory('IsitesVideoController');
+  		
+  		$videos = $controller->findVideosByKeyword($keyword);
+  		//$lectureVideos = $controller->findVideosByKeyword($keyword);
+  		
+  		//print_r("videos = ".count($videos));
+  		
+  		return count($videos);
+  		
+  	}
+  
 }

@@ -5,8 +5,8 @@ class IsitesVideoController extends AuthenticatedDataController
 	protected $cacheFolder = "Videos"; // set the cache folder
 	protected $DEFAULT_PARSER_CLASS='JSONDataParser'; // the default parser
 
-	public function search($user, $query) {
-error_log("***$user***");
+	public function search($query) {
+		error_log("***$user***");
 		$baseURL = $this->baseURL;
 		$huid = $user->getUserID();
 		$courses = $user->getCourses();
@@ -32,49 +32,56 @@ error_log("***$user***");
 		 * So a query like 'Hello world' would look like 'Hello%2bworld'
 		 */
 		$query = preg_replace('/\s+/i', '%2B', $query);
-		//print_r($query);
 		 
 		/*
 		 * Build the search query string
 		 */
 		$searchTerms = "((title:".$query."%20OR%20description:".$query."%20OR%20topictitle:".$query."%20OR%20sitetitle:".$query.")%20AND%20".$newCourseList;
 		$formattedQuery = "userid=".$huid."&q=".$searchTerms."&omitHeader=true&fq=category:video&fq=userid:".$huid."&start=0&rows=100&wt=json";
-		 
-		/*
-		 * There are issues when you try to send the query in plain text to the search url.
-		 * Base64 encode the query to send it to the search service
-		 */
-		
-		//$b64EncodedQuery = base64_encode($formattedQuery);
 		
 		$this->setBaseUrl($baseURL.'video/by_query/'.urlencode($formattedQuery).'.json');
 		$data = $this->getParsedData();
 		$results = $data['video']['docs'];
+		
+		 print_r("results: ".$results);
 		 
 		return $results;
 		 
 	}
-
-	public function findVideosByHuidAndKeyword($huid, $keyword) {
+/*
+	public function findVideosByHuidAndKeyword($keyword) {
 
 		$originalBaseURL = $this->baseURL;
 		$baseURL = $this->baseURL;
-		$this->setBaseUrl($baseURL.'video/by_user_and_keyword/'.$huid.'/'.$keyword.'.json');
+		$this->setBaseUrl($baseURL.'video/by_huid_and_keyword/'.$huid.'/'.$keyword.'.json');
+		
+		//print_r($baseURL.'video/by_huid_and_keyword/'.$huid.'/'.$keyword.'.json');
+		
 		$data = $this->getParsedData();
 		$this->baseURL = $originalBaseURL;
 		$results = $data['video']['docs'];
 		return $results;
 	}
+	*/
 	
-	public function findVideoCountByHuidAndKeyword($huid, $keyword) {
-
+	public function findVideosByKeyword($keyword){
 		$originalBaseURL = $this->baseURL;
-		$baseURL = $this->baseURL;
-		$this->setBaseUrl($baseURL.'video/count_by_user_and_keyword/'.$huid.'/'.$keyword.'.json');
+		$baseURL = 'http://tool2.isites.harvard.edu:8937/dvs/api/lectureVideoByKeyword/'.$keyword.'.json';
+		$this->setBaseUrl($baseURL);
 		$data = $this->getParsedData();
 		$this->baseURL = $originalBaseURL;
-		$results = $data['video'];
-		return $results;
+		return $data;
+	}
+	
+	public function findVideosByHuidAndKeyword($huid, $keyword) {
+
+		$originalBaseURL = $this->baseURL;
+		//$baseURL = $this->baseURL;
+		$this->setBaseUrl('http://tool2.isites.harvard.edu:8937/dvs/api/lectureVideoByKeyword/'.$keyword.'.json');
+		$data = $this->getParsedData();
+		$this->baseURL = $originalBaseURL;
+		//$results = $data['video'];
+		return $data;
 	}
 
 	public function findVideoByUserAndEntryId($huid, $entryid) {
