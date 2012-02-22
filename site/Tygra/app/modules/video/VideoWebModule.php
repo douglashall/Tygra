@@ -79,7 +79,7 @@ class VideoWebModule extends WebModule
 	 		//$entityid = $this->getArg('entity');
 	 		
 	 		$huid = $user->getUserId();
-	 		$videoStr = $entityid.'.icb.video'.$videoid;
+	 		//$videoStr = $entityid.'.icb.video'.$videoid;
 	 		
 	 		//if($vid = $controller->findVideoByUserAndEntryId($huid, $videoStr)){
 	 		
@@ -96,7 +96,7 @@ class VideoWebModule extends WebModule
 		 			}
 		 		}
 		 		
-	 			$video = new VideoObject($vid);
+	 			//$video = new VideoObject($vid);
 		 		
 		 		//$thumbnail = $video->getImgUrl();
 		 		//$title = $video->getTitle();
@@ -108,12 +108,12 @@ class VideoWebModule extends WebModule
 		 		//$this->assign('mediaurls', $urls);
 		 		//print_r("embed: ".$embed);
 		 		$this->assign('keyword',$keyword);
-		 		$this->assign('videoTitle', $title);
-		 		$this->assign('videoThumbnail', $thumbnail);
+		 		//$this->assign('videoTitle', $title);
+		 		//$this->assign('videoThumbnail', $thumbnail);
 		 		$this->assign('embed', $embed);
-		 		$this->assign('videoDescription', $desc);
-		 		$this->assign('modifiedOn', $datetime );
-		 		$this->assign('topicid',$topicid);
+		 		//$this->assign('videoDescription', $desc);
+		 		//$this->assign('modifiedOn', $datetime );
+		 		//$this->assign('topicid',$topicid);
 		 		$this->assign('entryid',$videoid);
 	 		//}
 	 	//	else {
