@@ -129,7 +129,7 @@
 {/block}
     
 {block name="footer"}
-  <span class="copyright">&copy; 2010 <a href="http://www.modolabs.com" target="_blank">Modo Labs, Inc.</a> Powered by Kurogo</span>
+  <span class="copyright">&copy; 2012 The President and Fellows of Harvard College</span>
 {/block}
 
 {block name="footerJavascript"}
