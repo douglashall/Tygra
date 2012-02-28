@@ -7,17 +7,6 @@
 		worldwide.{/block}
 
 {block name="header"}
-	<!--
-  	<div id="utility_nav">
-    	<a href="http://modolabs.com" target="_blank">Universitas.edu</a>
-        &nbsp;|&nbsp;
-        <a href="http://modolabs.com/" target="_blank">Contact</a>
-        &nbsp;|&nbsp;
-        Share &nbsp; <a href="http://facebook.com/universitas" title="Facebook" target="_blank"><img src="/modules/info/images/facebook.png" alt="facebook"></a>  
-		&nbsp;
-		<a href="http://twitter.com/universitas" title="Twitter" target="_blank"><img src="/modules/info/images/twitter.png" alt="twitter"></a>
-    </div><!--/utility_nav-->
-    -->
     <div id="logo">
     	<img src="/modules/home/images/logo-home.png" alt="Harvard Mobile Courses" border="0" />
     </div>
