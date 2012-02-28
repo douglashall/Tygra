@@ -1,8 +1,10 @@
 {extends file="findExtends:modules/info/templates/index.tpl"}
 
-{block name="pageTitle"}Universitas Mobile Internet{/block}
+{block name="pageTitle"}Harvard Mobile Courses{/block}
 
-{block name='description'}Universitas is launching a university-wide mobile initiative to aggregate and deliver useful, usable, mobile-appropriate content to the Universitas community, locally and worldwide.{/block}
+{block name='description'}m.courses.harvard.edu is a university-wide mobile initiative to aggregate and deliver useful,
+		usable, mobile-appropriate course content to university communities, locally and
+		worldwide.{/block}
 
 {block name="header"}
 	<!--
