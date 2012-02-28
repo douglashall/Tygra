@@ -5,8 +5,10 @@
 {block name='description'}m.courses.harvard.edu is a university-wide mobile initiative to aggregate and deliver useful,
 		usable, mobile-appropriate course content to university communities, locally and
 		worldwide.{/block}
-<p> </p>
 {block name="header"}
+  	<div id="utility_nav">
+    </div><!--/utility_nav-->
+    
     <div id="logo">
     	<img src="/modules/home/images/logo-home.png" alt="Harvard Mobile Courses" border="0" />
     </div>
