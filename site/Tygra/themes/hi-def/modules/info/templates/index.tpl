@@ -46,7 +46,6 @@
             <br />
             Want to recommend a feature? Your ideas and usage will 
             help inform future development. 
-            <a href="https://huit.uservoice.com/forums/150465-mobile-interface">Click here to give us feedback</a>!
           </a>
         </p>
         
@@ -63,7 +62,7 @@
             <td>
             <h2>Updates</h2>
             <p>
-            Search by first and last name for phone numbers, email addresses, and office location for Universitas students, faculty and staff. Note that contact details vary and are informed by individual privacy settings.
+Keep up-to-date on site activity with this personalized list of the latest site content.
             </p>
             </td>
           </tr>
@@ -72,9 +71,9 @@
               <img src="/modules/home/images/syllabus.png" alt="Syllabus" />
             </td>
             <td>
-            <h2>Classmates</h2>
+            <h2>Syllabus</h2>
             <p>
-            Search by first and last name for phone numbers, email addresses, and office location for Universitas students, faculty and staff. Note that contact details vary and are informed by individual privacy settings.
+View course outlines as posted by your teaching staff.
             </p>
             </td>
           </tr>
@@ -85,7 +84,7 @@
             <td>
             <h2>Classmates</h2>
             <p>
-            Search by first and last name for phone numbers, email addresses, and office location for Universitas students, faculty and staff. Note that contact details vary and are informed by individual privacy settings.
+Get to know your fellow classmates -- contact information is available to help foster collaboration.
             </p>
             </td>
           </tr>
@@ -97,7 +96,7 @@
             <td>
             <h2>Lecture Video</h2>
             <p>
-            View YouTube videos posted by Universitas including special events, athletics and student organizations. 
+Miss a lecture or want to review? If media services has made a video of your class available, you'll find it here.
             </p>
             </td>
           </tr>
@@ -108,7 +107,7 @@
             <td>
             <h2>Search</h2>
             <p>
-            Search offers a quick and powerful way to search across content from most or all of the features above. Search results will be presented grouped by type, and recent search queries will be saved and auto-suggested for even faster and easier access.
+Available across all of your courses or within a single course, use this feature to quickly find what you're after.
             </p>
             </td>
           </tr>
