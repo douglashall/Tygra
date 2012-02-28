@@ -10,6 +10,12 @@ class CourseObject implements KurogoObject
     protected $videos = array();
     protected $siteId;
     protected $numVideos;
+    protected $termName;
+    protected $termDisplayName;
+    protected $termNum;
+    protected $academicYear;
+    protected $calendarYear;
+    protected $schoolId;	
     
     public function setKeyword($keyword) {
         $this->keyword = $keyword;
@@ -33,7 +39,7 @@ class CourseObject implements KurogoObject
     }
     
     public function getVideos() {
-    	 //print_r("CourseObject[ ".var_dump($this->videos)." ]<br />");
+         //print_r("CourseObject[ ".var_dump($this->videos)." ]<br />");
         return $this->videos;
     }
     
@@ -47,12 +53,12 @@ class CourseObject implements KurogoObject
     }
     
     public function findVideoByEntryId($entryid){
-    	foreach($this->$videos as $video){
-    		if($video->getEntryId() == $entryid){
-    			return $video;
-    		}
-    	}
-    	return NULL;
+        foreach($this->$videos as $video){
+            if($video->getEntryId() == $entryid){
+                return $video;
+            }
+        }
+        return NULL;
     }
     
     public function setSiteId($siteId) {
@@ -63,7 +69,52 @@ class CourseObject implements KurogoObject
         return $this->siteId;
     }
     
+    public function setTermName($termName) {
+        $this->termName = $termName;
+    }
+    
+    public function getTermName() {
+        return $this->termName;
+    }
+    
+    public function setTermNum($termName) {
+        $this->termNum = ($this->termName === 'Fall' ? 1 
+            :  $this->termName === 'Spring' ? 2
+            :  3);
+    }
+    
+    public function getTermNum() {
+        return $this->termNum;
+    }
+    
+    public function setAcademicYear($academicYear) {
+        $this->academicYear = $academicYear;
+    }
+    
+    public function getAcademicYear() {
+        return $this->academicYear;
+    }
+    
     public function toArray() {
-    	return array("keyword" => $this->keyword, "title" => $this->title, "videos" => $this->videos);
+        return array("keyword" => $this->keyword, "title" => $this->title, "videos" => $this->videos);
+    }
+    
+    public function sortCmp($b) {
+        $av = array($this->getAcademicYear(), $this->getTermNum(), $this->getTitle());
+        $bv = array($b->getAcademicYear(), $b->getTermNum(), $b->getTitle());
+
+        if($av[0] < $bv[0]) {
+            return -1;
+        } else if($av[0] == $bv[0]) {
+            if($av[1] < $bv[1]) {
+                return -1;
+            } else if($av[1] == $bv[1]) {
+                return strcasecmp($av[2], $bv[2]);
+            } else {
+                return 1;
+            }           
+        } else {
+            return 1;
+        }
     }
 }

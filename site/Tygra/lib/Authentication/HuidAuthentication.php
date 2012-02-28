@@ -66,6 +66,15 @@ class HuidAuthentication extends AuthenticationAuthority
 					if (isset($course['keyword'])) {
 	     				$result->setKeyword($course['keyword']);
 					}
+					if (isset($course['termName'])) {
+						$result->setTermName($course['termName']);
+					}
+					if (isset($course['termName'])) {
+						$result->setTermNum($course['termName']);
+					}
+					if (isset($course['academicYear'])) {
+						$result->setAcademicYear($course['academicYear']);
+					}
 
 					$courses[] = $result;
 	     		}

@@ -38,6 +38,7 @@ class HomeWebModule extends WebModule
 				$this->assign('modules', $navModules);
 
 				$courses = $user->getCourses();
+				$courses = $this->sortCourses($courses);
 				$courseItems = array();
 				foreach($courses as $course) {
 					$courseItems[] = array(
@@ -61,6 +62,16 @@ class HomeWebModule extends WebModule
 				}
 				break;
 		}
+	}
+
+	protected function sortCourses($courses) {
+		usort($courses, array(get_class($this), "compareCourse")); // user-defined sort
+		$courses = array_reverse($courses); // most recent term first
+		return $courses;
+	}
+
+	static function compareCourse($a, $b) {
+		return $a->sortCmp($b);
 	}
 
 	public function searchItems($searchTerms, $limit=null, $options=null) {
