@@ -17,7 +17,7 @@ class CourseDataController extends AuthenticatedDataController {
 			."&fq=-category:".rawurlencode('page OR site')
 			."&fl=".rawurlencode('sitetitle,topictitle,linkurl')
 			."&q=".rawurlencode($query)
-			."&qt=dismax" // use the dismax solr parser for user-submitted queries
+			."&qt=dismaxsite" // use the dismax solr parser for user-submitted queries
 			."&omitHeader=true"
 			."&wt=json"
 			."&start=0"
