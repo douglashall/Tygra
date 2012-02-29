@@ -16,7 +16,7 @@ class CourseWebModule extends WebModule {
 	protected $keyword = '';
 
   protected function showLogin() {
-    return $this->getOptionalModuleVar('SHOW_LOGIN', true);
+    return $this->getOptionalModuleVar('SHOW_LOGIN', false);
   }
 
   private function getTabletModulePanes($tabletConfig) {
