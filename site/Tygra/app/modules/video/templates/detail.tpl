@@ -10,8 +10,9 @@
 </a>
 {/foreach}
  -->
- 
- embed: {$embed}
+ <div id="video_container">
+ {$embed}
+ </div>
 
 </p>
 <p class="focal">

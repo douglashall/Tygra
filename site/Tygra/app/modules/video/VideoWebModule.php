@@ -86,12 +86,13 @@ class VideoWebModule extends WebModule
 		 		$vs = $controller->findVideosByKeyword($keyword);
 		 		$urls = array();
 		 		foreach($vs as $v){
+		 			//print_r($v);
 		 			if($v['id']==$videoid){
 		 				foreach($v['asset']['videoFileRefs'] as $ref){
-		 					if($ref['mediaType']=="video"){
+		 					//if($ref['mediaType']=="video"){
 								//array_push($urls, $url['sourceUrl']);
 								$embed = $ref['embed'];
-		 					}
+		 					//}
 						}
 		 			}
 		 		}
