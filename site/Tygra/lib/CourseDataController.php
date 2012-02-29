@@ -14,7 +14,7 @@ class CourseDataController extends AuthenticatedDataController {
 
 		$formattedQuery = "userid=$huid"
 			."&fq=sitekey:".rawurlencode($keyword)
-			."&fq=-category:".rawurlencode('page OR site')
+			."&fq=-category:".rawurlencode('(page OR site)')
 			."&fl=".rawurlencode('sitetitle,topictitle,linkurl')
 			."&q=".rawurlencode($query)
 			."&qt=dismaxsite" // use the dismax solr parser for user-submitted queries
