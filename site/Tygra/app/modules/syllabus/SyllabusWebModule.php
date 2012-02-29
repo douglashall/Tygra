@@ -7,53 +7,15 @@ class SyllabusWebModule extends WebModule
 		$session = $this->getSession();
 		$user = $session->getUser();
 		$controller = DataController::factory('SyllabusDataController');
-//		$keyword = $this->getArg('keyword');
-		
-//		if ($keyword)
-//	    	$this->page = 'detail';
 	    	
 		switch ($this->page)
 		{
-//			case 'index':
-//				$items = $user->getUserData('syllabus');
-//				if (!$items) {
-//					$items = $controller->search($user);
-//					$user->setUserData('syllabus', $items);
-//				}
-//				
-//				$syllabus = array();
-//				if ($items) {
-//					foreach ($items as $item) {
-//						if (count($item['syllabus']) == 0)
-//							continue;
-//							
-//						$url = "";
-//						$description=null;
-//						if (count($item['syllabus']) == 1) {
-//							$url = $item['syllabus'][0]['linkUrl'];
-//							if ($item['syllabus'][0]['description'])
-//								$description = $item['syllabus'][0]['description'][0];
-//						} else
-//							$url = $this->buildBreadcrumbURL('detail', array(
-//								'keyword'=>$item['keyword'])
-//								);
-//								
-//						$syllabus[] = array(
-//						'title'=>$item['siteTitle'],
-//						'url'=>$url,
-//						'subtitle'=>$description
-//						);
-//					}
-//				}
-//				
-//				$this->assign('results', $syllabus);
-//				break;
 			case 'index':
 				$keyword = $this->getArg('keyword');
 				$items = $user->getUserData('syllabus');
 				if (!$items) {
 					$items = $controller->search($user);
-					$user->setUserData('syllabus', $items);
+//					$user->setUserData('syllabus', $items);
 				}
 				$syllabus = array();
 				if ($items) {
@@ -72,7 +34,6 @@ class SyllabusWebModule extends WebModule
 								'subtitle'=>$description
 								);
 							}
-//							$this->setPageTitles($item['siteTitle']);
 							break;
 						}
 					}
@@ -96,7 +57,7 @@ class SyllabusWebModule extends WebModule
 		if (!$items) {
 			$controller = DataController::factory('SyllabusDataController');
 			$items = $controller->search($user);
-			$user->setUserData('syllabus', $items);
+//			$user->setUserData('syllabus', $items);
 		}
 		if ($items) {
 			foreach ($items as $item) {
