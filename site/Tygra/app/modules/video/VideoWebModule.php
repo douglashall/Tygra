@@ -88,6 +88,7 @@ class VideoWebModule extends WebModule
 		 		foreach($vs as $v){
 		 			//print_r($v);
 		 			if($v['id']==$videoid){
+		 				$title = $v['displayTitle'];
 		 				foreach($v['asset']['videoFileRefs'] as $ref){
 		 					//if($ref['mediaType']=="video"){
 								//array_push($urls, $url['sourceUrl']);
@@ -109,7 +110,7 @@ class VideoWebModule extends WebModule
 		 		//$this->assign('mediaurls', $urls);
 		 		//print_r("embed: ".$embed);
 		 		$this->assign('keyword',$keyword);
-		 		//$this->assign('videoTitle', $title);
+		 		$this->assign('videoTitle', $title);
 		 		//$this->assign('videoThumbnail', $thumbnail);
 		 		$this->assign('embed', $embed);
 		 		//$this->assign('videoDescription', $desc);

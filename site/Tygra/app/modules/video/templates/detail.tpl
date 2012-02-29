@@ -15,8 +15,9 @@
  </div>
 
 </p>
+<!--  
 <p class="focal">
 {$videoDescription}
 </p>
-
+-->
 {include file="findInclude:common/templates/footer.tpl"}
