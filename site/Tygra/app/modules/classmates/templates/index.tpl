@@ -10,6 +10,6 @@
 	{include file="findInclude:common/templates/navlist.tpl" navlistItems=$bookmarkLink secondary=true}
 {/if}
 
-{include file="findInclude:common/templates/results.tpl" results=$results resultslistID="studentsList" titleTruncate=40}
+{include file="findInclude:common/templates/results.tpl" results=$results resultslistID="studentsList" titleTruncate=5}
 
 {include file="findInclude:common/templates/footer.tpl"}
