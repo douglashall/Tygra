@@ -12,7 +12,6 @@ class CourseObject implements KurogoObject
     protected $numVideos;
     protected $termName;
     protected $termDisplayName;
-    protected $termNum;
     protected $academicYear;
     protected $calendarYear;
     protected $schoolId;	
@@ -68,6 +67,14 @@ class CourseObject implements KurogoObject
     public function getSiteId() {
         return $this->siteId;
     }
+
+    public function setSchoolId($schoolId) {
+        $this->schoolId = $schoolId;
+    }
+    
+    public function getSchoolId() {
+        return $this->schoolId;
+    }
     
     public function setTermName($termName) {
         $this->termName = $termName;
@@ -77,14 +84,22 @@ class CourseObject implements KurogoObject
         return $this->termName;
     }
     
-    public function setTermNum($termName) {
-        $this->termNum = ($this->termName === 'Fall' ? 1 
-            :  $this->termName === 'Spring' ? 2
-            :  3);
+    public function getTermOrder() {
+    	$orderOf = array(
+    		'Fall' => 1,
+    		'Spring' => 2,
+		);
+		$defaultOrder = 3;
+		
+		return isset($orderOf[$this->termName]) ? $orderOf[$this->termName] : $defaultOrder;
+    }
+	
+    public function setTermDisplayName($termDisplayName) {
+        $this->termDisplayName = $termDisplayName;
     }
     
-    public function getTermNum() {
-        return $this->termNum;
+    public function getTermDisplayName() {
+        return $this->termDisplayName;
     }
     
     public function setAcademicYear($academicYear) {
@@ -94,27 +109,16 @@ class CourseObject implements KurogoObject
     public function getAcademicYear() {
         return $this->academicYear;
     }
+	
+    public function setCalendarYear($calendarYear) {
+        $this->calendarYear = $calendarYear;
+    }
+    
+    public function getCalendarYear() {
+        return $this->calendarYear;
+    }
     
     public function toArray() {
         return array("keyword" => $this->keyword, "title" => $this->title, "videos" => $this->videos);
-    }
-    
-    public function sortCmp($b) {
-        $av = array($this->getAcademicYear(), $this->getTermNum(), $this->getTitle());
-        $bv = array($b->getAcademicYear(), $b->getTermNum(), $b->getTitle());
-
-        if($av[0] < $bv[0]) {
-            return -1;
-        } else if($av[0] == $bv[0]) {
-            if($av[1] < $bv[1]) {
-                return -1;
-            } else if($av[1] == $bv[1]) {
-                return strcasecmp($av[2], $bv[2]);
-            } else {
-                return 1;
-            }           
-        } else {
-            return 1;
-        }
     }
 }
