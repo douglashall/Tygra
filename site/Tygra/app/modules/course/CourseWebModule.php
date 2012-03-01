@@ -94,7 +94,8 @@ class CourseWebModule extends WebModule {
 										$modules[$id]['badge'] = $total;
 									}
 								} else {
-									$modules[$id]['img'] = DS. implode(DS, array('modules', 'home', 'images', $id.'Gray'.$this->imageExt)); 
+									$modules[$id]['img'] = DS. implode(DS, array('modules', 'home', 'images', $id.'Gray'.$this->imageExt));
+									$modules[$id]['class'] .= ' disabledmodule';
 									unset($modules[$id]['url']);
 								}
 							}
