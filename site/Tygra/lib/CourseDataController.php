@@ -13,12 +13,11 @@ class CourseDataController extends AuthenticatedDataController {
 		$query = str_replace(array('\\', '/'), ' ', $query); // tomcat doesn't like encoded slashes
 
 		$formattedQuery = "userid=$huid"
-			."&fq=".rawurlencode("userid:$huid")
 			."&fq=sitekey:".rawurlencode($keyword)
-			."&fq=-category:".rawurlencode('page OR site')
+			."&fq=-category:".rawurlencode('(page OR site)')
 			."&fl=".rawurlencode('sitetitle,topictitle,linkurl')
 			."&q=".rawurlencode($query)
-			."&qt=dismax" // use the dismax solr parser for user-submitted queries
+			."&qt=dismaxsite" // use the dismax solr parser for user-submitted queries
 			."&omitHeader=true"
 			."&wt=json"
 			."&start=0"

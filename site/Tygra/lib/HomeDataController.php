@@ -21,9 +21,8 @@ class HomeDataController extends AuthenticatedDataController {
 			$query = str_replace(array('\\', '/'), ' ', $query); // tomcat doesn't like encoded slashes
 
 			$formattedQuery = "userid=$huid"
-				."&fq=".rawurlencode("userid:$huid")
-				."&fq=sitekey:".rawurlencode($sitekeys)
-				."&fq=-category:".rawurlencode('page OR site')
+				."&fq=sitekey:".rawurlencode('('.$sitekeys.')')
+				."&fq=-category:".rawurlencode('(page OR site)')
 				."&fl=".rawurlencode('sitetitle,topictitle,linkurl')
 				."&q=".rawurlencode($query)
 				."&qt=dismax" // use the dismax solr parser for user-submitted queries
