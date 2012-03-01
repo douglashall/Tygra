@@ -18,7 +18,7 @@
 		{include file="findInclude:common/templates/springboard.tpl" springboardItems=$modules springboardID="homegrid"}
 	</div>
 
-	{include file="findInclude:common/templates/navlist.tpl" navlistItems=$courseItems}
+	{include file="findInclude:common/templates/navlist.tpl" navlistItems=$courseItems titleTruncate=40}
 {else}
 	{include file="findInclude:common/templates/emptylist.tpl" emptyMessage="No courses found"}
 {/if}
