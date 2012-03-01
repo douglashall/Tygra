@@ -86,8 +86,11 @@ class CourseWebModule extends WebModule {
 							$module = self::factory($id);
 							$modules[$id]['url'] = $this->buildBreadcrumbURLForModule($id, '', array('keyword' => $keyword));
 							$modules[$id]['class'] = "module";
-
-							if($module->getOptionalModuleVar('totalCount')){
+							
+							$schools = $module->getOptionalModuleVar('enableForSchools', null);
+							if(isset($schools) && !in_array($course->getSchoolId(), $schools)) {
+								unset($modules[$id]);
+							} else if($module->getOptionalModuleVar('totalCount')){
 								$total = $module->getTotalCount($keyword);
 								if($total > 0){
 									if($module->getOptionalModuleVar('displayTotalCount')) {
