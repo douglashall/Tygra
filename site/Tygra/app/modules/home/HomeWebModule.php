@@ -6,7 +6,7 @@ class HomeWebModule extends WebModule
 	protected $encoding = 'UTF-8';
 
 	protected function showLogin() {
-		return $this->getOptionalModuleVar('SHOW_LOGIN', true);
+		return $this->getOptionalModuleVar('SHOW_LOGIN', false);
 	}
 
 	protected function initializeForPage() {

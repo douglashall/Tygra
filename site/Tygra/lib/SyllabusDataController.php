@@ -30,8 +30,8 @@
 			
      		$this->path = "userid=$huid"
      		."&q=".rawurlencode('title:syllabus -title:hidden')
-     		."&fq=category:".rawurlencode('file OR topic')
-     		."&fq=sitekey:".rawurlencode($sitekeys)
+     		."&fq=category:".rawurlencode('(file OR topic)')
+     		."&fq=sitekey:".rawurlencode('('.$sitekeys.')')
      		."&fl=".rawurlencode('topicid,title,sitekey,linkurl,description,category')
             ."&omitHeader=true"
             ."&wt=json"

@@ -23,7 +23,7 @@
 			 <h2>{$term['label']}</h2>
 		</div>
 		
-		{include file="findInclude:common/templates/navlist.tpl" navlistItems=$term['items']}
+		{include file="findInclude:common/templates/navlist.tpl" navlistItems=$term['items'] titleTruncate=40}
 	{/foreach}
 {else}
 	{include file="findInclude:common/templates/emptylist.tpl" emptyMessage="No courses found"}
