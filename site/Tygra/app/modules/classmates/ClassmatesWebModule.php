@@ -7,28 +7,9 @@ class ClassmatesWebModule extends WebModule
 		$session = $this->getSession();
 		$user = $session->getUser();
 		$controller = DataController::factory('ClassmatesDataController');
-		$keyword = $this->getArg('keyword');
 		$studentId = $this->getArg('id');		
-//		if ($keyword) {
-//			if ($studentId)
-//		    	$this->page = 'detail';
-//	    	else
-//  		    	$this->page = 'people';
-//		}
 		switch ($this->page)
 		{
-			// courses
-//			case 'index':
-//				$courses = array();
-//	 			foreach ($user->getCourses() as $course) {
-//					$courses[] = array(
-//					'title'=>$course->getTitle(),
-//					'url'=>$this->buildBreadcrumbURL('people', array(
-//            		'keyword'=>$course->getKeyword()))
-//					);
-//	 			}
-//				$this->assign('results', $courses);
-//				break;
 			//students
 			case 'index':
 				$results = array();
@@ -41,7 +22,7 @@ class ClassmatesWebModule extends WebModule
 				
 	 			foreach ($students as $student) {
 	 				$results[] = array(
-					'title'=>$student['firstName'].' '.$student['lastName'],
+					'title'=>$student['lastName'].', '.$student['firstName'],
 					'url'=>$this->buildBreadcrumbURL('detail', array(
             		'keyword'=>$keyword,
             		'id'=>$student['id']))
