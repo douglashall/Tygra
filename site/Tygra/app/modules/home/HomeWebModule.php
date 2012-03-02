@@ -27,7 +27,6 @@ class HomeWebModule extends WebModule
 				if(isset($navModules['updates'])) {
 				    $updatesModule = self::factory('updates');
 				    if($updatesModule->getOptionalModuleVar('totalCountForCourses')) {
-				        $keywords = array();
 				        $total = $updatesModule->getTotalCountForCourses($user->getCourseKeywords());
 				        if($total == 0) {
 				            $navModules['updates']['img'] = '/modules/home/images/updatesGray'.$this->imageExt;
