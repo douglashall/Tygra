@@ -63,20 +63,14 @@ class HomeWebModule extends WebModule
 		
 		// builds a list of course items
 		foreach($courses as $course) {
-			$termName = $course->getTermName();
-			$academicYear = $course->getAcademicYear();
-			$calendarYear = $course->getCalendarYear();
-			$termOrder = $course->getTermOrder();
-			$group = "$termName $calendarYear";
-		
 			$items[] = array(
 				'item' => array(
 					'title' => $course->getTitle(),
 					'url'   => $this->buildBreadcrumbURLForModule('course', '', array('keyword' => $course->getKeyword()))
 				),
-				'group' => $group,
-				'grouplabel' => $group,
-				'sort' => array($academicYear, $termOrder, $course->getTitle())
+				'group' => $course->getTermGroupName(),
+				'grouplabel' => $course->getTermDisplayName(),
+				'sort' => array($course->getYearOrder(), $course->getTermOrder(), $course->getTitle())
 			);
 		}
 

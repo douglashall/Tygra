@@ -87,7 +87,7 @@ class CourseWebModule extends WebModule {
 							$modules[$id]['url'] = $this->buildBreadcrumbURLForModule($id, '', array('keyword' => $keyword));
 							$modules[$id]['class'] = "module";
 							
-							$schools = $module->getOptionalModuleVar('enableForSchools', null);
+							$schools = $module->getOptionalModuleVar('displayForSchools', null);
 							if(isset($schools) && !in_array($course->getSchoolId(), $schools)) {
 								unset($modules[$id]);
 							} else if($module->getOptionalModuleVar('totalCount')){

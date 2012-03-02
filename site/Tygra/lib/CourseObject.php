@@ -14,7 +14,8 @@ class CourseObject implements KurogoObject
     protected $termDisplayName;
     protected $academicYear;
     protected $calendarYear;
-    protected $schoolId;	
+    protected $schoolId;
+    private $termOrder; // lazy init, maps termNames to orderNumbers
     
     public function setKeyword($keyword) {
         $this->keyword = $keyword;
@@ -84,16 +85,6 @@ class CourseObject implements KurogoObject
         return $this->termName;
     }
     
-    public function getTermOrder() {
-    	$orderOf = array(
-    		'Fall' => 1,
-    		'Spring' => 2,
-		);
-		$defaultOrder = 3;
-		
-		return isset($orderOf[$this->termName]) ? $orderOf[$this->termName] : $defaultOrder;
-    }
-	
     public function setTermDisplayName($termDisplayName) {
         $this->termDisplayName = $termDisplayName;
     }
@@ -109,13 +100,50 @@ class CourseObject implements KurogoObject
     public function getAcademicYear() {
         return $this->academicYear;
     }
-	
+    
     public function setCalendarYear($calendarYear) {
         $this->calendarYear = $calendarYear;
     }
     
     public function getCalendarYear() {
         return $this->calendarYear;
+    }
+    
+    public function getYearOrder() {
+        return $this->calendarYear;
+    }
+    
+    public function getTermOrder() {        
+        if(!isset($this->termOrder)) {
+            $this->termOrder = array_flip(array(
+                'Winter',
+                'Winter-Spring',
+                'Spring',
+                'Spring 1',
+                'Spring 2',
+                'Spring Saturday',
+                'Summer',
+                'Summer 1',
+                'Summer 2',
+                'Full Year',
+                'Fall',
+                'Fall 1',
+                'Fall 2',
+                'Fall-Winter',
+                'Fall Saturday',
+            ));
+        }
+        
+        $defaultOrder = 999;
+        if(isset($this->termOrder[$this->termName])) {
+            return $this->termOrder[$this->termName];
+        }
+        
+        return $defaultOrder;
+    }
+    
+    public function getTermGroupName() {
+        return "{$this->termName} {$this->calendarYear}";
     }
     
     public function toArray() {
