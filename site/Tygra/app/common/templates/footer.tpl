@@ -22,7 +22,7 @@
   {block name="footerNavLinks"}
     {if !$hideFooterLinks}
       <div id="footerlinks">
-        <a href="#top">{$footerBackToTop}</a> | <a href="{$homeLink}">{$homeLinkText}</a> | <a href="/login/logout?authority=pin">Logout</a>
+        <a href="#top">{$footerBackToTop}</a> | <a href="{$homeLink}">{$homeLinkText}</a> | <a href="/login/logout?authority=huid">Logout</a>
       </div>
     {/if}
   {/block}
