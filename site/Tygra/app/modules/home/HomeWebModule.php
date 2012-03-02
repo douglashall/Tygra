@@ -105,19 +105,19 @@ class HomeWebModule extends WebModule
 		$av = $a['sort'];
 		$bv = $b['sort'];
 		
-        if($av[0] > $bv[0]) {
-            return -1;
-        } else if($av[0] == $bv[0]) {
-            if($av[1] > $bv[1]) {
-                return -1;
-            } else if($av[1] == $bv[1]) {
-                return strcasecmp($av[2], $bv[2]);
-            } else {
-                return 1;
-            }           
-        } else {
-            return 1;
-        }
+		if($av[0] > $bv[0]) {
+			return -1;
+		} else if($av[0] == $bv[0]) {
+			if($av[1] > $bv[1]) {
+				return -1;
+			} else if($av[1] == $bv[1]) {
+				return strcasecmp($av[2], $bv[2]);
+			} else {
+				return 1;
+			}           
+		} else {
+			return 1;
+		}
 	}
 
 	public function searchItems($searchTerms, $limit=null, $options=null) {
