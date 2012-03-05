@@ -137,7 +137,7 @@ class HomeWebModule extends WebModule
 	public function linkForSearchItem($item, $options=null) {
 		$sitetitle = $item['sitetitle'];
 		$topictitle = isset($item['topictitle']) ? $item['topictitle'] : '';
-		$linkurl = $item['linkurl'];
+		$linkurl = str_replace(' ', '%20', $item['linkurl']);
 		$title = $sitetitle . ($topictitle !== '' ? " ($topictitle)" : '');
 
 		$result = array(

@@ -58,7 +58,7 @@
 				if (isset($item['category']))
 					$result->setCategory($item['category']);
 				if (isset($item['linkurl']))
-					$result->setLinkUrl($item['linkurl']);
+					$result->setLinkUrl(str_replace(' ', '%20', $item['linkurl']));
 				if (isset($item['description']))
 				    $result->setDescription($item['description']);
 				if (isset($item['topicid']))
