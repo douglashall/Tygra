@@ -17,7 +17,7 @@
    <br />
    {block name="footerKurogo"}{$footerKurogo}{/block}
   {/capture}
-
+	
   
   {block name="footerNavLinks"}
     {if !$hideFooterLinks}
