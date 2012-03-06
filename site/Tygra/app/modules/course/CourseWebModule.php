@@ -88,9 +88,7 @@ class CourseWebModule extends WebModule {
 							$modules[$id]['class'] = "module";
 							
 							$schools = $module->getOptionalModuleVar('displayForSchools', null);
-							if(isset($schools) && !in_array($course->getSchoolId(), $schools)) {
-								Kurogo::log(LOG_WARNING, "Course - video - dislpayForSchools is %s", $schools, 'module');
-
+							if(isset($schools) && $course->getSchoolId() && !in_array($course->getSchoolId(), $schools)) {
 								unset($modules[$id]);
 							} else if($module->getOptionalModuleVar('totalCount')){
 								$total = $module->getTotalCount($keyword);
