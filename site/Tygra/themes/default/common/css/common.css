@@ -113,7 +113,6 @@ dt, .label, .legend, .legend h2, .legend h3, .searchlegend {
 	
 	background: transparent url(/common/images/menuBkg.png) repeat-x;
 	font-size: 94.1%;
-	padding-top:4px;
 }
 
 .breadcrumbs, .breadcrumbs a, .breadcrumbs a:visited, .pagetitle {

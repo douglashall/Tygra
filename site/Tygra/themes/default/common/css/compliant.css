@@ -1,5 +1,5 @@
 /* Springboards */
-
+.disabledmodule img { padding-bottom: 1px !important; }
 /* Overall size of one cell in a springboard (grid of icons) */
 .springboard div {	
 	font-size: 76.5%;	/* Font size of text label below icon */
