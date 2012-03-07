@@ -91,6 +91,7 @@ class HomeWebModule extends WebModule
 		}
 		
 		$result = array_values($terms);
+		var_export($result);
 		//error_log('terms: '.var_export($result,1));
 		
 		return $result;
