@@ -16,7 +16,7 @@ class CourseWebModule extends WebModule {
 	protected $keyword = '';
 
   protected function showLogin() {
-    return $this->getOptionalModuleVar('SHOW_LOGIN', true);
+    return $this->getOptionalModuleVar('SHOW_LOGIN', false);
   }
 
   private function getTabletModulePanes($tabletConfig) {
@@ -86,15 +86,19 @@ class CourseWebModule extends WebModule {
 							$module = self::factory($id);
 							$modules[$id]['url'] = $this->buildBreadcrumbURLForModule($id, '', array('keyword' => $keyword));
 							$modules[$id]['class'] = "module";
-
-							if($module->getOptionalModuleVar('totalCount')){
+							
+							$schools = $module->getOptionalModuleVar('displayForSchools', null);
+							if(isset($schools) && $course->getSchoolId() && !in_array($course->getSchoolId(), $schools)) {
+								unset($modules[$id]);
+							} else if($module->getOptionalModuleVar('totalCount')){
 								$total = $module->getTotalCount($keyword);
 								if($total > 0){
 									if($module->getOptionalModuleVar('displayTotalCount')) {
 										$modules[$id]['badge'] = $total;
 									}
 								} else {
-									$modules[$id]['img'] = DS. implode(DS, array('modules', 'home', 'images', $id.'Gray'.$this->imageExt)); 
+									$modules[$id]['img'] = DS. implode(DS, array('modules', 'home', 'images', $id.'Gray'.$this->imageExt));
+									$modules[$id]['class'] .= ' disabledmodule';
 									unset($modules[$id]['url']);
 								}
 							}
@@ -191,7 +195,7 @@ class CourseWebModule extends WebModule {
 	public function linkForSearchItem($item, $options=null) {
 		$sitetitle = $item['sitetitle'];
 		$topictitle = isset($item['topictitle']) ? $item['topictitle'] : '';
-		$linkurl = $item['linkurl'];
+		$linkurl = str_replace(' ', '%20', $item['linkurl']);
 		$title = $sitetitle . ($topictitle !== '' ? " ($topictitle)" : '');
 
 		$result = array(

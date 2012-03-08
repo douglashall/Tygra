@@ -48,21 +48,6 @@ class IsitesVideoController extends AuthenticatedDataController
 		return $results;
 		 
 	}
-/*
-	public function findVideosByHuidAndKeyword($keyword) {
-
-		$originalBaseURL = $this->baseURL;
-		$baseURL = $this->baseURL;
-		$this->setBaseUrl($baseURL.'video/by_huid_and_keyword/'.$huid.'/'.$keyword.'.json');
-		
-		//print_r($baseURL.'video/by_huid_and_keyword/'.$huid.'/'.$keyword.'.json');
-		
-		$data = $this->getParsedData();
-		$this->baseURL = $originalBaseURL;
-		$results = $data['video']['docs'];
-		return $results;
-	}
-	*/
 	
 	public function findVideosByKeyword($keyword){
 		$originalBaseURL = $this->baseURL;
@@ -76,11 +61,9 @@ class IsitesVideoController extends AuthenticatedDataController
 	public function findVideosByHuidAndKeyword($huid, $keyword) {
 
 		$originalBaseURL = $this->baseURL;
-		//$baseURL = $this->baseURL;
 		$this->setBaseUrl('http://tool2.isites.harvard.edu:8937/dvs/api/lectureVideoByKeyword/'.$keyword.'.json');
 		$data = $this->getParsedData();
 		$this->baseURL = $originalBaseURL;
-		//$results = $data['video'];
 		return $data;
 	}
 

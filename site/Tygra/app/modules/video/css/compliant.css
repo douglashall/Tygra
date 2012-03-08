@@ -1,5 +1,9 @@
+#video_container {
+	padding-left: 10px;
+	}
+
 .results li.video {
-    height: 86px;
+    /*height: 50px;*/
 	margin: 0;
     padding: 1px;
     overflow: hidden;
@@ -12,7 +16,7 @@ li.noimage {
    	overflow: hidden;
     margin: 0;
     padding: 3px 24px 3px 0;
-    height: 80px;
+    /*height: 50px;*/
 	border-radius: 0;
 	line-height: 19px;
 }
@@ -20,7 +24,7 @@ li.noimage {
     overflow: hidden;
     margin: 0;
     padding: 3px 24px 3px 0;
-    height: 80px;
+    /*height: 80px;*/
 	border-radius: 0;
 	line-height: 19px;
     font-size: 82.35%;
@@ -35,7 +39,7 @@ li.noimage {
     float:left;
     margin:-3px 7px -3px 0;
     width: 110px;
-    height: 86px;
+    /*height: 86px;*/
     background: transparent url('/modules/video/images/video-placeholder.png') no-repeat top left;
     background-size: 110px;
 }
@@ -65,7 +69,7 @@ li.noimage {
 }
 
 #videoList li {
- height: 75px;
+ /*height: 75px;*/
  padding: 0 10px 0 0;
  overflow: hidden;
 }

@@ -30,8 +30,8 @@
 			
      		$this->path = "userid=$huid"
      		."&q=".rawurlencode('title:syllabus -title:hidden')
-     		."&fq=category:".rawurlencode('file OR topic')
-     		."&fq=sitekey:".rawurlencode($sitekeys)
+     		."&fq=category:".rawurlencode('(file OR topic)')
+     		."&fq=sitekey:".rawurlencode('('.$sitekeys.')')
      		."&fl=".rawurlencode('topicid,title,sitekey,linkurl,description,category')
             ."&omitHeader=true"
             ."&wt=json"
@@ -58,7 +58,7 @@
 				if (isset($item['category']))
 					$result->setCategory($item['category']);
 				if (isset($item['linkurl']))
-					$result->setLinkUrl($item['linkurl']);
+					$result->setLinkUrl(str_replace(' ', '%20', $item['linkurl']));
 				if (isset($item['description']))
 				    $result->setDescription($item['description']);
 				if (isset($item['topicid']))
