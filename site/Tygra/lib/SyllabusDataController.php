@@ -40,42 +40,44 @@
      		
 	        $data = $this->getParsedData();
 	        
-	        // initialize a CourseSyllabus object fro each course
-	        $coursesSyllabusCollection = array();
-			foreach ($user->getCourses() as $course) {
-				$courseSyllabus = new CourseSyllabus();
-				$courseSyllabus->setKeyword($course->getKeyword());
-				$courseSyllabus->setTitle($course->getTitle());
-				$coursesSyllabusCollection[] = $courseSyllabus;
-			}
+			if ($data) {
+		        // initialize a CourseSyllabus object fro each course
+		        $coursesSyllabusCollection = array();
+				foreach ($user->getCourses() as $course) {
+					$courseSyllabus = new CourseSyllabus();
+					$courseSyllabus->setKeyword($course->getKeyword());
+					$courseSyllabus->setTitle($course->getTitle());
+					$coursesSyllabusCollection[] = $courseSyllabus;
+				}
 			
-			foreach ($data['response']['docs'] as $item) {
-				$result = new SyllabusObject();
-				if (isset($item['title']))
-					$result->setTitle($item['title']);
-				if (isset($item['sitekey']))
-					$result->setKeyword($item['sitekey']);
-				if (isset($item['category']))
-					$result->setCategory($item['category']);
-				if (isset($item['linkurl']))
-					$result->setLinkUrl(str_replace(' ', '%20', $item['linkurl']));
-				if (isset($item['description']))
-				    $result->setDescription($item['description']);
-				if (isset($item['topicid']))
-				    $result->setTopicId($item['topicid']);
-				foreach ($coursesSyllabusCollection as $courseSyllabus)
-					$courseSyllabus->addSyllabusObject($result);
-	        }
-	        
-	 		foreach ($coursesSyllabusCollection as $courseSyllabus) {
-	 			$view = new SyllabusView();
-	 			$view->setKeyword($courseSyllabus->getKeyword());
-	 			$view->setSiteTitle($courseSyllabus->getTitle());
-	 			$href = sprintf("%s/%s",$this->getIsitesUrl(),$courseSyllabus->getKeyword());
-	 			$view->setSiteHref($href);
-				$view->setSyllabus($courseSyllabus->toArray());
-				$results[] = $view->toArray();
-	 		}
+				foreach ($data['response']['docs'] as $item) {
+					$result = new SyllabusObject();
+					if (isset($item['title']))
+						$result->setTitle($item['title']);
+					if (isset($item['sitekey']))
+						$result->setKeyword($item['sitekey']);
+					if (isset($item['category']))
+						$result->setCategory($item['category']);
+					if (isset($item['linkurl']))
+						$result->setLinkUrl(str_replace(' ', '%20', $item['linkurl']));
+					if (isset($item['description']))
+					    $result->setDescription($item['description']);
+					if (isset($item['topicid']))
+					    $result->setTopicId($item['topicid']);
+					foreach ($coursesSyllabusCollection as $courseSyllabus)
+						$courseSyllabus->addSyllabusObject($result);
+		        }
+		        
+		 		foreach ($coursesSyllabusCollection as $courseSyllabus) {
+		 			$view = new SyllabusView();
+		 			$view->setKeyword($courseSyllabus->getKeyword());
+		 			$view->setSiteTitle($courseSyllabus->getTitle());
+		 			$href = sprintf("%s/%s",$this->getIsitesUrl(),$courseSyllabus->getKeyword());
+		 			$view->setSiteHref($href);
+					$view->setSyllabus($courseSyllabus->toArray());
+					$results[] = $view->toArray();
+		 		}
+			}
  		}
      	
 		return $results;
