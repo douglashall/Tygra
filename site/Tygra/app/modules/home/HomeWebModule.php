@@ -140,8 +140,10 @@ class HomeWebModule extends WebModule
 		$items = $controller->search($user, $searchTerms);
 
 		$searchResults = array();
-		foreach($items as $item) {
-			$searchResults[] = $this->linkForSearchItem($item);
+		if ($items) {
+			foreach($items as $item) {
+				$searchResults[] = $this->linkForSearchItem($item);
+			}
 		}
 
 		return $searchResults;
