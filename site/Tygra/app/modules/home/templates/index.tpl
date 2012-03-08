@@ -7,26 +7,31 @@
 
 {include file="findInclude:common/templates/header.tpl" customHeader=$banner scalable=false}
 
-{if $terms}
-	{if $showFederatedSearch}
-	{block name="federatedSearch"}
-	{include file="findInclude:common/templates/search.tpl"}
-	{/block}
-	{/if}
-
-	<div class="homegrid" style="height:100px">
-		{include file="findInclude:common/templates/springboard.tpl" springboardItems=$modules springboardID="homegrid"}
-	</div>
-
-	{foreach $terms as $term}
-		<div class="nonfocal">
-			 <h2>{$term['label']}</h2>
-		</div>
-		
-		{include file="findInclude:common/templates/navlist.tpl" navlistItems=$term['items'] titleTruncate=40}
-	{/foreach}
+{if  $restrictedFlag}
+	{include file="findInclude:common/templates/restricted.tpl" restrictedMessage="Restricted!!"}
 {else}
-	{include file="findInclude:common/templates/emptylist.tpl" emptyMessage="No courses found"}
-{/if}
 
-{include file="findInclude:common/templates/footer.tpl"}
+	{if $terms}
+		{if $showFederatedSearch}
+		{block name="federatedSearch"}
+		{include file="findInclude:common/templates/search.tpl"}
+		{/block}
+		{/if}
+	
+		<div class="homegrid" style="height:100px">
+			{include file="findInclude:common/templates/springboard.tpl" springboardItems=$modules springboardID="homegrid"}
+		</div>
+	
+		{foreach $terms as $term}
+			<div class="nonfocal">
+				 <h2>{$term['label']}</h2>
+			</div>
+			
+			{include file="findInclude:common/templates/navlist.tpl" navlistItems=$term['items'] titleTruncate=40}
+		{/foreach}
+	{else}
+		{include file="findInclude:common/templates/emptylist.tpl" emptyMessage="No courses found"}
+	{/if}
+	
+	{include file="findInclude:common/templates/footer.tpl"}
+{/if}

@@ -13,6 +13,19 @@ class HomeWebModule extends WebModule
 		$session = $this->getSession();
 		$user = $session->getUser();
 
+		$userId= $user->getUserID();
+		$restrictedFlag = false;
+		if (Kurogo::getOptionalSiteVar('USER_LIST')){
+			$list = Kurogo::getOptionalSiteVar('USER_LIST');
+			$user_list = explode(",", $list);
+	
+			if (!in_array($userId, $user_list) ){
+				$this->assign('restrictedFlag', "true");
+				$restrictedFlag = true;
+				return;
+			}
+		}
+
 		switch ($this->page)
 		{
 			case 'index':
