@@ -95,7 +95,7 @@ strong {
 #footer {
 	clear: both;
 	min-height: 22px;
-	padding-top: 10px;
+	/*padding-top: 10px;*/
 	margin: 20px 12px 14px 12px;
 	font-weight: normal;
 }
