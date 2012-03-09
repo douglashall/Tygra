@@ -61,7 +61,7 @@
             <td>
               <img src="/modules/home/images/updates.png" alt="Updates" />
             </td>
-            <td>
+            <td style="padding-top: 12px;">
             <h2>Updates</h2>
             <p>
 Keep up-to-date on site activity with this personalized list of the latest site content.
@@ -72,7 +72,7 @@ Keep up-to-date on site activity with this personalized list of the latest site 
             <td>
               <img src="/modules/home/images/syllabus.png" alt="Syllabus" />
             </td>
-            <td>
+            <td style="padding-top: 3px;">
             <h2>Syllabus</h2>
             <p>
 View course outlines as posted by your teaching staff.
@@ -83,7 +83,7 @@ View course outlines as posted by your teaching staff.
             <td>
               <img src="/modules/home/images/classmates.png" alt="Classmates" />
             </td>
-            <td>
+            <td style="padding-top: 4px;">
             <h2>Classmates</h2>
             <p>
 Get to know your fellow classmates -- contact information is available to help foster collaboration.
@@ -95,7 +95,7 @@ Get to know your fellow classmates -- contact information is available to help f
             <td>
               <img src="/modules/home/images/video.png" alt="Lecture Video" />
             </td>
-            <td>
+            <td style="padding-top: 3px;">
             <h2>Lecture Video</h2>
             <p>
 Miss a lecture or want to review? If media services has made a video of your class available, you'll find it here.
@@ -104,9 +104,9 @@ Miss a lecture or want to review? If media services has made a video of your cla
           </tr>
           <tr>
             <td>
-              <img src="/modules/home/images/info.png" alt="Search" />
+              <img src="/modules/home/images/search.png" alt="Search" />
             </td>
-            <td>
+            <td style="padding-top:12px;">
             <h2>Search</h2>
             <p>
 Available across all of your courses or within a single course, use this feature to quickly find what you're after.
