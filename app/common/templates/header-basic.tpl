@@ -18,7 +18,7 @@
         </a>
       </td>
       <td>
-        <h1 id="header">{$pageTitle|sanitize_html:'inline'}</h1>
+        <h1 id="header">{$pageTitle|sanitize_html:'inline'|truncate:40}</h1>
       </td>
     </tr>
   </table>

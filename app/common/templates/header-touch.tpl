@@ -22,7 +22,7 @@
           <img src="/common/images/title-{$navImageID|default:$configModule}.gif" width="{$module_nav_image_width|default:28}" height="{$module_nav_image_height|default:28}" alt="" class="moduleicon" />
         {/if}
       <span class="pagetitle">
-        {$pageTitle|sanitize_html:'inline'}
+        {$pageTitle|sanitize_html:'inline'|truncate:40}
       </span>
     </div>
   </div>

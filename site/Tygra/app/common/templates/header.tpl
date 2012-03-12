@@ -3,11 +3,10 @@
 {block name="breadcrumbs"}
   {if !$isModuleHome}
     {foreach $breadcrumbs as $breadcrumb}	
-    	{if $breadcrumb@first && ($breadcrumb['p'] == 'index' && $breadcrumb['m'] == 'home')}
-    		{* Skip the home/index breadcrumb because the $homeLink is already displayed *}
-    		{continue}
-    	{/if}
-    	
+      {if $breadcrumb@first && ($breadcrumb['p'] == 'index' && $breadcrumb['m'] == 'home')}
+          {* Skip the home/index breadcrumb because the $homeLink is already displayed *}
+          {continue}
+      {/if}
       {if $breadcrumb@first || ($breadcrumb['p'] == 'index')}
         {$crumbClass = 'module'}
       {elseif count($breadcrumbs) == 1}
@@ -33,7 +32,7 @@
           {if $breadcrumb['p'] == 'index'}
             <img src="/common/images/title-{$navImageID|default:$breadcrumb['m']}.png" width="{$module_nav_image_width|default:28}" height="{$module_nav_image_height|default:28}" alt="" />
           {else}
-            <span>{$breadcrumb['title']|sanitize_html:'inline'}</span>
+            <span>{$breadcrumb['title']|sanitize_html:'inline'|truncate:40}</span>
           {/if}
         </a>
       {/if}

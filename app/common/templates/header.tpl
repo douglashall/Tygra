@@ -167,7 +167,7 @@
               {if $isModuleHome}
                 <img src="/common/images/title-{$navImageID|default:$configModule}.png" width="{$module_nav_image_width|default:28}" height="{$module_nav_image_height|default:28}" alt="" class="moduleicon" />
               {/if}
-              {$pageTitle|sanitize_html:'inline'}
+              {$pageTitle|sanitize_html:'inline'|truncate:40}
             </span>
           </div>
           {if $hasHelp}
