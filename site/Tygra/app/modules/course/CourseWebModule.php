@@ -73,6 +73,10 @@ class CourseWebModule extends WebModule {
 		
       			$this->setPageTitles($course->getTitle());
       			$this->assign('user', $user);
+      			$this->assign('keyword', $keyword);
+      			
+      			//print_r("Hello".$keyword);
+      			
         		if ($this->pagetype == 'tablet') {
           
           			$this->assign('modulePanes', $this->getTabletModulePanes($this->getModuleSection('tablet_panes')));

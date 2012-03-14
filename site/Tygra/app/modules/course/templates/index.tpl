@@ -8,7 +8,6 @@
  
 {if $displayType == 'springboard'}
   {include file="findInclude:common/templates/springboard.tpl" springboardItems=$modules springboardID="homegrid"}
-  
 {elseif $displayType == 'list'}
   {$primaryModules = array()}
   {$secondaryModules = array()}

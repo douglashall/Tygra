@@ -30,4 +30,8 @@
       </div>
     {/if}
   {/foreach}
+  <div class="module">
+  <a href="http://isites.harvard.edu/{$keyword}"><img alt="Lecture Video" src="/modules/home/images/coursesite.png"><br>
+  Course home</a>
+</div>
 </div>
