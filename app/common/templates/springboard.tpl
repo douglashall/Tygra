@@ -36,4 +36,8 @@
   Course home</a>
   </div>
   {/if}
+   <div class="module">
+  <a href="https://huit.uservoice.com/forums/150465-mobile-interface"><img alt="Lecture Video" src="/modules/home/images/coursesite.png"><br>
+  Feedback</a>
+  </div>
 </div>
