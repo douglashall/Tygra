@@ -33,7 +33,7 @@
   {if isset($keyword)}
   <div class="module">
   <a href="http://isites.harvard.edu/{$keyword}"><img alt="Course Site" src="/modules/home/images/coursesite.png"><br>
-  Course home</a>
+  Full Course Site</a>
   </div>
   {/if}
    <div class="module">
