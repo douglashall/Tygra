@@ -32,7 +32,7 @@
           {if $breadcrumb['p'] == 'index'}
             <img src="/common/images/title-{$navImageID|default:$breadcrumb['m']}.png" width="{$module_nav_image_width|default:28}" height="{$module_nav_image_height|default:28}" alt="" />
           {else}
-            <span>{$breadcrumb['title']|sanitize_html:'inline'|truncate:40}</span>
+            <span>{$breadcrumb['title']|sanitize_html:'inline'}</span>
           {/if}
         </a>
       {/if}
