@@ -4,9 +4,43 @@ class HomeWebModule extends WebModule
 {
 	protected $id='home';
 	protected $encoding = 'UTF-8';
+	protected $httpHeaders = array();
+	protected $pageCacheSettings = array('index' => 86400);
 
 	protected function showLogin() {
 		return $this->getOptionalModuleVar('SHOW_LOGIN', false);
+	}
+
+	protected function addHttpHeader($headerStr) {
+		$this->httpHeaders[$headerStr] = false;
+	}
+
+	protected function removeHttpHeader($headerStr) {
+		$this->httpHeaders[$headerStr] = true;
+	}
+
+	protected function sendHttpHeaders() {
+		foreach($this->httpHeaders as $header => $remove) {
+			if($remove) {
+				header_remove($header);
+			} else {
+				header($header);
+			}
+		}
+	}
+
+	// This is method is invoked from WebModule::displayPage(). It was added
+	// to WebModule in order to override the default caching headers. 
+	protected function beforePageRender() {
+
+		if(isset($this->pageCacheSettings[$this->page])) {
+			$cacheMaxAge = $this->pageCacheSettings[$this->page];
+			$this->addHttpHeader(sprintf('Cache-Control: private, max-age=%s, post-check=%s, pre-check=%s', $cacheMaxAge, intval($cacheMaxAge/2), $cacheMaxAge));
+			$this->addHttpHeader("Expires: " . gmdate('D, d M Y H:i:s', time() + $cacheMaxAge) . ' GMT');
+			$this->removeHttpHeader('Pragma'); // removes no-cache pragma sent by kurogo
+		}
+
+		$this->sendHttpHeaders();
 	}
 
 	protected function initializeForPage() {

@@ -1416,6 +1416,7 @@ abstract class WebModule extends Module {
   //
   public function displayPage() {
     $template = $this->setPageVariables();
+    $this->beforePageRender();
     
     // Load template for page
     $output = $this->templateEngine->fetchForDevice($template);
@@ -1425,6 +1426,8 @@ abstract class WebModule extends Module {
 	echo $output;
 	exit();
   }
+
+  protected function beforePageRender() {}
   
   protected function logView($size=null) {
     if ($this->logView) {
