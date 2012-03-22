@@ -29,9 +29,13 @@ class HomeWebModule extends WebModule
 		}
 	}
 
-	// This is method is invoked from WebModule::displayPage(). It was added
-	// to WebModule in order to override the default caching headers. 
+	// This method is invoked from WebModule::displayPage(). 
+	//
+	// NOTE: this hook method does NOT exist in the core Kurogo WebModule. It
+	// was added to WebModule (site/Tygra/lib/WebModule.php) in order to
+	// override the default caching headers. 
 	protected function beforePageRender() {
+		parent::beforePageRender();
 
 		if(isset($this->pageCacheSettings[$this->page])) {
 			$cacheMaxAge = $this->pageCacheSettings[$this->page];
