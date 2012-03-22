@@ -22,7 +22,7 @@ class HomeWebModule extends WebModule
 	protected function sendHttpHeaders() {
 		foreach($this->httpHeaders as $header => $remove) {
 			if($remove) {
-				header_remove($header);
+				//header_remove($header);
 			} else {
 				header($header);
 			}
