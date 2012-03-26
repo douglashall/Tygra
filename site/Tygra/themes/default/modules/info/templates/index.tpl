@@ -3,8 +3,7 @@
 {block name="pageTitle"}Harvard Mobile Courses{/block}
 
 {block name='description'}m.courses.harvard.edu is a university-wide mobile initiative to aggregate and deliver useful,
-		usable, mobile-appropriate course content to university communities, locally and
-		worldwide.{/block}
+		usable, mobile-appropriate course content.{/block}
 {block name="header"}
   	<div id="utility_nav">
     </div><!--/utility_nav-->
@@ -16,8 +15,7 @@
     <!--h1>m.courses.harvard.edu</h1-->
     <p>
         is a university-wide mobile initiative to aggregate and deliver useful,
-		usable, mobile-appropriate course content to university communities, locally and
-		worldwide.
+		usable, mobile-appropriate course content.
     </p>
 {/block}
     
