@@ -5,6 +5,12 @@
         <p class="separator">&nbsp;</p>
       {/block}
     {else}
+    {if $item['title'] == "Logout"}
+       <div class="module">
+  <a href="https://huit.uservoice.com/forums/150465-mobile-interface"><img alt="m.courses Feedback" src="/modules/home/images/feedback.png"><br>
+  Feedback</a>
+  </div>
+    {/if}
       <div {if $item['class']} class="{$item['class']}"{/if}>
         {if $item['url']}
           <a href="{$item['url']}">
@@ -35,9 +41,10 @@
   <a href="http://isites.harvard.edu/{$keyword}"><img alt="Course Site" src="/modules/home/images/coursesite.png"><br>
   Full Course Site</a>
   </div>
-  {/if}
-   <div class="module">
+     <div class="module">
   <a href="https://huit.uservoice.com/forums/150465-mobile-interface"><img alt="m.courses Feedback" src="/modules/home/images/feedback.png"><br>
   Feedback</a>
   </div>
+  {/if}
+
 </div>
