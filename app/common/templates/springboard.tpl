@@ -7,7 +7,7 @@
     {else}
     {if $item['title'] == "Logout"}
        <div class="module">
-  <a href="https://huit.uservoice.com/forums/150465-mobile-interface"><img alt="m.courses Feedback" src="/modules/home/images/feedback.png"><br>
+  <a href="https://icommons.uservoice.com/forums/155804-m-courses-feedback"><img alt="m.courses Feedback" src="/modules/home/images/feedback.png"><br>
   Feedback</a>
   </div>
     {/if}
@@ -42,7 +42,7 @@
   Full Course Site</a>
   </div>
      <div class="module">
-  <a href="https://huit.uservoice.com/forums/150465-mobile-interface"><img alt="m.courses Feedback" src="/modules/home/images/feedback.png"><br>
+  <a href="https://icommons.uservoice.com/forums/155804-m-courses-feedback"><img alt="m.courses Feedback" src="/modules/home/images/feedback.png"><br>
   Feedback</a>
   </div>
   {/if}
