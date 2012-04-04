@@ -48,9 +48,6 @@
             help inform future development. 
           </a>
         </p>
-        <h2>
-            <a id="email_us" href="mailto:mobile_courses@harvard.edu">Contact us!</a>
-        </h2>
         
     </div><!--/leftcol-->
     
