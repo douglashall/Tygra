@@ -7,9 +7,9 @@
     {else}
     {if $item['title'] == "Logout"}
        <div class="module">
-  <a href="https://huit.uservoice.com/forums/150465-mobile-interface"><img alt="m.courses Feedback" src="/modules/home/images/feedback.png"><br>
-  Feedback</a>
-  </div>
+  		<a href="https://huit.uservoice.com/forums/150465-mobile-interface"><img alt="m.courses Feedback" src="/modules/home/images/feedback.png"><br>
+  		Feedback</a>
+  		</div>
     {/if}
       <div {if $item['class']} class="{$item['class']}"{/if}>
         {if $item['url']}
