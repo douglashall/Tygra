@@ -42,7 +42,7 @@
         </p>
         
         <p>
-          <a id="feedback" href="https://huit.uservoice.com/forums/150465-mobile-interface">
+          <a id="feedback" href="https://icommons.uservoice.com/forums/155804-m-courses-feedback">
             <strong>Feedback</strong>
             <br />
             Want to recommend a feature? Your ideas and usage will 

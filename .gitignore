@@ -11,5 +11,5 @@ nbproject/*
 .buildpath
 .project
 .settings
-
+site/*/config/content
 www/php_errors.log
