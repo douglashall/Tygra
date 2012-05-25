@@ -1,5 +1,14 @@
 {include file="findInclude:common/templates/header.tpl"}
 
+{if $results|@count == 1}
+
+<script>
+	window.location='{$results[0]['url']}';
+</script>
+
+
+{else}
+
 <ul class="results" id="syllabusList">
   {foreach $results as $item}
 	    {if !isset($item['separator'])}
@@ -44,4 +53,5 @@
   {/if}
 </ul>
 
+{/if}
 {include file="findInclude:common/templates/footer.tpl"}
