@@ -41,7 +41,7 @@
 	        $data = $this->getParsedData();
 	        
 			if ($data) {
-		        // initialize a CourseSyllabus object fro each course
+		        // initialize a CourseSyllabus object for each course
 		        $coursesSyllabusCollection = array();
 				foreach ($user->getCourses() as $course) {
 					$courseSyllabus = new CourseSyllabus();

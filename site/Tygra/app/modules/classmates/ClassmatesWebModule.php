@@ -7,43 +7,66 @@ class ClassmatesWebModule extends WebModule
 		$session = $this->getSession();
 		$user = $session->getUser();
 		$controller = DataController::factory('ClassmatesDataController');
-		$studentId = $this->getArg('id');		
 		switch ($this->page)
 		{
-			//students
+			//display course groups
 			case 'index':
 				$results = array();
 				$keyword = $this->getArg('keyword');
-				$students = $user->getUserData('enrollee_'.$keyword);
-				if (!$students) {
-					$students = $controller->search($keyword, $user->getUserID());
-					$user->setUserData('enrollee_'.$keyword, $students);
+ 				$groups = $user->getUserData('groups_'.$keyword);
+ 				if (!$groups) {
+					$groups = $controller->findCourseGroups($keyword, $user->getUserID());
+ 					$user->setUserData('groups_'.$keyword, $groups);
+ 				}
+				if ($groups) {
+					foreach ($groups as $group) {
+						$results[] = array(
+						'title'=>$group['name'],
+						'url'=>$this->buildBreadcrumbURL('group', array(
+	            		'keyword'=>$keyword,
+	            		'id'=>$group['id']))
+						);
+					}
+					$this->setPageTitles('Course Groups');
 				}
-				
-	 			foreach ($students as $student) {
-	 				$results[] = array(
-					'title'=>$student['lastName'].', '.$student['firstName'],
-					'url'=>$this->buildBreadcrumbURL('detail', array(
-            		'keyword'=>$keyword,
-            		'id'=>$student['id']))
-	 				);
-	 			}
 				$this->assign('results', $results);
 				break;
-			case 'detail':
+			// display groups members
+			case 'group':
+				$results = array();
 				$keyword = $this->getArg('keyword');
-				$students = $user->getUserData('enrollee_'.$keyword);
-				if ($students) {
-					foreach ($students as $student) {
-						if ($studentId == $student['id']) {
-							$this->assign('item', $student);
-							$this->setPageTitles($student['firstName'].' '.$student['lastName']);
-							// TODO: add a valid photoUrl to the module config
-							$this->assign('photoUrl', $this->getPhotoUrl($student['huid']));
-							break;
-						}
+				$id = $this->getArg('id');
+				$members = $controller->findCourseGroupMembers($id, $keyword, $user->getUserID());
+				if ($members) {
+					foreach ($members as $member) {
+						$results[] = array(
+								'title'=>$member['lastName'].', '.$member['firstName'],
+								'url'=>$this->buildBreadcrumbURL('detail', array(
+										'keyword'=>$keyword,
+										'id'=>$member['id']))
+						);
 					}
-	 			}
+					$this->setPageTitles('Group Members');
+					$groups = $user->getUserData('groups_'.$keyword);
+ 					if ($groups) {
+						foreach ($groups as $group) {
+							if ($group['id'] == $id) {
+								$this->setPageTitles($group['name'].' Group Members');
+								break;
+							}
+						}
+ 					}
+						
+				}
+				$this->assign('results', $results);
+				break;
+			// display student info	
+			case 'detail':
+				$studentId = $this->getArg('id');		
+				$person = $controller->getItem($studentId);
+				$this->assign('item', $person);
+				$this->setPageTitles($person['firstName'].' '.$person['lastName']);
+				$this->assign('photoUrl', $this->getPhotoUrl($person['huid']));
 				break;
 		}
 	}
