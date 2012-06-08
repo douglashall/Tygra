@@ -20,12 +20,10 @@ class VideoWebModule extends WebModule
 		
 	 		$keyword = $this->getArg('keyword');
 	 		$course = $user->findCourseByKeyword($keyword);
-	 		//$vstmp = $controller->findVideosByKeyword2($keyword,$huid);
+	 		//$vs = $controller->findVideosByKeyword2($keyword,$huid);
 	 		$title = $course->getTitle();
 	 		
-	 		if($vstmp = $controller->findVideosByKeyword2($keyword, $huid)){
-	 			
-	 			$vs = $vstmp['videos'];
+	 		if($vs = $controller->findVideosByKeyword2($keyword, $huid)){
 	 			 			
 		 		$varray = array();
 		 		foreach($vs as $v){
@@ -100,7 +98,8 @@ class VideoWebModule extends WebModule
 		$user = $session->getUser();
 		$huid = $user->getUserId();
   		$controller = DataController::factory('IsitesVideoController');
-  		$videos = $controller->findVideosByKeyword($keyword);
+  		$data = $controller->findVideosByKeyword2($keyword, $huid);
+  		$videos = $data['videos'];
   		  		
   		return count($videos);
   		

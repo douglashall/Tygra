@@ -58,13 +58,13 @@ class IsitesVideoController extends AuthenticatedDataController
 		return $data;
 	}
 	
-	public function findVideosByKeyword2($keyword, $userId){
+	public function findVideosByKeyword2($keyword, $huid){
 		$originalBaseURL = $this->baseURL;
-		$baseURL = $originalBaseURL.'/video/byKeywordanduserid/'.$keyword.'/'.$huid.'.json';
+		$baseURL = $originalBaseURL.'video/byKeywordanduserid/'.$keyword.'/'.$huid.'.json';
 		$this->setBaseUrl($baseURL);
 		$data = $this->getParsedData();
 		$this->baseURL = $originalBaseURL;
-		return $data;
+		return $data['videos'];
 	}
 	
 	public function findVideosByHuidAndKeyword($huid, $keyword) {
