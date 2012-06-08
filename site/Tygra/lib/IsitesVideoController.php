@@ -58,10 +58,23 @@ class IsitesVideoController extends AuthenticatedDataController
 		return $data;
 	}
 	
+	public function findVideosByKeyword2($keyword, $userId){
+		$originalBaseURL = $this->baseURL;
+		$baseURL = $originalBaseURL.'/video/byKeywordanduserid/'.$keyword.'/'.$huid.'.json';
+		$this->setBaseUrl($baseURL);
+		$data = $this->getParsedData();
+		$this->baseURL = $originalBaseURL;
+		return $data;
+	}
+	
 	public function findVideosByHuidAndKeyword($huid, $keyword) {
 
 		$originalBaseURL = $this->baseURL;
+		
+		// this will change to the new icommonsapi call that enforces topicId permissions
+		//$this->setBaseUrl('http://tool2.isites.harvard.edu:8937/dvs/api/lectureVideoByKeyword/'.$keyword.'.json');
 		$this->setBaseUrl('http://tool2.isites.harvard.edu:8937/dvs/api/lectureVideoByKeyword/'.$keyword.'.json');
+		
 		$data = $this->getParsedData();
 		$this->baseURL = $originalBaseURL;
 		return $data;

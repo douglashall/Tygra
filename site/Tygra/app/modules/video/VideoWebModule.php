@@ -20,10 +20,12 @@ class VideoWebModule extends WebModule
 		
 	 		$keyword = $this->getArg('keyword');
 	 		$course = $user->findCourseByKeyword($keyword);
-	 		$vs = $controller->findVideosByKeyword($keyword);
+	 		//$vstmp = $controller->findVideosByKeyword2($keyword,$huid);
 	 		$title = $course->getTitle();
 	 		
-	 		if($vs = $controller->findVideosByKeyword($keyword)){
+	 		if($vstmp = $controller->findVideosByKeyword2($keyword, $huid)){
+	 			
+	 			$vs = $vstmp['videos'];
 	 			 			
 		 		$varray = array();
 		 		foreach($vs as $v){
