@@ -60,7 +60,9 @@ class IsitesVideoController extends AuthenticatedDataController
 	
 	public function findVideosByKeyword2($keyword, $huid){
 		$originalBaseURL = $this->baseURL;
-		$baseURL = $originalBaseURL.'video/byKeywordanduserid/'.$keyword.'/'.$huid.'.json';
+		//$baseURL = $originalBaseURL.'video/byKeywordanduserid/'.$keyword.'/'.$huid.'.json';
+		
+		$baseURL = 'http://qa.isites.harvard.edu/services/video/byKeywordanduserid/' .$keyword.'/'.$huid.'.json';
 		$this->setBaseUrl($baseURL);
 		$data = $this->getParsedData();
 		$this->baseURL = $originalBaseURL;
