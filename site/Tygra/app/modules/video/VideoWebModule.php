@@ -23,8 +23,10 @@ class VideoWebModule extends WebModule
 	 		//$vs = $controller->findVideosByKeyword2($keyword,$huid);
 	 		$title = $course->getTitle();
 	 		
-	 		if($vs = $controller->findVideosByKeyword2($keyword, $huid)){
-	 			 			
+	 		if($vs = json_decode($controller->findVideosByKeyword2($keyword, $huid),true)){
+				//$tmp=json_decode($vs,true);
+				//print_r("VideoJSON=".var_dump($tmp));	 			 			
+
 		 		$varray = array();
 		 		foreach($vs as $v){
 		 			$vid = new VideoObject($v);
@@ -99,9 +101,11 @@ class VideoWebModule extends WebModule
 		$huid = $user->getUserId();
   		$controller = DataController::factory('IsitesVideoController');
   		$data = $controller->findVideosByKeyword2($keyword, $huid);
-  		$videos = $data['videos'];
-  		  		
-  		return count($videos);
+  		$videoJSONString = $data;
+		//print_r("String: ".$videoJSONString);   		
+		$videoJSONArray = json_decode($videoJSONString, true);
+		//print_r("data: ".var_dump($videoJSONArray));  		
+		return count($videoJSONArray);
   		
   	}
   
