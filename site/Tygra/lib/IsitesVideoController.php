@@ -4,7 +4,18 @@ class IsitesVideoController extends AuthenticatedDataController
 {
 	protected $cacheFolder = "Videos"; // set the cache folder
 	protected $DEFAULT_PARSER_CLASS='JSONDataParser'; // the default parser
-
+    protected $icommonsApiUrl;
+    
+    protected function init($args) {
+    	
+        parent::init($args);
+        if (isset($args['PASS_PHRASE'])) {
+        	$this->passPhrase = $args['PASS_PHRASE'];
+        }
+        
+        $this->icommonsApiUrl = $this->baseURL;
+    }
+    
 	public function search($query) {
 		error_log("***$user***");
 		$baseURL = $this->baseURL;
