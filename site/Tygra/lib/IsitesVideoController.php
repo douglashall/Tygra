@@ -4,7 +4,18 @@ class IsitesVideoController extends AuthenticatedDataController
 {
 	protected $cacheFolder = "Videos"; // set the cache folder
 	protected $DEFAULT_PARSER_CLASS='JSONDataParser'; // the default parser
-
+    protected $icommonsApiUrl;
+    
+    protected function init($args) {
+    	
+        parent::init($args);
+        if (isset($args['PASS_PHRASE'])) {
+        	$this->passPhrase = $args['PASS_PHRASE'];
+        }
+        
+        $this->icommonsApiUrl = $this->baseURL;
+    }
+    
 	public function search($query) {
 		error_log("***$user***");
 		$baseURL = $this->baseURL;
@@ -58,10 +69,26 @@ class IsitesVideoController extends AuthenticatedDataController
 		return $data;
 	}
 	
+	public function findVideosByKeyword2($keyword, $huid){
+		//$originalBaseURL = $this->baseURL;
+		//$baseURL = $originalBaseURL.'video/byKeywordanduserid/'.$keyword.'/'.$huid.'.json';
+		$this->setBaseURL($this->icommonsApiUrl.'video/byKeywordanduserid/');
+     	$this->path = "$keyword/$huid.json";
+		
+		//$this->setBaseUrl($baseURL);
+		$data = $this->getParsedData();
+		//$this->baseURL = $originalBaseURL;
+		return $data['videos'];
+	}
+	
 	public function findVideosByHuidAndKeyword($huid, $keyword) {
 
 		$originalBaseURL = $this->baseURL;
+		
+		// this will change to the new icommonsapi call that enforces topicId permissions
+		//$this->setBaseUrl('http://tool2.isites.harvard.edu:8937/dvs/api/lectureVideoByKeyword/'.$keyword.'.json');
 		$this->setBaseUrl('http://tool2.isites.harvard.edu:8937/dvs/api/lectureVideoByKeyword/'.$keyword.'.json');
+		
 		$data = $this->getParsedData();
 		$this->baseURL = $originalBaseURL;
 		return $data;
