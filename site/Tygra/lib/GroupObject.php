@@ -7,6 +7,8 @@ class GroupObject implements KurogoObject
 {
     protected $id; // this is the group id, something like 'ScaleCourseSiteEnroll:k8246'
     protected $name;
+    protected $members = array();
+    
     
     public function setId($id) {
         $this->id = $id;
@@ -23,6 +25,15 @@ class GroupObject implements KurogoObject
     public function getName() {
         return $this->name;
     }
+    
+    public function setMembers($members) {
+    	$this->members = $members;
+    }
+    
+    public function getMembers() {
+    	return $this->members;
+    }
+    
     
     public function toArray() {
     	return get_object_vars($this);

@@ -9,56 +9,36 @@ class ClassmatesWebModule extends WebModule
 		$controller = DataController::factory('ClassmatesDataController');
 		switch ($this->page)
 		{
-			//display course groups
+			//display course groups and members
 			case 'index':
-				$results = array();
+				$sections = array();
 				$keyword = $this->getArg('keyword');
  				$groups = $user->getUserData('groups_'.$keyword);
  				if (!$groups) {
 					$groups = $controller->findCourseGroups($keyword, $user->getUserID());
- 					$user->setUserData('groups_'.$keyword, $groups);
  				}
 				if ($groups) {
 					foreach ($groups as $group) {
-						$results[] = array(
-						'title'=>$group['name'],
-						'url'=>$this->buildBreadcrumbURL('group', array(
-	            		'keyword'=>$keyword,
-	            		'id'=>$group['id']))
+						$items = array();
+						$members = $group['members'];
+						if ($members) {
+							foreach ($members as $member) {
+								$items[] = array(
+										'title'=>$member['lastName'].', '.$member['firstName'],
+										'url'=>$this->buildBreadcrumbURL('detail', array(
+												'keyword'=>$keyword,
+												'id'=>$member['id']))
+								);
+							}
+						}
+						$sections[] = array(
+						'label'=>$group['name'],
+						'items'=>$items
 						);
 					}
 					$this->setPageTitles('Course Groups');
 				}
-				$this->assign('results', $results);
-				break;
-			// display groups members
-			case 'group':
-				$results = array();
-				$keyword = $this->getArg('keyword');
-				$id = $this->getArg('id');
-				$members = $controller->findCourseGroupMembers($id, $keyword, $user->getUserID());
-				if ($members) {
-					foreach ($members as $member) {
-						$results[] = array(
-								'title'=>$member['lastName'].', '.$member['firstName'],
-								'url'=>$this->buildBreadcrumbURL('detail', array(
-										'keyword'=>$keyword,
-										'id'=>$member['id']))
-						);
-					}
-					$this->setPageTitles('Group Members');
-					$groups = $user->getUserData('groups_'.$keyword);
- 					if ($groups) {
-						foreach ($groups as $group) {
-							if ($group['id'] == $id) {
-								$this->setPageTitles($group['name'].' Group Members');
-								break;
-							}
-						}
- 					}
-						
-				}
-				$this->assign('results', $results);
+				$this->assign('sections', $sections);
 				break;
 			// display student info	
 			case 'detail':

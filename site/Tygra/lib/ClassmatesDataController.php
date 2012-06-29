@@ -50,9 +50,9 @@
      		$group = new GroupObject();
      		$group->setId($item['idType'].':'.$item['idValue']);
      		$group->setName($item['name']);
+   			$group->setMembers($this->findCourseGroupMembers($group->getId(), $keyword, $userId));
      		$results[] = $group->toArray();
      	}
-     
      	return $results;
      }
      
