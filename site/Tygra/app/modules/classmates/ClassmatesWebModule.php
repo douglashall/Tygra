@@ -36,7 +36,6 @@ class ClassmatesWebModule extends WebModule
 						'items'=>$items
 						);
 					}
-					$this->setPageTitles('Course Groups');
 				}
 				$this->assign('sections', $sections);
 				break;
