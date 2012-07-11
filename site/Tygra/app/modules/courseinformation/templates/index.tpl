@@ -4,8 +4,14 @@
 		
             <div>
             	<strong>
-                  <div >{$results['title']}: {$results['subTitle']}</div>
-                  	<br/>
+            	 <div>
+	            	  {if $results['title']}
+	                 	{$results['title']}
+	                  {/if} 
+	                  {if $results['subTitle']}
+	                  		: {$results['subTitle']}
+	                  {/if}	
+	                  <br/>
 				  <div/>
 				 </strong>
 				  

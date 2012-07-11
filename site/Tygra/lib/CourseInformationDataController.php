@@ -32,7 +32,7 @@
 			 
 			 $info->setCredits($item['credits']);
 			 $info->setInstructorsDisplay($item['instructorsDisplay']);
-			 //$info->setPrereq($item['prereq']);
+			 $info->setPrereq($item['prereq']);
 			 
 			 $info->setMeetingTime($item['meetingTime']);
 			 $info->setLocation($item['location']);
@@ -45,7 +45,7 @@
 			 
 			 $course = $item['course'];
 			 $info->setDepartment($course['department']);
-			 $info->setSchoolId($course['schoolId']);
+			 $info->setSchoolId($this->getSchoolName($course['schoolId']));
 			 $info->setRegistrarCode($course['registrarCode']);
 			 
 
@@ -58,7 +58,71 @@
 
     // not used yet
 	public function getItem($id){}
+	
+	//Translate SchoolId to  Friendly School Name 
+	//
+	protected function getSchoolName($schoolId) {
+		$schoolName = $schoolId;
+		switch ($schoolId){
+		
+				case 'hsph':
+					$schoolName = "School of Public Health";
+					break;
+				case 'colgsas':
+					$schoolName = "Harvard College";
+					break;
+				case 'fas':
+					$schoolName = "Harvard College";
+					break;
+				case 'hds':
+					$schoolName = "Harvard Divinity School";
+					break;
+				case 'gsd':
+					$schoolName = "Harvard Design School";
+					break;
+				case 'gse':
+					$schoolName = "Graduate School of Education";
+					break;
+				case 'dce':
+					$schoolName = "Division of Continuing Education";
+					break;
+				case 'hls':
+					$schoolName = "Harvard Law School";
+					break;
+				case 'arb':
+					$schoolName = "Arnold Arboretum";
+					break;
+				case 'ext':
+					$schoolName = "Harvard Extension School";
+					break;
+				case 'rad':
+					$schoolName = "Radcliffe College";
+					break;
+				case 'sum':
+					$schoolName = "Harvard Summer School";
+					break;
+				case 'ksg':
+					$schoolName = "Kennedy School of Government";
+					break;
+				case 'ksg':
+					$schoolName = "Harvard Kennedy School";
+					break;
+				case 'hilr':
+					$schoolName = "Institute for Learning and Retirement";
+					break;
+				case 'hcl':
+					$schoolName = "Harvard College library";
+					break;
+				
+			}// end switch
+	
+		
+		return $schoolName;
+	}
+
 
 }
+
+
 
 ?>
