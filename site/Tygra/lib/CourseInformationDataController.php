@@ -29,10 +29,16 @@
         	 $info = new CourseInformationObject();
         	 $info->setTitle($item['title']);
           	 $info->setSubTitle($item['subTitle']);
-			 $info->setDescription($item['description']);
+			 
 			 $info->setCredits($item['credits']);
 			 $info->setInstructorsDisplay($item['instructorsDisplay']);
+			 //$info->setPrereq($item['prereq']);
+			 
 			 $info->setMeetingTime($item['meetingTime']);
+			 $info->setLocation($item['location']);
+			 $info->setDescription($item['description']);
+			 $info->setExamGroup($item['examGroup']);
+			 
 			 
 			 $term = $item['term'];
 			 $info->setTermDisplayName($term['displayName']);
@@ -40,6 +46,8 @@
 			 $course = $item['course'];
 			 $info->setDepartment($course['department']);
 			 $info->setSchoolId($course['schoolId']);
+			 $info->setRegistrarCode($course['registrarCode']);
+			 
 
            	 //print_r("  info=".var_dump($info));
          	 $results[] = $info->toArray();

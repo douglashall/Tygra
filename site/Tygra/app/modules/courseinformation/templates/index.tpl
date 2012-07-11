@@ -1,47 +1,70 @@
 {include file="findInclude:common/templates/header.tpl"}
 
 {if $results}
-		{block name="detail"}
+		
             <div>
-                  <div class="label">Title</div>
-                  <div class="value">{$results['title']}</div>
-                  {if $results['subTitle']}
-	                  <div class="label">Sub Title</div>
-	                  <div class="value">{$results['subTitle']}</div>
-                  {/if}
-                  {if $results['description']}
-	                  <div class="label">Description</div>
-	                  <div class="value">{$results['description']}</div>
-	              {/if}
+            	<strong>
+                  <div >{$results['title']}: {$results['subTitle']}</div>
+                  	<br/>
+				  <div/>
+				 </strong>
+				  
+				  {if $results['schoolId']}
+				       <div>{$results['schoolId']}: {$results['registrarCode']}</div>
+				      
+	              {/if}  
+	              
+	              {if $results['termDisplayName']}
+	                  <!--<div class="label">Term </div>-->
+	                  <div >{$results['termDisplayName']}</div>
+	                  
+	               {/if} 
+	               
+          
+	            
 	              {if $results['credits']}
-                  	 <div class="label">Credits</div>
-                  	<div class="value">{$results['credits']}</div>
+                  	 <!--<div class="label">Credits</div>-->
+                  	<div >{$results['credits']}</div>
+                  	
                   {/if}
-                  {if $results['termDisplayName']}
-	                  <div class="label">Term </div>
-	                  <div class="value">{$results['termDisplayName']}</div>
-	               {/if}   
+  					
                    {if $results['instructorsDisplay']}
-	                   <div class="label">Instructors </div>
-	                   <div class="value">{$results['instructorsDisplay']}</div>
-	               {/if}  
+	                  
+	                   <div>{$results['instructorsDisplay']}</div>
+	                   
+	               {/if} 
+	              
                    {if $results['meetingTime']}
-	                   <div class="label">Meeting Time</div>
-	                   <div class="value">{$results['meetingTime']}</div>
-	                {/if}  
-                   {if $results['department']}
-	                   <div class="label">Department </div>
-	                   <div class="value">{$results['department']}</div>
+	                   <div>Meeting Time: {$results['meetingTime']}</div>
+	                   
+	                {/if}
+	                
+	                {if $results['location']}
+	                   <!--<div class="label">Location</div>-->
+	                   <div>{$results['location']}</div>
+	     
+	                {/if} 
+	                
+	                {if $results['examGroup']}
+	                   <!--<div class="value">examGroup</div>-->
+	                   <div>Exam Group: {$results['examGroup']}</div>
+	        
 	                {/if}   
-                   {if $results['schoolId']}
-	                   <div class="label">School </div>
-	                   <div class="value">{$results['schoolId']}</div>
-	                {/if}  
+                   
 
-			
+			        {if $results['description']}
+	                  <div>{$results['description']}</div>
+	       
+	                {/if}
+	                
+	                
+			        {if $results['prereq']}
+	                  <div>Prerequisite: {$results['prereq']}</div>
+	          
+	                {/if}
 			 
             </div>
-          {/block}
+        
 
 
 	

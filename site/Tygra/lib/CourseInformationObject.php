@@ -11,12 +11,15 @@ class CourseInformationObject implements KurogoObject
     protected $credits;
     protected $description;
     protected $instructorsDisplay;
+    protected $preeq;
 
     protected $registrarCode;
     protected $department;
     protected $termName;
     protected $termDisplayName;
     protected $meetingTime;
+    protected $location;
+    protected $examGroup;
     protected $academicYear;
     protected $calendarYear;
     protected $school;
@@ -69,7 +72,15 @@ class CourseInformationObject implements KurogoObject
       
     public function getInstructorsDisplay() {
         return $this->instructorsDisplay;
-    }   
+    } 
+    
+    public function setPrereq($prereq) {
+        $this->prereq = $prereq;
+    }
+      
+    public function getPrereq() {
+        return $this->prereq;
+    }    
     
   	public function setRegistrarCode($registrarCode) {
         $this->registrarCode = $registrarCode;
@@ -116,7 +127,19 @@ class CourseInformationObject implements KurogoObject
     public function getMeetingTime() {
         return $this->meetingTime;
     }
-    
+
+    public function setLocation($location) {
+        $this->location = $location;
+    }
+    public function getLocation() {
+        return $this->location;
+    }
+    public function setExamGroup($examGroup) {
+        $this->examGroup = $examGroup;
+    }
+    public function getExamGroup() {
+        return $this->examGroup;
+    }
     public function setAcademicYear($academicYear) {
         $this->academicYear = $academicYear;
     }
