@@ -2,8 +2,9 @@
 
 {if $results}
 		
-            <div>
+            <div class="results">
             	<strong>
+<<<<<<< HEAD
             	 <div>
 	            	  {if $results['title']}
 	                 	{$results['title']}
@@ -13,6 +14,10 @@
 	                  {/if}	
 	                  <br/>
 				  <div/>
+=======
+                  <div >{$results['title']}: {$results['subTitle']}</div>
+                  
+>>>>>>> Course Information CSS
 				 </strong>
 				  
 				  {if $results['schoolId']}
