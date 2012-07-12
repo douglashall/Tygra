@@ -2,31 +2,31 @@
 
 {if $results}
 		
-            <div class="results">
-            	<strong>
-
-            	 <div>
-	            	  {if $results['title']}
-	                 	{$results['title']}
-	                  {/if} 
-	                  {if $results['subTitle']}
-	                  		: {$results['subTitle']}
-	                  {/if}	
-	                  <br/>
-				  </div>
-
+            
+            <!-- what is this block for? (start)-->
+            <div class="nonfocal">
+                <h3>
+                    {if $results['title']}
+                    {$results['title']}
+                    {/if} 
+                    {if $results['subTitle']}
+                        : {$results['subTitle']}
+                    {/if}	
+                </h3>              
+            </div>   
+            <!-- what is this block for? (end)-->
+            
+							  
+            {if $results['schoolId']}
+                <div class="nonfocal">
+                	<h3>{$results['schoolId']}: {$results['registrarCode']}</h3>
+                </div>				      
+            {/if}
                   
-                  
-				 </strong>
-				  
-				  {if $results['schoolId']}
-				       <div>{$results['schoolId']}: {$results['registrarCode']}</div>
-				      
-	              {/if}  
-	              
+	         <ul class="nav">     
 	              {if $results['termDisplayName']}
 	                  <!--<div class="label">Term </div>-->
-	                  <div >{$results['termDisplayName']}</div>
+	                  <li>{$results['termDisplayName']}</li>
 	                  
 	               {/if} 
 	               
@@ -34,46 +34,46 @@
 	            
 	              {if $results['credits']}
                   	 <!--<div class="label">Credits</div>-->
-                  	<div >{$results['credits']}</div>
+                  	<li >{$results['credits']}</li>
                   	
                   {/if}
   					
                    {if $results['instructorsDisplay']}
 	                  
-	                   <div>{$results['instructorsDisplay']}</div>
+	                   <li>{$results['instructorsDisplay']}</li>
 	                   
 	               {/if} 
 	              
                    {if $results['meetingTime']}
-	                   <div>Meeting Time: {$results['meetingTime']}</div>
+	                   <li>Meeting Time: {$results['meetingTime']}</li>
 	                   
 	                {/if}
 	                
 	                {if $results['location']}
 	                   <!--<div class="label">Location</div>-->
-	                   <div>{$results['location']}</div>
+	                   <li>{$results['location']}</li>
 	     
 	                {/if} 
 	                
 	                {if $results['examGroup']}
 	                   <!--<div class="value">examGroup</div>-->
-	                   <div>Exam Group: {$results['examGroup']}</div>
+	                   <li>Exam Group: {$results['examGroup']}</li>
 	        
 	                {/if}   
                    
 
 			        {if $results['description']}
-	                  <div>{$results['description']}</div>
+	                  <li>{$results['description']}</li>
 	       
 	                {/if}
 	                
 	                
 			        {if $results['prereq']}
-	                  <div>Prerequisite: {$results['prereq']}</div>
+	                  <li>Prerequisite: {$results['prereq']}</li>
 	          
 	                {/if}
 			 
-            </div>
+            </ul>
         
 
 
