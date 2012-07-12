@@ -23,48 +23,35 @@
                   
 	         <ul class="nav">     
 	              {if $results['termDisplayName']}
-	                  <!--<div class="label">Term </div>-->
 	                  <li>{$results['termDisplayName']}</li>
-	                  
 	               {/if} 
 	               
-          
-	            
-	              {if $results['credits']}
+                 {if $results['credits']}
                   	 <!--<div class="label">Credits</div>-->
                   	<li >{$results['credits']}</li>
-                  	
                   {/if}
   					
                    {if $results['instructorsDisplay']}
-	                  
 	                   <li>{$results['instructorsDisplay']}</li>
-	                   
 	               {/if} 
-	              
+	          	   
+	          	   {if $results['location']}
+	                   <li>Location: {$results['location']}</li>
+	                {/if} 
+	                    
                    {if $results['meetingTime']}
 	                   <li>Meeting Time: {$results['meetingTime']}</li>
-	                   
 	                {/if}
-	                
-	                {if $results['location']}
-	                   <!--<div class="label">Location</div>-->
-	                   <li>{$results['location']}</li>
-	     
-	                {/if} 
-	                
+               
 	                {if $results['examGroup']}
 	                   <!--<div class="value">examGroup</div>-->
 	                   <li>Exam Group: {$results['examGroup']}</li>
 	        
 	                {/if}   
                    
-
 			        {if $results['description']}
 	                  <li>{$results['description']}</li>
-	       
 	                {/if}
-	                
 	                
 			        {if $results['prereq']}
 	                  <li>Prerequisite: {$results['prereq']}</li>
