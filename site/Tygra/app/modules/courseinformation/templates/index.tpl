@@ -4,7 +4,7 @@
 		
             <div class="results">
             	<strong>
-<<<<<<< HEAD
+
             	 <div>
 	            	  {if $results['title']}
 	                 	{$results['title']}
@@ -13,11 +13,10 @@
 	                  		: {$results['subTitle']}
 	                  {/if}	
 	                  <br/>
-				  <div/>
-=======
-                  <div >{$results['title']}: {$results['subTitle']}</div>
+				  </div>
+
                   
->>>>>>> Course Information CSS
+                  
 				 </strong>
 				  
 				  {if $results['schoolId']}
