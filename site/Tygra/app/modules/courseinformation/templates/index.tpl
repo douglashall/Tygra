@@ -3,7 +3,6 @@
 {if $results}
 		
             
-            <!-- what is this block for? (start)-->
             <div class="nonfocal">
                 <h3>
                     {if $results['title']}
@@ -13,13 +12,12 @@
                         : {$results['subTitle']}
                     {/if}	
                 </h3>              
-            </div>   
-            <!-- what is this block for? (end)-->
+            </div>
             
 							  
             {if $results['schoolId']}
                 <div class="nonfocal">
-                	<h3>{$results['schoolId']}: {$results['registrarCode']}</h3>
+                	<h4>{$results['schoolId']}: {$results['registrarCode']}</h4>
                 </div>				      
             {/if}
                   
