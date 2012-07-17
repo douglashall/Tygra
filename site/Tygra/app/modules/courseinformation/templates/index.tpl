@@ -25,16 +25,16 @@
 	              {if $results['termDisplayName']}
 	                  <li>{$results['termDisplayName']}</li>
 	               {/if} 
-	               
-                 {if $results['credits']}
-                  	 <!--<div class="label">Credits</div>-->
-                  	<li >{$results['credits']}</li>
-                  {/if}
+
   					
                    {if $results['instructorsDisplay']}
 	                   <li>{$results['instructorsDisplay']}</li>
 	               {/if} 
-	          	   
+	          	   	               
+                 	{if $results['credits']}
+                  		<li >Credits: {$results['credits']}</li>
+                  	{/if}
+                  
 	          	   {if $results['location']}
 	                   <li>Location: {$results['location']}</li>
 	                {/if} 
