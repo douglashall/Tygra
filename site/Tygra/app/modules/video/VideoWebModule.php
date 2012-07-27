@@ -32,6 +32,9 @@ class VideoWebModule extends WebModule
 		 			$vid = new VideoObject($v);
 		 			array_push($varray, $vid);
 		 		}
+		 		
+		 		usort($varray, array("VideoObject", "cmp_obj"));
+		 		
 		 			
 		 		$videos = array();
 				foreach( $varray as $value) {

@@ -53,6 +53,16 @@ class VideoObject implements KurogoObject
       		$this->imgurl  = $video['imageurl'];
 		}
    	}
+   	
+   	static function cmp_obj($a, $b)
+    {
+        $al = strtolower($a->getModifiedOn());
+        $bl = strtolower($b->getModifiedOn());
+        if ($al == $bl) {
+            return 0;
+        }
+        return ($al > $bl) ? +1 : -1;
+    }
     
     public function setEntryId($entryid) {
         $this->entryid = $entryid;
