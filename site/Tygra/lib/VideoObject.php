@@ -61,7 +61,7 @@ class VideoObject implements KurogoObject
         if ($al == $bl) {
             return 0;
         }
-        return ($al > $bl) ? +1 : -1;
+        return ($al < $bl) ? +1 : -1;
     }
     
     public function setEntryId($entryid) {
