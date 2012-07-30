@@ -1,47 +1,65 @@
 {include file="findInclude:common/templates/header.tpl"}
 
 {if $results}
-		{block name="detail"}
-            <div>
-                  <div class="label">Title</div>
-                  <div class="value">{$results['title']}</div>
-                  {if $results['subTitle']}
-	                  <div class="label">Sub Title</div>
-	                  <div class="value">{$results['subTitle']}</div>
-                  {/if}
-                  {if $results['description']}
-	                  <div class="label">Description</div>
-	                  <div class="value">{$results['description']}</div>
-	              {/if}
-	              {if $results['credits']}
-                  	 <div class="label">Credits</div>
-                  	<div class="value">{$results['credits']}</div>
-                  {/if}
-                  {if $results['termDisplayName']}
-	                  <div class="label">Term </div>
-	                  <div class="value">{$results['termDisplayName']}</div>
-	               {/if}   
-                   {if $results['instructorsDisplay']}
-	                   <div class="label">Instructors </div>
-	                   <div class="value">{$results['instructorsDisplay']}</div>
-	               {/if}  
-                   {if $results['meetingTime']}
-	                   <div class="label">Meeting Time</div>
-	                   <div class="value">{$results['meetingTime']}</div>
-	                {/if}  
-                   {if $results['department']}
-	                   <div class="label">Department </div>
-	                   <div class="value">{$results['department']}</div>
-	                {/if}   
-                   {if $results['schoolId']}
-	                   <div class="label">School </div>
-	                   <div class="value">{$results['schoolId']}</div>
-	                {/if}  
-
-			
-			 
+		
+            
+            <div class="nonfocal">
+                <h3>
+                    {if $results['title']}
+                    {$results['title']}
+                    {/if} 
+                    {if $results['subTitle']}
+                        : {$results['subTitle']}
+                    {/if}	
+                </h3>              
             </div>
-          {/block}
+            
+							  
+            {if $results['schoolId']}
+                <div class="nonfocal">
+                	<h4>{$results['schoolId']}: {$results['registrarCode']}</h4>
+                </div>				      
+            {/if}
+                  
+	         <ul class="nav">     
+	              {if $results['termDisplayName']}
+	                  <li>{$results['termDisplayName']}</li>
+	               {/if} 
+
+  					
+                   {if $results['instructorsDisplay']}
+	                   <li>{$results['instructorsDisplay']}</li>
+	               {/if} 
+	          	   	               
+                 	{if $results['credits']}
+                  		<li >Credits: {$results['credits']}</li>
+                  	{/if}
+                  
+	          	   {if $results['location']}
+	                   <li>Location: {$results['location']}</li>
+	                {/if} 
+	                    
+                   {if $results['meetingTime']}
+	                   <li>Meeting Time: {$results['meetingTime']}</li>
+	                {/if}
+               
+	                {if $results['examGroup']}
+	                   <!--<div class="value">examGroup</div>-->
+	                   <li>Exam Group: {$results['examGroup']}</li>
+	        
+	                {/if}   
+                   
+			        {if $results['description']}
+	                  <li>{$results['description']}</li>
+	                {/if}
+	                
+			        {if $results['prereq']}
+	                  <li>Prerequisite: {$results['prereq']}</li>
+	          
+	                {/if}
+			 
+            </ul>
+        
 
 
 	
