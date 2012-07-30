@@ -106,4 +106,19 @@ class ClassmatesWebModule extends WebModule
 	    }
 	    return $string;
 	}
+	
+	// if this keyword is in the courses list, return 1; otherwise return 0;
+	public function getTotalCount($keyword) {
+		$ret = 0;
+		$session = $this->getSession();
+		$user = $session->getUser();
+		foreach ($user->getCourses() as $course) {
+			if ($keyword == $course->getKeyword()) {
+				$ret = 1;
+				break;
+			}
+		}
+		return $ret;
+	}
+	
 }
