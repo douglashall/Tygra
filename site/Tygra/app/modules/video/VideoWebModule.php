@@ -62,31 +62,35 @@ class VideoWebModule extends WebModule
 	 		
 	 		break;
 	 	case 'detail':
+	 	
 	 		$videoid = $this->getArg('videoid');
-	 		
-	 		//print_r('ID TO MATCH: ' . $videoid. ' <br />');
-	 		
+	 			 		
 	 		$keyword = $this->getArg('keyword');
 	 		
 	 		$huid = $user->getUserId();
 	 		
 	 		$vs = json_decode($controller->findVideosByKeyword2($keyword, $huid),true);
 	 		
-	 		//$vs = $controller->findVideosByKeyword2($keyword, $huid);
-	 		
-	 		$urls = array();
 	 		foreach($vs as $v){
-	 			//print_r(var_dump($v).'<br />');
+	 			
 	 			if($v['id']==$videoid){
+	 				
 	 				$title = $v['displayTitle'];
+	 				
 	 				foreach($v['asset']['videoFileRefs'] as $ref){
+	 					
 							$embed = $ref['embed'];
+							
 					}
+					
 	 			}
+	 			
 	 		}
 	 		
 	 		$this->assign('keyword',$keyword);
+	 		
 	 		$this->assign('videoTitle', $title);
+	 		
 	 		$this->assign('embed', $embed);
 		 		
 	 		break;
