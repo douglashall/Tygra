@@ -70,7 +70,8 @@ class VideoWebModule extends WebModule
 	 		
 	 		$huid = $user->getUserId();
 	 		
-	 		$vs = $controller->findVideosByKeyword($keyword);
+	 		$vs = $controller->findVideosByKeyword2($keyword, $huid);
+	 		
 	 		$urls = array();
 	 		foreach($vs as $v){
 	 			print_r(var_dump($v).'<br />');
