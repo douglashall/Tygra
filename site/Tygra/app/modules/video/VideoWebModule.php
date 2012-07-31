@@ -64,7 +64,7 @@ class VideoWebModule extends WebModule
 	 	case 'detail':
 	 		$videoid = $this->getArg('videoid');
 	 		
-	 		print_r($videoid. ' <br />');
+	 		print_r('ID TO MATCH: ' . $videoid. ' <br />');
 	 		
 	 		$keyword = $this->getArg('keyword');
 	 		
