@@ -63,6 +63,9 @@ class VideoWebModule extends WebModule
 	 		break;
 	 	case 'detail':
 	 		$videoid = $this->getArg('videoid');
+	 		
+	 		print_r($videoid. ' <br />');
+	 		
 	 		$keyword = $this->getArg('keyword');
 	 		
 	 		$huid = $user->getUserId();
@@ -70,6 +73,7 @@ class VideoWebModule extends WebModule
 	 		$vs = $controller->findVideosByKeyword($keyword);
 	 		$urls = array();
 	 		foreach($vs as $v){
+	 			print_r($v['id'].'<br />');
 	 			if($v['id']==$videoid){
 	 				$title = $v['displayTitle'];
 	 				foreach($v['asset']['videoFileRefs'] as $ref){
