@@ -73,7 +73,7 @@ class VideoWebModule extends WebModule
 	 		$vs = $controller->findVideosByKeyword($keyword);
 	 		$urls = array();
 	 		foreach($vs as $v){
-	 			print_r($v['id'].'<br />');
+	 			print_r(var_dump($v).'<br />');
 	 			if($v['id']==$videoid){
 	 				$title = $v['displayTitle'];
 	 				foreach($v['asset']['videoFileRefs'] as $ref){
