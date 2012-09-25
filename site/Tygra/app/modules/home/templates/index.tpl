@@ -30,7 +30,7 @@
 			{include file="findInclude:common/templates/navlist.tpl" navlistItems=$term['items'] titleTruncate=40}
 		{/foreach}
 	{else}
-		{include file="findInclude:common/templates/emptylist.tpl" emptyMessage="No courses found"}
+		{include file="findInclude:common/templates/emptylist.tpl" emptyMessage="Welcome!  Unfortunately, we don't see you in the class list of any current course iSites.  If that doesn't seem right, please contact your school's registrar."}
 	{/if}
 	
 	{include file="findInclude:common/templates/footer.tpl"}
