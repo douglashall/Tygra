@@ -18,27 +18,28 @@ class HarvardUser extends User
     public function getCourseKeywords() {
     	$keywords = array();
     	foreach($this->courses as $course) {
-    		$keywords[] = $course->getKeyword();
+			if($course->hasKeyword()) {
+				$keywords[] = $course->getKeyword();
+			}
     	}
     	return $keywords;
     }
     
     public function findCourseByKeyword($keyword) {
-    	$courseObject = new CourseObject();
     	foreach($this->courses as $course){
-    		if(strcmp($course->getKeyword(), $keyword)==0){
-    			$courseObject = $course;
+    		if($course->keywordEquals($keyword)){
+    			return $course;
     		}
     	}
-    	return $courseObject;
+    	return new CourseObject();
     }
     
     
     public function updateCourse($courseObj){
     	$ukeyword = $courseObj->getKeyword();
         for($i = 0; $i < sizeof($courses); ++$i){
-    		if(strcmp($this->$courses[$i]->getKeyword(), $ukeyword)==0){
-    			$this->$courses[$i] = $courseObj;
+    		if($this->courses[$i]->keywordEquals($ukeyword)){
+    			$this->courses[$i] = $courseObj;
     		}
     	}
     }
@@ -52,8 +53,8 @@ class HarvardUser extends User
     }
     
     public function getVideosByKeyword($keyword){
-    	foreach($this->$courses as $course){
-    		if(strcmp($course->getKeyword(), $keyword)==0){
+    	foreach($this->courses as $course){
+    		if($course->keywordEquals($keyword)){
     			return $course->getVideos();
     		}
     	}
@@ -62,7 +63,7 @@ class HarvardUser extends User
     
     public function getVideoByEntryId($entryid){
     	//print_r(var_dump($courses));
-    	foreach($this->$courses as $course){
+    	foreach($this->courses as $course){
     		foreach($course->getVideos() as $video){
     			if(strcmp($video->getEntryId(), $entryid)==0){
     				return $video;

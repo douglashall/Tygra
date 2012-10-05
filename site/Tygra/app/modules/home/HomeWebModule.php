@@ -114,10 +114,20 @@ class HomeWebModule extends WebModule
 		
 		// builds a list of course items
 		foreach($courses as $course) {
+			$url = '';
+			$class = '';
+			if($course->hasKeyword()) {
+				$url = $this->buildBreadcrumbURLForModule('course', '', array('keyword' => $course->getKeyword()));
+			} else if($course->hasExternalUrl()) {
+				$url = $course->getExternalUrl();
+				$class = 'external';
+			}
+			
 			$items[] = array(
 				'item' => array(
 					'title' => $course->getTitle(),
-					'url'   => $this->buildBreadcrumbURLForModule('course', '', array('keyword' => $course->getKeyword()))
+					'url'   => $url,
+					'class' => $class
 				),
 				'group' => $course->getTermGroupName(),
 				'grouplabel' => $course->getTermDisplayName(),

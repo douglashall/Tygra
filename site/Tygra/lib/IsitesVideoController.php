@@ -20,14 +20,13 @@ class IsitesVideoController extends AuthenticatedDataController
 		error_log("***$user***");
 		$baseURL = $this->baseURL;
 		$huid = $user->getUserID();
-		$courses = $user->getCourses();
 		$courseList = "(sitekey:";
 
 		/*
 		 * For each course, get the keyword and add it to the search query
 		 */
-		foreach($courses as $course){
-			$courseList .= $course->getKeyword() .'%20OR%20sitekey:';
+		foreach ($user->getCourseKeywords() as $keyword){
+			$courseList .= $keyword .'%20OR%20sitekey:';
 		}
 		 
 		/* Trim off the end of the string.

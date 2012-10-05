@@ -20,10 +20,10 @@
 		$huid = $user->getUserID();	
 		$results = array();
 		$sitekeys = '';
-		foreach ($user->getCourses() as $course) {
+		foreach ($user->getCourseKeywords() as $keyword) {
 			if (strlen($sitekeys) > 0)
 				$sitekeys = $sitekeys.' OR ';
-			$sitekeys = $sitekeys.$course->getKeyword();
+			$sitekeys = $sitekeys.$keyword;
 		}
 			
 		if (strlen($sitekeys) > 0) {

@@ -6,15 +6,14 @@ class HomeDataController extends AuthenticatedDataController {
 
 	public function search($user, $query = '') {
 		$huid = $user->getUserID();
-		$courses = $user->getCourses();
 		$result = array();
 		$sitekeys = '';
 
-		foreach ($courses as $course) {
+		foreach ($user->getCourseKeywords() as $keyword) {
 			if (strlen($sitekeys) > 0) {
 				$sitekeys = $sitekeys.' OR ';
 			}
-			$sitekeys = $sitekeys.$course->getKeyword();
+			$sitekeys = $sitekeys.$keyword;
 		}
 
 		if(strlen($sitekeys) > 0) {

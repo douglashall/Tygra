@@ -58,35 +58,12 @@ class PinAuthentication extends AuthenticationAuthority
 		        $user->setFirstName($person['firstName']);
 		        $user->setLastName($person['lastName']);
 		        $user->setFullName($person['firstName']." ".$person['lastName']);
-		        
 		        if (!isset($person['courses']))
 		        	return $user;
 		        	
 		        $courses = array();
 	     		foreach ($person['courses'] as $course) {
-					$result = new CourseObject();
-					if (isset($course['title']))
-	     				$result->setTitle($course['title']);
-					if (isset($course['keyword'])) {
-	     				$result->setKeyword($course['keyword']);
-					}
-					if (isset($course['termName'])) {
-						$result->setTermName($course['termName']);
-					}
-					if (isset($course['termDisplayName'])) {
-						$result->setTermDisplayName($course['termDisplayName']);
-					}
-					if (isset($course['academicYear'])) {
-						$result->setAcademicYear($course['academicYear']);
-					}
-					if (isset($course['calendarYear'])) {
-						$result->setCalendarYear($course['calendarYear']);
-					}
-					if (isset($course['schoolId'])) {
-						$result->setSchoolId($course['schoolId']);
-					}
-
-					$courses[] = $result;
+					$courses[] = new CourseObject($course);
 	     		}
 		        $user->setCourses($courses);
 		        

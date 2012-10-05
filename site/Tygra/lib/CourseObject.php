@@ -1,7 +1,9 @@
 <?php
 
-/* 
+/** 
  * Class to abstract course data
+ *
+ * Note: courses with an external URL will have a NULL keyword and vice versa.
  */
 class CourseObject implements KurogoObject
 {
@@ -15,7 +17,56 @@ class CourseObject implements KurogoObject
     protected $academicYear;
     protected $calendarYear;
     protected $schoolId;
-    private $termOrder; // lazy init, maps termNames to orderNumbers
+    protected $externalUrl;
+
+    // class property that maps termName to order
+	protected static $termOrder = array (
+		'Winter' => 0,
+		'Winter-Spring' => 1,
+		'Spring' => 2,
+		'Spring 1' => 3,
+		'Spring 2' => 4,
+		'Spring Saturday' => 5,
+		'Summer' => 6,
+		'Summer 1' => 7,
+		'Summer 2' => 8,
+		'Full Year' => 9,
+		'Fall' => 10,
+		'Fall 1' => 11,
+		'Fall 2' => 12,
+		'Fall-Winter' => 13,
+		'Fall Saturday' => 14
+	);
+	
+	// class property for when a term's order is unknown
+	protected static $unknownTermOrder = 999;
+
+    public function __construct($data = array()) {    		
+            if (isset($data['title'])) {
+            	$this->title = $data['title'];
+            }
+            if (isset($data['keyword'])) {
+            	$this->keyword = $data['keyword'];
+            }
+            if (isset($data['termName'])) {
+            	$this->termName = $data['termName'];
+            }
+            if (isset($data['termDisplayName'])) {
+            	$this->termDisplayName = $data['termDisplayName'];
+            }
+            if (isset($data['academicYear'])) {
+            	$this->academicYear = $data['academicYear'];
+            }
+            if (isset($data['calendarYear'])) {
+            	$this->calendarYear = $data['calendarYear'];
+            }
+            if (isset($data['schoolId'])) {
+            	$this->schoolId = $data['schoolId'];
+            }
+            if (isset($data['externalUrl'])) {
+            	$this->externalUrl = $data['externalUrl'];
+            }
+    }
     
     public function setKeyword($keyword) {
         $this->keyword = $keyword;
@@ -23,6 +74,17 @@ class CourseObject implements KurogoObject
 
     public function getKeyword() {
         return $this->keyword;
+    }
+    
+    public function hasKeyword() {
+    	return isset($this->keyword);
+    }
+    
+    public function keywordEquals($keyword = '') {
+    	if($this->hasKeyword()) {
+    		return strcmp($this->keyword, $keyword) == 0;
+    	}
+    	return false;
     }
     
     public function setTitle($title) {
@@ -76,6 +138,18 @@ class CourseObject implements KurogoObject
     public function getSchoolId() {
         return $this->schoolId;
     }
+
+    public function setExternalUrl($externalUrl) {
+        $this->externalUrl = $externalUrl;
+    }
+
+    public function getExternalUrl() {
+        return $this->externalUrl;
+    }
+    
+    public function hasExternalUrl() {
+    	return isset($this->externalUrl);	
+    }
     
     public function setTermName($termName) {
         $this->termName = $termName;
@@ -113,33 +187,11 @@ class CourseObject implements KurogoObject
         return $this->calendarYear;
     }
     
-    public function getTermOrder() {        
-        if(!isset($this->termOrder)) {
-            $this->termOrder = array_flip(array(
-                'Winter',
-                'Winter-Spring',
-                'Spring',
-                'Spring 1',
-                'Spring 2',
-                'Spring Saturday',
-                'Summer',
-                'Summer 1',
-                'Summer 2',
-                'Full Year',
-                'Fall',
-                'Fall 1',
-                'Fall 2',
-                'Fall-Winter',
-                'Fall Saturday',
-            ));
+    public function getTermOrder() {
+        if(isset(self::$termOrder[$this->termName])) {
+            return self::$termOrder[$this->termName];
         }
-        
-        $defaultOrder = 999;
-        if(isset($this->termOrder[$this->termName])) {
-            return $this->termOrder[$this->termName];
-        }
-        
-        return $defaultOrder;
+        return self::$unknownTermOrder;
     }
     
     public function getTermGroupName() {

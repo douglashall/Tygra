@@ -113,7 +113,7 @@ class ClassmatesWebModule extends WebModule
 		$session = $this->getSession();
 		$user = $session->getUser();
 		foreach ($user->getCourses() as $course) {
-			if ($keyword == $course->getKeyword()) {
+			if ($course->keywordEquals($keyword)) {
 				$ret = 1;
 				break;
 			}
