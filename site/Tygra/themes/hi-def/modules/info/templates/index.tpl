@@ -2,8 +2,7 @@
 
 {block name="pageTitle"}Harvard Mobile Courses{/block}
 
-{block name='description'}m.courses.harvard.edu is a university-wide mobile initiative to aggregate and deliver useful,
-		usable, mobile-appropriate course content.{/block}
+{block name='description'}m.courses beta helps keep you up to date on activity in your course iSites.  You can view course information and updates, watch lecture videos on the go, and connect with classmates.  This beta release is a starting point for providing a better academic mobile experience; we will continue to roll out new features, and look forward to your feedback!{/block}
 
 {block name="header"}
   	<div id="utility_nav">
@@ -15,8 +14,7 @@
     
     <!--h1>m.courses.harvard.edu</h1-->
     <p>
-        is a university-wide mobile initiative to aggregate and deliver useful,
-		usable, mobile-appropriate course content.
+        m.courses beta helps keep you up to date on activity in your course iSites.  You can view course information and updates, watch lecture videos on the go, and connect with classmates.  This beta release is a starting point for providing a better academic mobile experience; we will continue to roll out new features, and look forward to your feedback!
     </p>
 {/block}
     
@@ -37,7 +35,7 @@
     	<h2>What's next?</h2>
         <p>
             We recognize that this is just the starting point for providing a better
-            mobile experience for students, faculty and staff. We will continue to roll
+            academic mobile experience for students, faculty and staff. We will continue to roll
             out new features in the future.
         </p>
         
