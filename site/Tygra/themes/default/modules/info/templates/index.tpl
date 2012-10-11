@@ -14,8 +14,9 @@
     
     <!--h1>m.courses.harvard.edu</h1-->
     <p>
-        is a university-wide mobile initiative to aggregate and deliver useful,
-		usable, mobile-appropriate course content.
+        Keep up to date on activity in your course iSites; view course information and updates, 
+        watch lecture videos on the go, and connect with classmates. This beta release is a starting point 
+        for providing a better academic mobile experience.  We will continue to roll out new features, and look forward to your feedback!
     </p>
 {/block}
     
