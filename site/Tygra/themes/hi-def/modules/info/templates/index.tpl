@@ -14,13 +14,7 @@
     
     <!--h1>m.courses.harvard.edu</h1-->
     <p>
-<<<<<<< HEAD
         m.courses beta helps keep you up to date on activity in your course iSites.  You can view course information and updates, watch lecture videos on the go, and connect with classmates.  This beta release is a starting point for providing a better academic mobile experience; we will continue to roll out new features, and look forward to your feedback!
-=======
-        Keep up to date on activity in your course iSites; view course information and updates, 
-        watch lecture videos on the go, and connect with classmates. This beta release is a starting point 
-        for providing a better academic mobile experience.  We will continue to roll out new features, and look forward to your feedback!
->>>>>>> Changed welcome text
     </p>
 {/block}
     
