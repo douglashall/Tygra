@@ -78,8 +78,9 @@ class VideoWebModule extends WebModule
 	 				$title = $v['displayTitle'];
 	 				
 	 				foreach($v['asset']['videoFileRefs'] as $ref){
-	 					
+	 					if($v['mediaType'] == "video"){
 							$embed = $ref['embed'];
+						}
 							
 					}
 					
