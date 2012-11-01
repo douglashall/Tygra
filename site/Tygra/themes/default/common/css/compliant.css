@@ -10,10 +10,12 @@
 	height: 96px;	/* For springboard grid that is 4 icons wide */
 }
 
-.springboard a img {
+.springboard a img,
+.springboard img {
 	/* Size of each standard icon image in a springboard */
-	width: 64px;
-	height: 64px;
+	width: 49px;/*old size 64*/
+	height: 32px;/*old size 64*/
+	
 }
 
 .springboard .separator {
@@ -51,4 +53,92 @@
 	/* Adjust position to fit springboard icon size for utility-class module icons */
 	top: 26px;
 	right: 12px;
+}
+
+/********************* ICONS FOR NON-RETINA DISPLAY (START) *******************/
+img.Updates{
+	background: transparent url('/modules/home/images/mUpdateSmall.png') no-repeat left top;
+}
+.disabledmodule img.Updates{
+	background: transparent url('/modules/home/images/mUpdateSmallInactive.png') no-repeat left top;
+}
+
+img.Feedback{
+	background: transparent url('/modules/home/images/mFeedbackSmall.png') no-repeat left top;
+}
+
+img.Logout{
+	background: transparent url('/modules/home/images/mLogoutSmall.png') no-repeat left top;
+}
+
+img.Syllabus{
+	background: transparent url('/modules/home/images/mSyllabusSmall.png') no-repeat left top;
+}
+.disabledmodule img.Syllabus{
+	background: transparent url('/modules/home/images/mSyllabusSmallInactive.png') no-repeat left top;
+}
+
+img.Classmates{
+	background: transparent url('/modules/home/images/mClassmatesSmall.png') no-repeat left top;
+}
+
+img.LectureVideo{
+	background: transparent url('/modules/home/images/mVideoSmall.png') no-repeat left top;
+}
+.disabledmodule img.LectureVideo{
+	background: transparent url('/modules/home/images/mVideoSmallInactive.png') no-repeat left top;
+}
+
+img.CourseInformation{
+	background: transparent url('/modules/home/images/mInfoSmall.png') no-repeat left top;
+}
+
+img.CourseSite{
+	background: transparent url('/modules/home/images/mFullCourseSmall.png') no-repeat left top;
+}
+
+@media only screen and (-Webkit-min-device-pixel-ratio: 1.5),
+only screen and (-moz-min-device-pixel-ratio: 1.5),
+only screen and (-o-min-device-pixel-ratio: 3/2),
+only screen and (min-device-pixel-ratio: 1.5) {
+	img.Updates{
+		background: transparent url('/modules/home/images/mUpdate.png') no-repeat left top;
+	}
+	.disabledmodule img.Updates{
+		background: transparent url('/modules/home/images/mUpdateInactive.png') no-repeat left top;
+	}
+	
+	img.Feedback{
+		background: transparent url('/modules/home/images/mFeedback.png') no-repeat left top;
+	}
+	
+	img.Logout{
+		background: transparent url('/modules/home/images/mLogout.png') no-repeat left top;
+	}
+	
+	img.Syllabus{
+		background: transparent url('/modules/home/images/mSyllabus.png') no-repeat left top;
+	}
+	.disabledmodule img.Syllabus{
+		background: transparent url('/modules/home/images/mSyllabusInactive.png') no-repeat left top;
+	}
+	
+	img.Classmates{
+		background: transparent url('/modules/home/images/mClassmates.png') no-repeat left top;
+	}
+	
+	img.LectureVideo{
+		background: transparent url('/modules/home/images/mVideo.png') no-repeat left top;
+	}
+	.disabledmodule img.LectureVideo{
+		background: transparent url('/modules/home/images/mVideoInactive.png') no-repeat left top;
+	}
+	
+	img.CourseInformation{
+		background: transparent url('/modules/home/images/mInfo.png') no-repeat left top;
+	}
+	
+	img.CourseSite{
+		background: transparent url('/modules/home/images/mFullCourse.png') no-repeat left top;
+	}
 }

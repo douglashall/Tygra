@@ -7,7 +7,7 @@
     {else}
     {if $item['title'] == "Logout"}
        <div class="module">
-  <a href="https://icommons.uservoice.com/forums/155804-m-courses-feedback"><img alt="m.courses Feedback" src="/modules/home/images/feedback.png"><br>
+  <a href="https://icommons.uservoice.com/forums/155804-m-courses-feedback"><img alt="m.courses Feedback" class="Feedback" src="/modules/home/images/spacer.gif"><br>
   Feedback</a>
   </div>
     {/if}
@@ -15,7 +15,7 @@
         {if $item['url']}
           <a href="{$item['url']}">
         {/if}
-            <img src="{$item['img']}" alt="{$item['title']}" />
+            <img src="/modules/home/images/spacer.gif" alt="{$item['title']}" class="{$item['title']|replace:' ':''}" /><!--old src {$item['img']}-->
             <br/>{$item['title']}
             {if isset($item['subTitle'])}
               <br/><span class="fineprint">{$item['subTitle']}</span>
@@ -38,11 +38,11 @@
   {/foreach}
   {if isset($keyword)}
   <div class="module">
-  <a href="http://isites.harvard.edu/{$keyword}"><img alt="Course Site" src="/modules/home/images/coursesite.png"><br>
+  <a href="http://isites.harvard.edu/{$keyword}"><img alt="Course Site" class="CourseSite" src="/modules/home/images/spacer.gif"><br>
   Full Course Site</a>
   </div>
      <div class="module">
-  <a href="https://icommons.uservoice.com/forums/155804-m-courses-feedback"><img alt="m.courses Feedback" src="/modules/home/images/feedback.png"><br>
+  <a href="https://icommons.uservoice.com/forums/155804-m-courses-feedback"><img alt="m.courses Feedback" class="Feedback" src="/modules/home/images/spacer.gif"><br>
   Feedback</a>
   </div>
   {/if}
