@@ -15,7 +15,7 @@
         {if $item['url']}
           <a href="{$item['url']}">
         {/if}
-            <img src="/modules/home/images/spacer.gif" alt="{$item['title']}" class="{$item['title']|replace:' ':''}" /><!--old src {$item['img']}-->
+            <img src="/modules/home/images/spacer.gif" alt="{$item['title']}" class="{$item['title']|replace:' ':''|replace:'(%d)':''}" /><!-- old src {$item['img']}-->
             <br/>{$item['title']}
             {if isset($item['subTitle'])}
               <br/><span class="fineprint">{$item['subTitle']}</span>
