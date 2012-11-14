@@ -78,22 +78,25 @@ class VideoWebModule extends WebModule
 	 				$title = $v['displayTitle'];
 	 				
 	 				foreach($v['asset']['videoFileRefs'] as $ref){
-	 					if($ref['mediaType'] == "video"){
+	 					if($ref['mediaType'] == "video" || $ref['mediaType'] == ""){
 							$embed = $ref['embed'];
 						}
-							
+						
+						if($ref['mediaType'] == "audio"){
+							$audioembed = $ref['embed'];
+						}
+						
 					}
-					
 	 			}
-	 			
 	 		}
 	 		
 	 		$this->assign('keyword',$keyword);
-	 		
 	 		$this->assign('videoTitle', $title);
-	 		
 	 		$this->assign('embed', $embed);
-		 		
+	 		
+	 		if(isset($audioembed)){
+	 			$this->assign('audio', $audioembed);
+		 	}
 	 		break;
 	 	}
 	}
