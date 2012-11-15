@@ -95,9 +95,9 @@ class VideoWebModule extends WebModule
 	 		$this->assign('keyword',$keyword);
 	 		$this->assign('videoTitle', $title);
 	 		
-	 		if(isset($embed)){
+	 		//if(isset($embed)){
 	 			$this->assign('video', $embed);
-	 		}
+	 		//}
 	 		
 	 		if(isset($audioembed)){
 	 			$this->assign('audio', $audioembed);
