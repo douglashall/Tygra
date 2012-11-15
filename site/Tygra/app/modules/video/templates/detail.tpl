@@ -1,7 +1,7 @@
 {include file="findInclude:common/templates/header.tpl"}
   <script type="text/javascript" src="http://isites.harvard.edu/jwplayer/jwplayer.js"></script>
 
-{if $audio}
+{if $audio }
 <style type="text/css">
 #audio_container {
     padding-left: 10px;
@@ -91,7 +91,7 @@ $(document).ready(function() {
 
 <p class="nonfocal">
  <div id="video_container">
- {$embed}
+ {$video}
  </div>
  
 {if $audio}
