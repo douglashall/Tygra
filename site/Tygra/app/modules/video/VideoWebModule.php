@@ -14,6 +14,8 @@ class VideoWebModule extends WebModule
 	$session = $this->getSession();
 	$user = $session->getUser();
 	$huid = $user->getUserID();
+	//$embed = "";
+	//$audioembed = "";
 		
 	 switch ($this->page) {
 	 	case 'index':
@@ -92,7 +94,10 @@ class VideoWebModule extends WebModule
 	 		
 	 		$this->assign('keyword',$keyword);
 	 		$this->assign('videoTitle', $title);
-	 		$this->assign('embed', $embed);
+	 		
+	 		if(isset($embed)){
+	 			$this->assign('video', $embed);
+	 		}
 	 		
 	 		if(isset($audioembed)){
 	 			$this->assign('audio', $audioembed);
