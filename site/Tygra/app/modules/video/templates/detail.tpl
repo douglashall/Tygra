@@ -80,10 +80,13 @@ $(document).ready(function() {
 
 <h1 class="focal videoTitle">{$videoTitle}</h1>
 <div id="media_selector">
+<!-- only show audio nav if there is an audio version -->
+{if $audio}
 <ul>
 <li><a id="videolink" >Video</a></li>
 <li><a id="audiolink" >Audio Only</a></li>
 </ul>
+{/if}
 </div>
 
 <p class="nonfocal">
