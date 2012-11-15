@@ -41,8 +41,8 @@ $(document).ready(function() {
 	$('#audiolink').click(function(){
 		console.log("audiolink was clicked");
 		
-		if ( $('#videolink').hasclass('active'){
-			$('#videolink').removeclass('active');
+		if ( $('#videolink').hasClass('active')){
+			$('#videolink').removeClass('active');
 		}
 		
 		$('#video_container').hide();
@@ -59,8 +59,8 @@ $(document).ready(function() {
 	$('#videolink').click(function(){
 		console.log("videolink was clicked");
 		
-		if ( $('#audiolink').hasclass('active'){
-			$('#audiolink').removeclass('active');
+		if ( $('#audiolink').hasClass('active')){
+			$('#audiolink').removeClass('active');
 		}
 		
 		$('#audio_container').hide();
