@@ -339,4 +339,22 @@ h1.slugline, h2.itemtitle {
 }
 
 
+/* navigation for video / audio interface */
+ul.videoAudio{
+	margin: 0;
+	padding: 0;
+	display:inline-block;
+}
+
+	ul.videoAudio li{
+		display: inline-block;
+	}
+	
+	ul.videoAudio li a.active{
+		padding: 10px 10px;
+		display: inline-block;
+		background-color: red;
+	}
+
+
 

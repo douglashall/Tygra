@@ -82,7 +82,7 @@ $(document).ready(function() {
 <div id="media_selector">
 <!-- only show audio nav if there is an audio version -->
 {if $audio}
-<ul>
+<ul class="videoAudio">
 <li><a id="videolink" >Video</a></li>
 <li><a id="audiolink" >Audio Only</a></li>
 </ul>
