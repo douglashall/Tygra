@@ -2,35 +2,7 @@
   <script type="text/javascript" src="http://isites.harvard.edu/jwplayer/jwplayer.js"></script>
 
 {if $audio}
-<style type="text/css">
-#audio_container {
-    padding-left: 10px;
-    display: none;
-}
 
-#media_selector ul {
-	margin-left: 0;
-	padding-left: 0;
-	display: inline;
-	} 
-
-#media_selector ul li {
-	margin-left: 0;
-	padding: 3px 15px;
-	border-left: 1px solid #000;
-	list-style: none;
-	display: inline;
-	}
-	
-		
-#media_selector ul li.first {
-	margin-left: 0;
-	border-left: none;
-	list-style: none;
-	display: inline;
-	}
-
-</style>
 
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.2.6/jquery.min.js"></script>
 

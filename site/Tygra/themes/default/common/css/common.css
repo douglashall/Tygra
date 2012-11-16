@@ -340,6 +340,10 @@ h1.slugline, h2.itemtitle {
 
 
 /* navigation for video / audio interface */
+#audio_container {
+    padding-left: 10px;
+    display: none;
+}
 ul.videoAudio{
 	margin: 0;
 	padding: 0;
@@ -348,7 +352,6 @@ ul.videoAudio{
 
 	ul.videoAudio li{
 		display: inline-block;
-		border-left:0;
 	}
 	
 	ul.videoAudio li a.active{
