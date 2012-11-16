@@ -37,6 +37,8 @@
 <script type="text/javascript">
 $(document).ready(function() {
 
+	$('#videolink').addClass('active');
+	
 	/* user clicked on the audio link*/
 	$('#audiolink').click(function(){
 		console.log("audiolink was clicked");
