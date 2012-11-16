@@ -348,6 +348,7 @@ ul.videoAudio{
 
 	ul.videoAudio li{
 		display: inline-block;
+		border-left:0;
 	}
 	
 	ul.videoAudio li a.active{
