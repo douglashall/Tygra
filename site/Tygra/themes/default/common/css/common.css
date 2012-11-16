@@ -353,7 +353,11 @@ ul.videoAudio{
 	ul.videoAudio li a.active{
 		padding: 10px 10px;
 		display: inline-block;
-		background-color: red;
+		background: transparent url(/common/images/menuBkg.png) repeat-x;
+		color: #FDE5C4;
+		-webkit-border-radius: 10px;
+		-moz-border-radius: 10px;
+		border-radius: 10px;
 	}
 
 
