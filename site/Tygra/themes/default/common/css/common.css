@@ -344,9 +344,10 @@ h1.slugline, h2.itemtitle {
     padding-left: 10px;
     display: none;
 }
+
 ul.videoAudio{
 	margin: 0;
-	padding: 0;
+	padding: 5px 15px;
 	display:inline-block;
 }
 
