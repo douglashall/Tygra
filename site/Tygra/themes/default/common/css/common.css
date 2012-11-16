@@ -347,11 +347,12 @@ h1.slugline, h2.itemtitle {
 
 ul.videoAudio{
 	margin: 0;
-	padding: 5px 15px;
+	padding: 0;
 	display:inline-block;
 }
 
 	ul.videoAudio li{
+		padding: 5px 15px;
 		display: inline-block;
 	}
 	
