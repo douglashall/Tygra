@@ -463,7 +463,7 @@ a.module img {
 .springboard div {
 	position: relative;
 	margin: 0;
-	padding: 0;
+	padding: 8px 4px;
 	border: 0;
 	float: left;
 	text-align: center;		
