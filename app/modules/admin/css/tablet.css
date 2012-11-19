@@ -591,6 +591,7 @@ h1 img {
 	margin: 0;
 	width: 100%;
 	padding: 6px;
+	display: inline-block;
 }
 
 .springboard div {

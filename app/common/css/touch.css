@@ -267,6 +267,7 @@ a.module img {
 	margin: 0 auto;
 	padding: 5px;
 	clear: both;
+	display: inline-block;
 }
 
 .springboard div {

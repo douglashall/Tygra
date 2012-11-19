@@ -479,6 +479,7 @@ a.module img {
 	padding: 5px;
 	margin-left: 2px;
 	clear: both;
+	display:inline-block;
 }
 
 .springboard div {
