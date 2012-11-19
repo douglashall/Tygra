@@ -75,6 +75,8 @@ class CourseWebModule extends WebModule {
       			$this->assign('user', $user);
       			$this->assign('keyword', $keyword);
       			
+      			$this->addJQuery();
+      			
       			//print_r("Hello".$keyword);
       			
         		if ($this->pagetype == 'tablet') {

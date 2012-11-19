@@ -16,6 +16,8 @@ class VideoWebModule extends WebModule
 	$huid = $user->getUserID();
 	//$embed = "";
 	//$audioembed = "";
+	
+	$this->addJQuery();
 		
 	 switch ($this->page) {
 	 	case 'index':

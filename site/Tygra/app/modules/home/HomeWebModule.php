@@ -7,6 +7,8 @@ class HomeWebModule extends WebModule
 	protected $httpHeaders = array();
 	protected $pageCacheSettings = array('index' => 86400);
 
+	
+
 	protected function showLogin() {
 		return $this->getOptionalModuleVar('SHOW_LOGIN', false);
 	}
@@ -74,6 +76,8 @@ class HomeWebModule extends WebModule
 					$this->assign('showFederatedSearch', true);
 					$this->assign('placeholder', $this->getLocalizedString("SEARCH_PLACEHOLDER", Kurogo::getSiteString('SITE_NAME')));
 				}
+
+				$this->addJQuery();
 
 				$navModules = $this->getModuleNavList();
 				if(isset($navModules['updates'])) {
