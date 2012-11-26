@@ -17,15 +17,23 @@
         {/if}
             <img src="/modules/home/images/spacer.gif" alt="{$item['title']}" class="{$item['title']|replace:' ':''}" /><!-- old src {$item['img']}-->
             <script>
-				for ( var i = 0 ; i < 6; i++)
-				{
+				//for ( var i = 0 ; i < 6; i++)
+				//{
 					//get the img tag for icon
-					var x=document.getElementsByTagName('img')[i];
+					//var x=document.getElementsByTagName('img')[i];
 					//remove (n)
-					x = x.className.replace(/\(.*?\)/g, '');
+					//x = x.className.replace(/\(.*?\)/g, '');
 					//replace class name with out (n)
-					document.getElementsByTagName('img')[i].setAttribute("class", x);
-				}
+					//document.getElementsByTagName('img')[i].setAttribute("class", x);
+				//}
+				$(document).ready( function(){	
+					$(".springboard img").each(function() {
+						var removeParenthesis = $(this).attr('class').replace(/\(.*?\)/g, '');
+						//add them back to the img class
+						$(this).attr('class', removeParenthesis);
+						alert($(this).attr('class'));
+                    });
+				});
 			</script>
             <br/>{$item['title']}
             {if isset($item['subTitle'])}
