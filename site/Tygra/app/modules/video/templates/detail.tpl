@@ -8,7 +8,15 @@
 
 <script type="text/javascript">
 $(document).ready(function() {
-
+	
+	if( !$.trim( $('#video_container').html() ).length ){
+		console.log("no video, just audio");
+		$('#videolink').hide();
+		$('#audiolink').addClass('active');
+		$('#video_container').hide();
+		$('#audio_container').show();
+	}
+	
 	$('#videolink').addClass('active');
 	
 	/* user clicked on the audio link*/
