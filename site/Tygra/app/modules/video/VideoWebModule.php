@@ -14,7 +14,7 @@ class VideoWebModule extends WebModule
 	$session = $this->getSession();
 	$user = $session->getUser();
 	$huid = $user->getUserID();
-	//$embed = "";
+	$embed = "";
 	//$audioembed = "";
 	
 	$this->addJQuery();
