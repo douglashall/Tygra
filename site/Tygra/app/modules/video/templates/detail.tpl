@@ -11,12 +11,12 @@ $(document).ready(function() {
 	
 	if( !$.trim( $('#video_container').html() ).length ){
 		console.log("no video, just audio");
-		$('#videolink').hide();
+		$('#videolink').parent().hide();
 		$('#audiolink').addClass('active');
 		$('#video_container').hide();
 		$('#audio_container').show();
 		
-		$('#audiolink').parent().css("padding-left", 3+"px");
+		
 	}
 	
 	$('#videolink').addClass('active');
