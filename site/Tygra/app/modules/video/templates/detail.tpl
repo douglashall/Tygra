@@ -15,6 +15,8 @@ $(document).ready(function() {
 		$('#audiolink').addClass('active');
 		$('#video_container').hide();
 		$('#audio_container').show();
+		
+		$('#audiolink').parent().css("padding-left", 3+"px");
 	}
 	
 	$('#videolink').addClass('active');
