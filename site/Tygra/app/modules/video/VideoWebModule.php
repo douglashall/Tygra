@@ -45,6 +45,7 @@ class VideoWebModule extends WebModule
 					$vidArray = $value->toArray();
 					$entryid = $value->getEntryId();
 					$modDate = $value->getModifiedOn();
+					date_default_timezone_set("UTC");
 					$datetime = date("F j, Y g:i a", strtotime($modDate));
 					$urlArray = array('modDate'=>$datetime,
 									  'url'=>$this->buildBreadcrumbURL(
