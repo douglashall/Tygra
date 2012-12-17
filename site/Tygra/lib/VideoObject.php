@@ -32,9 +32,14 @@ class VideoObject implements KurogoObject
 		if(isset($video['asset']['videoFileRefs'][0]['dateCreated'])){
 			
 			foreach($video['asset']['videoFileRefs'] as $v){
-				if($v['mediaType'] == "video"){
+				/*
+					This check for mediaType = 'Video' is no longer valid as we now 
+					process both audio and video. I just commented it out in case it 
+					break anything we can easily undo
+				*/
+				//if($v['mediaType'] == "video"){
 					$this->modifiedon = $v['dateCreated'];
-				}
+				//}
 			}
 		}
 		
