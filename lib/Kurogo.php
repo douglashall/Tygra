@@ -757,7 +757,15 @@ class Kurogo
             'uname'=>php_uname("a")
             
         ));
-        return trim(file_get_contents($url));
+        $aContext = array(
+            'http' => array(
+                'proxy' => 'tcp://10.34.5.254:8080',
+                'request_fulluri' => true,
+            ),
+        );
+        $cxContext = stream_context_create($aContext);
+
+        return trim(file_get_contents($url,False,$cxContext));
     }
     
     private function rmdir($dir) {
