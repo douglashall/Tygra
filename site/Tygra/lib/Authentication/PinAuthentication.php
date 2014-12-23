@@ -10,8 +10,8 @@ class PinAuthentication extends AuthenticationAuthority
 {
     protected $authorityClass = 'pin';
     protected $userClass='HarvardUser';
-    protected $logoutUrl="https://login.pin1.harvard.edu/pin/logout";
-    
+    //protected $logoutUrl="https://login.pin1.harvard.edu/pin/logout";
+    protected $logoutUrl="https://www.pin1.harvard.edu/cas/logout";    
 	protected function validUserLogins() { 
         return array('LINK');
     }
@@ -27,10 +27,10 @@ class PinAuthentication extends AuthenticationAuthority
 
     public function login($login, $pass, Session $session, $options) {
     	$headers = apache_request_headers();
-		if (!isset($headers['HU-PIN-USER-ID'])) {
+		if (!isset($headers['HTTP_HU_PIN_LOGIN_ID'])) {
 			return AUTH_FAILED;
 		}
-        $user = $this->getUser($headers['HU-PIN-USER-ID']);
+        $user = $this->getUser($headers['HTTP_HU_PIN_LOGIN_ID']);
         $session->login($user);
     	return AUTH_OK;
     }
